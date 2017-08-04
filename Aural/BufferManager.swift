@@ -43,6 +43,8 @@ class BufferManager {
     // Starts track playback from a given frame position. Marks the beginning of a "playback session".
     fileprivate func startPlaybackFromFrame(_ track: Track, _ frame: AVAudioFramePosition) {
         
+        NSLog("Start startPlaybackFromFrame %@", track.shortDisplayName!)
+        
         // Can assume that track.avFile is non-nil, because track has been prepared for playback
         let playingFile: AVAudioFile = track.avFile!
         
@@ -63,6 +65,8 @@ class BufferManager {
         if (!reachedEOF) {
             queue.addOperation({self.scheduleNextBuffer(thisSession, track)})
         }
+        
+        NSLog("Start startPlaybackFromFrame %@", track.shortDisplayName!)
     }
     
     // Upon the completion of playback of a buffer, checks if more buffers are needed for the playback session, and if so, schedules one for playback. The session argument indicates which playback session this task was initiated for.
