@@ -12,6 +12,8 @@ class AppInitializer {
     
     private static var uiAppState: UIAppState?
     
+    private static var preferences: Preferences = Preferences.instance()
+    
     private static var player: Player?
     
     private static var playlist: Playlist?
@@ -40,8 +42,7 @@ class AppInitializer {
         }
         
         // Initialize the player
-        let preferences = Preferences.instance()
-        uiAppState = UIAppState(appState, preferences)
+        uiAppState = UIAppState(appState!, preferences)
         
         player = Player()
         player!.loadState(appState!.playerState)
@@ -64,12 +65,11 @@ class AppInitializer {
     
     static func getUIAppState() -> UIAppState {
         
-        if (preferences.playlistOnStartup == .rememberFromLastAppLaunch) {
-            EventRegistry.publishEvent(.startedAddingTracks, StartedAddingTracksEvent.instance)
-            loadPlaylistFromSavedState()
+        if (!initialized) {
+            initialize()
         }
         
-        return
+        return uiAppState!
     }
     
     static func getPlaylist() -> Playlist {
@@ -106,5 +106,9 @@ class AppInitializer {
         }
         
         return playerDelegate!
+    }
+    
+    static func getPreferences() -> Preferences {
+        return preferences
     }
 }

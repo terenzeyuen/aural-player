@@ -1,6 +1,6 @@
 import Cocoa
 
-class PlaylistViewController: NSViewController {
+class PlaylistViewController: NSViewController, EventSubscriber {
     
     private let delegate: AuralPlaylistControlDelegate = AppInitializer.getPlaylistControlDelegate()
     
@@ -12,7 +12,7 @@ class PlaylistViewController: NSViewController {
     @IBOutlet weak var btnShuffle: NSButton!
     @IBOutlet weak var btnRepeat: NSButton!
     
-    // Playlist search modal dialog fields
+    // Search modal dialog fields
     @IBOutlet weak var searchPanel: NSPanel!
     @IBOutlet weak var searchField: ColoredCursorSearchField!
     
@@ -34,7 +34,7 @@ class PlaylistViewController: NSViewController {
     
     @IBOutlet weak var searchCaseSensitive: NSButton!
     
-    // Playlist sort modal dialog fields
+    // Sort modal dialog fields
     @IBOutlet weak var sortPanel: NSPanel!
     
     @IBOutlet weak var sortByName: NSButton!
@@ -50,6 +50,8 @@ class PlaylistViewController: NSViewController {
         
         print("Fuck me !")
         
+        let appState = AppInitializer.getUIAppState()
+        
         // Set up a mouse listener (for double clicks -> play selected track)
         playlistView.doubleAction = #selector(self.playlistDoubleClickAction(_:))
         
@@ -61,16 +63,16 @@ class PlaylistViewController: NSViewController {
         
         switch appState.repeatMode {
             
-        case .off: btnRepeat.image = UIConstants.imgRepeatOff
-        case .one: btnRepeat.image = UIConstants.imgRepeatOne
-        case .all: btnRepeat.image = UIConstants.imgRepeatAll
+            case .off: btnRepeat.image = UIConstants.imgRepeatOff
+            case .one: btnRepeat.image = UIConstants.imgRepeatOne
+            case .all: btnRepeat.image = UIConstants.imgRepeatAll
             
         }
         
         switch appState.shuffleMode {
             
-        case .off: btnShuffle.image = UIConstants.imgShuffleOff
-        case .on: btnShuffle.image = UIConstants.imgShuffleOn
+            case .off: btnShuffle.image = UIConstants.imgShuffleOff
+            case .on: btnShuffle.image = UIConstants.imgShuffleOn
             
         }
         
@@ -326,12 +328,12 @@ class PlaylistViewController: NSViewController {
         }
         
         // Position the search modal dialog and show it
-        let searchFrameOrigin = NSPoint(x: window.frame.origin.x + 16, y: min(window.frame.origin.y + 227, window.frame.origin.y + window.frame.height - searchPanel.frame.height))
+//        let searchFrameOrigin = NSPoint(x: window.frame.origin.x + 16, y: min(window.frame.origin.y + 227, window.frame.origin.y + window.frame.height - searchPanel.frame.height))
         
         searchField.stringValue = ""
         resetSearchFields()
         
-        searchPanel.setFrameOrigin(searchFrameOrigin)
+//        searchPanel.setFrameOrigin(searchFrameOrigin)
         searchPanel.setIsVisible(true)
         
         searchPanel.makeFirstResponder(searchField)
@@ -379,7 +381,7 @@ class PlaylistViewController: NSViewController {
             query.type = .endsWith
         }
         
-        searchResults = player.searchPlaylist(searchQuery: query)
+        searchResults = delegate.searchPlaylist(searchQuery: query)
         
         if ((searchResults?.count)! > 0) {
             
@@ -448,9 +450,9 @@ class PlaylistViewController: NSViewController {
         }
         
         // Position the sort modal dialog and show it
-        let sortFrameOrigin = NSPoint(x: window.frame.origin.x + 73, y: min(window.frame.origin.y + 227, window.frame.origin.y + window.frame.height - sortPanel.frame.height))
-        
-        sortPanel.setFrameOrigin(sortFrameOrigin)
+//        let sortFrameOrigin = NSPoint(x: window.frame.origin.x + 73, y: min(window.frame.origin.y + 227, window.frame.origin.y + window.frame.height - sortPanel.frame.height))
+//        
+//        sortPanel.setFrameOrigin(sortFrameOrigin)
         sortPanel.setIsVisible(true)
         
         NSApp.runModal(for: sortPanel)
@@ -468,7 +470,7 @@ class PlaylistViewController: NSViewController {
         sortOptions.field = sortByName.state == 1 ? SortField.name : SortField.duration
         sortOptions.order = sortAscending.state == 1 ? SortOrder.ascending : SortOrder.descending
         
-        player.sortPlaylist(sort: sortOptions)
+        delegate.sortPlaylist(sort: sortOptions)
         dismissModalDialog()
         
         playlistView.reloadData()
@@ -521,8 +523,10 @@ class PlaylistViewController: NSViewController {
             
             do {
                 
-                let track = try player.play(playlistView.selectedRow)
+//                let track = try delegate.play(playlistView.selectedRow)
                 //                trackChange(track)
+                
+                // TODO: send a cmd to player to play sel track
                 
             } catch let error as Error {
                 
@@ -530,6 +534,74 @@ class PlaylistViewController: NSViewController {
                     //                    handleTrackNotPlayedError(error as! InvalidTrackError)
                 }
             }
+        }
+    }
+    
+    // Playlist info changed, need to reset the UI
+    func consumeEvent(_ event: Event) {
+        
+        if event is TrackChangedEvent {
+            //            setSeekTimerState(false)
+            //            let _event = event as! TrackChangedEvent
+            //            trackChange(_event.newTrack)
+        }
+        
+        if event is TrackAddedEvent {
+            let _evt = event as! TrackAddedEvent
+            playlistView.noteNumberOfRowsChanged()
+            updatePlaylistSummary(_evt.progress)
+        }
+        
+        if event is TrackNotPlayedEvent {
+            let _evt = event as! TrackNotPlayedEvent
+        }
+        
+        if event is TracksNotAddedEvent {
+            let _evt = event as! TracksNotAddedEvent
+//                        handleTracksNotAddedError(_evt.errors)
+        }
+        
+        if event is StartedAddingTracksEvent {
+            startedAddingTracks()
+        }
+        
+        if event is DoneAddingTracksEvent {
+            doneAddingTracks()
+        }
+        
+        // Not being used yet (to be used when duration is updated)
+        if event is TrackInfoUpdatedEvent {
+            let _event = event as! TrackInfoUpdatedEvent
+            playlistView.reloadData(forRowIndexes: IndexSet([_event.trackIndex]), columnIndexes: UIConstants.playlistViewColumnIndexes)
+        }
+    }
+    
+    func handleTrackNotPlayedError(_ error: InvalidTrackError) {
+        
+        // This needs to be done async. Otherwise, other open dialogs could hang.
+        DispatchQueue.main.async {
+            
+            // First, select the problem track and update the now playing info
+//            let playingTrack = self.delegate.getPlayingTrack()
+////            self.trackChange(playingTrack, true)
+//            let playingTrackIndex = playingTrack!.index!
+//            self.removeSingleTrack(playingTrackIndex)
+        }
+    }
+    
+    func handleTracksNotAddedError(_ errors: [InvalidTrackError]) {
+        
+        // This needs to be done async. Otherwise, the add files dialog hangs.
+        DispatchQueue.main.async {
+            
+            let alert = UIElements.tracksNotAddedAlertWithErrors(errors)
+            
+//            let orig = NSPoint(x: self.window.frame.origin.x, y: min(self.window.frame.origin.y + 227, self.window.frame.origin.y + self.window.frame.height - alert.window.frame.height))
+//            
+//            alert.window.setFrameOrigin(orig)
+            alert.window.setIsVisible(true)
+            
+            alert.runModal()
         }
     }
 }

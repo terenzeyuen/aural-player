@@ -39,11 +39,11 @@ class KeyPressHandler {
         // (Up arrow) Change selection (up) in playlist
         if (!isShift && !isCommand && event.keyCode == UP_ARROW) {
             
-            let selRow = app.playlistView.selectedRow
-            
-            if (selRow > 0) {
-                app.playlistView.selectRowIndexes(IndexSet(integer: selRow - 1), byExtendingSelection: false)
-            }
+//            let selRow = app.playlistView.selectedRow
+//            
+//            if (selRow > 0) {
+//                app.playlistView.selectRowIndexes(IndexSet(integer: selRow - 1), byExtendingSelection: false)
+//            }
             
             // TODO
 //            app.showPlaylistSelectedRow()
@@ -52,11 +52,11 @@ class KeyPressHandler {
         // (Down arrow) Change selection (down) in playlist
         if (!isShift && !isCommand && event.keyCode == DOWN_ARROW) {
             
-            let selRow = app.playlistView.selectedRow
-            
-            if (selRow < (app.playlistView.numberOfRows - 1)) {
-                app.playlistView.selectRowIndexes(IndexSet(integer: selRow + 1), byExtendingSelection: false)
-            }
+//            let selRow = app.playlistView.selectedRow
+//            
+//            if (selRow < (app.playlistView.numberOfRows - 1)) {
+//                app.playlistView.selectRowIndexes(IndexSet(integer: selRow + 1), byExtendingSelection: false)
+//            }
             
             // TODO
 //            app.showPlaylistSelectedRow()

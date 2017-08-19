@@ -1,6 +1,6 @@
 import Cocoa
 
-class PlayerViewController: NSViewController {
+class PlayerViewController: NSViewController, EventSubscriber {
     
     private let player: AuralPlayerDelegate = AppInitializer.getPlayerDelegate()
     
@@ -38,6 +38,8 @@ class PlayerViewController: NSViewController {
     
     override func viewDidLoad() {
         print("FAAK YOU, ASSHOLLLLLLLLLE")
+        
+        let appState = AppInitializer.getUIAppState()
         
         // TODO Initialize controls, subscribe to events
         volumeSlider.floatValue = appState.volume
@@ -135,7 +137,7 @@ class PlayerViewController: NSViewController {
         }
         
         resetPlayingTime()
-        selectTrack(newTrack == nil ? nil : newTrack!.index)
+//        selectTrack(newTrack == nil ? nil : newTrack!.index)
     }
     
     func showNowPlayingInfo(_ track: Track) {
@@ -380,63 +382,39 @@ class PlayerViewController: NSViewController {
         volumeBtnAction(sender as AnyObject)
     }
     
-//    func handleTracksNotAddedError(_ errors: [InvalidTrackError]) {
-//        
-//        // This needs to be done async. Otherwise, the add files dialog hangs.
-//        DispatchQueue.main.async {
-//            
-//            let alert = UIElements.tracksNotAddedAlertWithErrors(errors)
-//            
-//            let orig = NSPoint(x: self.window.frame.origin.x, y: min(self.window.frame.origin.y + 227, self.window.frame.origin.y + self.window.frame.height - alert.window.frame.height))
-//            
-//            alert.window.setFrameOrigin(orig)
-//            alert.window.setIsVisible(true)
-//            
-//            alert.runModal()
-//        }
-//    }
-//    
-//    func handleTrackNotPlayedError(_ error: InvalidTrackError) {
-//        
-//        // This needs to be done async. Otherwise, other open dialogs could hang.
-//        DispatchQueue.main.async {
-//            
-//            // First, select the problem track and update the now playing info
-//            let playingTrack = self.player.getPlayingTrack()
-//            self.trackChange(playingTrack, true)
-//            
-//            // Position and display the dialog with info
-//            let alert = UIElements.trackNotPlayedAlertWithError(error)
-//            
-//            let orig = NSPoint(x: self.window.frame.origin.x, y: min(self.window.frame.origin.y + 227, self.window.frame.origin.y + self.window.frame.height - alert.window.frame.height))
-//            
-//            alert.window.setFrameOrigin(orig)
-//            alert.window.setIsVisible(true)
-//            
-//            alert.runModal()
-//            
-//            // Remove the bad track from the playlist and update the UI
-//            
-//            let playingTrackIndex = playingTrack!.index!
-//            self.removeSingleTrack(playingTrackIndex)
-//        }
-//    }
+    // Playlist info changed, need to reset the UI
+    func consumeEvent(_ event: Event) {
+        
+        if event is TrackChangedEvent {
+            setSeekTimerState(false)
+            let _event = event as! TrackChangedEvent
+            trackChange(_event.newTrack)
+        }
+        
+        if event is TrackNotPlayedEvent {
+            let _evt = event as! TrackNotPlayedEvent
+            handleTrackNotPlayedError(_evt.error)
+        }
+    }
     
-    func selectTrack(_ index: Int?) {
+    func handleTrackNotPlayedError(_ error: InvalidTrackError) {
         
-        // TODO publish an event to playlist VC
-        
-//        if index != nil && index! >= 0 {
+        // This needs to be done async. Otherwise, other open dialogs could hang.
+        DispatchQueue.main.async {
+            
+            // First, select the problem track and update the now playing info
+            let playingTrack = self.player.getPlayingTrack()
+            self.trackChange(playingTrack, true)
+            
+            // Position and display the dialog with info
+            let alert = UIElements.trackNotPlayedAlertWithError(error)
+            
+//            let orig = NSPoint(x: self.window.frame.origin.x, y: min(self.window.frame.origin.y + 227, self.window.frame.origin.y + self.window.frame.height - alert.window.frame.height))
 //            
-//            playlistView.selectRowIndexes(IndexSet(integer: index!), byExtendingSelection: false)
-//            
-//        } else {
-//            // Select first track in list, if list not empty
-//            if (playlistView.numberOfRows > 0) {
-//                playlistView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
-//            }
-//        }
-//        
-//        showPlaylistSelectedRow()
+//            alert.window.setFrameOrigin(orig)
+            alert.window.setIsVisible(true)
+            
+            alert.runModal()
+        }
     }
 }

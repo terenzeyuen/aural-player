@@ -10,65 +10,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, EventSubscriber {
     
     @IBOutlet weak var window: NSWindow!
     
-    @IBOutlet weak var prefsPanel: NSPanel!
-    @IBOutlet weak var prefsTabView: NSTabView!
-    
-    private var prefsTabViewButtons: [NSButton]?
-    
-    // Player prefs
-    @IBOutlet weak var btnPlayerPrefs: NSButton!
-    
-    @IBOutlet weak var seekLengthField: NSTextField!
-    @IBOutlet weak var seekLengthSlider: NSSlider!
-    
-    @IBOutlet weak var volumeDeltaField: NSTextField!
-    @IBOutlet weak var volumeDeltaStepper: NSStepper!
-    
-    @IBOutlet weak var btnRememberVolume: NSButton!
-    @IBOutlet weak var btnSpecifyVolume: NSButton!
-    
-    @IBOutlet weak var startupVolumeSlider: NSSlider!
-    @IBOutlet weak var lblStartupVolume: NSTextField!
-    
-    @IBOutlet weak var panDeltaField: NSTextField!
-    @IBOutlet weak var panDeltaStepper: NSStepper!
-    
-    // Playlist prefs
-    @IBOutlet weak var btnPlaylistPrefs: NSButton!
-    
-    @IBOutlet weak var btnEmptyPlaylist: NSButton!
-    @IBOutlet weak var btnRememberPlaylist: NSButton!
-    
-    @IBOutlet weak var btnAutoplayOnStartup: NSButton!
-    
-    @IBOutlet weak var btnAutoplayAfterAddingTracks: NSButton!
-    @IBOutlet weak var btnAutoplayIfNotPlaying: NSButton!
-    @IBOutlet weak var btnAutoplayAlways: NSButton!
-    
-    // View prefs
-    @IBOutlet weak var btnViewPrefs: NSButton!
-    
-    @IBOutlet weak var btnStartWithView: NSButton!
-    @IBOutlet weak var startWithViewMenu: NSPopUpButton!
-    @IBOutlet weak var btnRememberView: NSButton!
-    
-    @IBOutlet weak var btnRememberWindowLocation: NSButton!
-    @IBOutlet weak var btnStartAtWindowLocation: NSButton!
-    @IBOutlet weak var startWindowLocationMenu: NSPopUpButton!
-    
-    // Buttons to toggle (collapsible) playlist/effects views
-    @IBOutlet weak var btnToggleEffects: NSButton!
-    @IBOutlet weak var btnTogglePlaylist: NSButton!
-    
-    @IBOutlet weak var viewPlaylistMenuItem: NSMenuItem!
-    @IBOutlet weak var viewEffectsMenuItem: NSMenuItem!
-    
-    // Views that are collapsible (hide/show)
-    @IBOutlet weak var playlistControlsBox: NSBox!
-    @IBOutlet weak var fxTabView: NSTabView!
-    @IBOutlet weak var fxBox: NSBox!
-    @IBOutlet weak var playlistBox: NSBox!
-    
     // Effects panel tab view buttons
     @IBOutlet weak var eqTabViewButton: NSButton!
     @IBOutlet weak var pitchTabViewButton: NSButton!
@@ -146,13 +87,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, EventSubscriber {
     // PlayerDelegate accepts all requests originating from the UI
     let player: PlayerDelegate = PlayerDelegate.instance()
     
-    var playlistCollapsibleView: CollapsibleView?
-    var fxCollapsibleView: CollapsibleView?
-    
     // Timer that periodically updates the recording duration (only when recorder is active)
     var recorderTimer: ScheduledTaskExecutor?
-    
-    var preferences: Preferences = Preferences.instance()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         
@@ -191,13 +127,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, EventSubscriber {
     
     func initStatelessUI() {
         
-        playlistCollapsibleView = CollapsibleView(views: [playlistBox, playlistControlsBox])
-        fxCollapsibleView = CollapsibleView(views: [fxBox])
         
         recorderTimer = ScheduledTaskExecutor(intervalMillis: UIConstants.recorderTimerIntervalMillis, task: {self.updateRecordingInfo()}, queue: DispatchQueue.main)
-        
-        
-        prefsPanel.titlebarAppearsTransparent = true
         
         // Set up the filter control sliders
         
@@ -226,8 +157,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, EventSubscriber {
         }
         
         fxTabViewButtons = [eqTabViewButton, pitchTabViewButton, timeTabViewButton, reverbTabViewButton, delayTabViewButton, filterTabViewButton, recorderTabViewButton]
-        
-        prefsTabViewButtons = [btnPlayerPrefs, btnPlaylistPrefs, btnViewPrefs]
     }
     
     func initStatefulUI(_ appState: UIAppState) {
@@ -306,15 +235,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, EventSubscriber {
         // Don't select any items from the EQ presets menu
         eqPresets.selectItem(at: -1)
         
-        if (appState.hidePlaylist) {
-            toggleViewPlaylistAction(self)
-        }
-        
-        if (appState.hideEffects) {
-            toggleViewEffectsAction(self)
-        }
-        
-        resetPreferencesFields()
     }
     
     private func updateEQSliders(_ eqBands: [Int: Float]) {
@@ -336,8 +256,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, EventSubscriber {
         let uiState = UIState()
         uiState.windowLocationX = Float(window.frame.origin.x)
         uiState.windowLocationY = Float(window.frame.origin.y)
-        uiState.showPlaylist = isPlaylistShown()
-        uiState.showEffects = isEffectsShown()
+//        uiState.showPlaylist = isPlaylistShown()
+//        uiState.showEffects = isEffectsShown()
         
         player.appExiting(uiState)
     }
@@ -594,94 +514,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, EventSubscriber {
         }
     }
     
-    // View menu item action
-    @IBAction func toggleViewEffectsAction(_ sender: AnyObject) {
-        
-        if (fxCollapsibleView?.hidden)! {
-            resizeWindow(playlistShown: !(playlistCollapsibleView?.hidden)!, effectsShown: true, sender !== self)
-            fxCollapsibleView!.show()
-            btnToggleEffects.state = 1
-            btnToggleEffects.image = UIConstants.imgEffectsOn
-            viewEffectsMenuItem.state = 1
-        } else {
-            fxCollapsibleView!.hide()
-            resizeWindow(playlistShown: !(playlistCollapsibleView?.hidden)!, effectsShown: false, sender !== self)
-            btnToggleEffects.state = 0
-            btnToggleEffects.image = UIConstants.imgEffectsOff
-            viewEffectsMenuItem.state = 0
-        }
-        
-//        showPlaylistSelectedRow()
-    }
-    
-    // View menu item action
-    @IBAction func toggleViewPlaylistAction(_ sender: AnyObject) {
-        
-        // Set focus on playlist view if it's visible after the toggle
-        
-        if (playlistCollapsibleView?.hidden)! {
-            resizeWindow(playlistShown: true, effectsShown: !(fxCollapsibleView?.hidden)!, sender !== self)
-            playlistCollapsibleView!.show()
-            window.makeFirstResponder(playlistView)
-            btnTogglePlaylist.state = 1
-            btnTogglePlaylist.image = UIConstants.imgPlaylistOn
-            viewPlaylistMenuItem.state = 1
-        } else {
-            playlistCollapsibleView!.hide()
-            resizeWindow(playlistShown: false, effectsShown: !(fxCollapsibleView?.hidden)!, sender !== self)
-            btnTogglePlaylist.state = 0
-            btnTogglePlaylist.image = UIConstants.imgPlaylistOff
-            viewPlaylistMenuItem.state = 0
-        }
-        
-//        showPlaylistSelectedRow()
-    }
-    
-    // Called when toggling views
-    func resizeWindow(playlistShown: Bool, effectsShown: Bool, _ animate: Bool) {
-        
-        var wFrame = window.frame
-        let oldOrigin = wFrame.origin
-        
-        var newHeight: CGFloat
-        
-        if (effectsShown && playlistShown) {
-            newHeight = UIConstants.windowHeight_playlistAndEffects
-        } else if (effectsShown) {
-            newHeight = UIConstants.windowHeight_effectsOnly
-        } else if (playlistShown) {
-            newHeight = UIConstants.windowHeight_playlistOnly
-        } else {
-            newHeight = UIConstants.windowHeight_compact
-        }
-        
-        let oldHeight = wFrame.height
-        let shrinking: Bool = newHeight < oldHeight
-        
-        wFrame.size = NSMakeSize(window.frame.width, newHeight)
-        wFrame.origin = NSMakePoint(oldOrigin.x, shrinking ? oldOrigin.y + (oldHeight - newHeight) : oldOrigin.y - (newHeight - oldHeight))
-        
-        window.setFrame(wFrame, display: true, animate: animate)
-    }
-    
-    // Toggle button action
-    @IBAction func togglePlaylistAction(_ sender: AnyObject) {
-        toggleViewPlaylistAction(sender)
-    }
-    
-    // Toggle button action
-    @IBAction func toggleEffectsAction(_ sender: AnyObject) {
-        toggleViewEffectsAction(sender)
-    }
-    
-    private func isEffectsShown() -> Bool {
-        return fxCollapsibleView?.hidden == false
-    }
-    
-    private func isPlaylistShown() -> Bool {
-        return playlistCollapsibleView?.hidden == false
-    }
-    
     @IBAction func recorderAction(_ sender: Any) {
         
         let isRecording: Bool = player.getRecordingInfo() != nil
@@ -833,224 +665,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, EventSubscriber {
         recorderTabViewButton.state = 1
         fxTabView.selectTabViewItem(at: 6)
     }
-    
-    @IBAction func volumeDeltaAction(_ sender: Any) {
-        
-        let value = volumeDeltaStepper.integerValue
-        volumeDeltaField.stringValue = String(format: "%d%%", value)
-    }
-    
-    @IBAction func panDeltaAction(_ sender: Any) {
-        
-        let value = panDeltaStepper.integerValue
-        panDeltaField.stringValue = String(format: "%d%%", value)
-    }
-    
-    @IBAction func preferencesAction(_ sender: Any) {
-        
-        resetPreferencesFields()
-        
-        // Position the search modal dialog and show it
-        let prefsFrameOrigin = NSPoint(x: window.frame.origin.x - 2, y: min(window.frame.origin.y + 227, window.frame.origin.y + window.frame.height - prefsPanel.frame.height))
-        
-        prefsPanel.setFrameOrigin(prefsFrameOrigin)
-        prefsPanel.setIsVisible(true)
-        
-        NSApp.runModal(for: prefsPanel)
-        prefsPanel.close()
-    }
-    
-    @IBAction func savePreferencesAction(_ sender: Any) {
-        
-        preferences.seekLength = seekLengthSlider.integerValue
-        preferences.volumeDelta = volumeDeltaStepper.floatValue * AppConstants.volumeConversion_UIToPlayer
-        
-        preferences.volumeOnStartup = btnRememberVolume.state == 1 ? .rememberFromLastAppLaunch : .specific
-        preferences.startupVolumeValue = Float(startupVolumeSlider.integerValue) * AppConstants.volumeConversion_UIToPlayer
-        
-        preferences.panDelta = panDeltaStepper.floatValue * AppConstants.panConversion_UIToPlayer
-        preferences.autoplayOnStartup = Bool(btnAutoplayOnStartup.state)
-        preferences.autoplayAfterAddingTracks = Bool(btnAutoplayAfterAddingTracks.state)
-        preferences.autoplayAfterAddingOption = btnAutoplayIfNotPlaying.state == 1 ? .ifNotPlaying : .always
-        
-        preferences.playlistOnStartup = btnEmptyPlaylist.state == 1 ? .empty : .rememberFromLastAppLaunch
-        
-        preferences.viewOnStartup.option = btnStartWithView.state == 1 ? .specific : .rememberFromLastAppLaunch
-        
-        for viewType in ViewTypes.allValues {
-            
-            if startWithViewMenu.selectedItem!.title == viewType.description {
-                preferences.viewOnStartup.viewType = viewType
-                break;
-            }
-        }
-        
-        preferences.windowLocationOnStartup.option = btnRememberWindowLocation.state == 1 ? .rememberFromLastAppLaunch : .specific
-        
-        for location in WindowLocations.allValues {
-            
-            if startWindowLocationMenu.selectedItem!.title == location.description {
-                preferences.windowLocationOnStartup.windowLocation = location
-                break;
-            }
-        }
-        
-        dismissModalDialog()
-        Preferences.persistAsync()
-    }
-    
-    @IBAction func cancelPreferencesAction(_ sender: Any) {
-        dismissModalDialog()
-    }
-    
-    @IBAction func seekLengthAction(_ sender: Any) {
-        
-        let value = seekLengthSlider.integerValue
-        seekLengthField.stringValue = Utils.formatDuration_minSec(value)
-    }
-    
-    @IBAction func seekLengthIncrementAction(_ sender: Any) {
-        
-        if (Double(seekLengthSlider.integerValue) < seekLengthSlider.maxValue) {
-            seekLengthSlider.integerValue += 1
-            seekLengthField.stringValue = Utils.formatDuration_minSec(seekLengthSlider.integerValue)
-        }
-    }
-    
-    @IBAction func seekLengthDecrementAction(_ sender: Any) {
-        
-        if (Double(seekLengthSlider.integerValue) > seekLengthSlider.minValue) {
-            seekLengthSlider.integerValue -= 1
-            seekLengthField.stringValue = Utils.formatDuration_minSec(seekLengthSlider.integerValue)
-        }
-    }
-    
-    @IBAction func playerPrefsTabViewAction(_ sender: Any) {
-        
-        for button in prefsTabViewButtons! {
-            button.state = 0
-        }
-        
-        btnPlayerPrefs.state = 1
-        prefsTabView.selectTabViewItem(at: 0)
-    }
-    
-    @IBAction func playlistPrefsTabViewAction(_ sender: Any) {
-        
-        for button in prefsTabViewButtons! {
-            button.state = 0
-        }
-        
-        btnPlaylistPrefs.state = 1
-        prefsTabView.selectTabViewItem(at: 1)
-    }
-    
-    @IBAction func viewPrefsTabViewAction(_ sender: Any) {
-        
-        for button in prefsTabViewButtons! {
-            button.state = 0
-        }
-        
-        btnViewPrefs.state = 1
-        prefsTabView.selectTabViewItem(at: 2)
-    }
-    
-    @IBAction func startupPlaylistPrefAction(_ sender: Any) {
-        // Needed for radio button group
-    }
-    
-    @IBAction func startupViewPrefAction(_ sender: Any) {
-        startWithViewMenu.isEnabled = Bool(btnStartWithView.state)
-    }
-    
-    // When the check box for "autoplay after adding tracks" is checked/unchecked, update the enabled state of the 2 option radio buttons
-    @IBAction func autoplayAfterAddingAction(_ sender: Any) {
-        
-        btnAutoplayIfNotPlaying.isEnabled = Bool(btnAutoplayAfterAddingTracks.state)
-        btnAutoplayAlways.isEnabled = Bool(btnAutoplayAfterAddingTracks.state)
-    }
-    
-    @IBAction func autoplayAfterAddingRadioButtonAction(_ sender: Any) {
-        // Needed for radio button group
-    }
-    
-    func resetPreferencesFields() {
-        
-        // Player preferences
-        let seekLength = preferences.seekLength
-        seekLengthSlider.integerValue = seekLength
-        seekLengthField.stringValue = Utils.formatDuration_minSec(seekLength)
-        
-        let volumeDelta = Int(round(preferences.volumeDelta * AppConstants.volumeConversion_playerToUI))
-        volumeDeltaStepper.integerValue = volumeDelta
-        volumeDeltaField.stringValue = String(format: "%d%%", volumeDelta)
-        
-        btnRememberVolume.state = preferences.volumeOnStartup == .rememberFromLastAppLaunch ? 1 : 0
-        btnSpecifyVolume.state = preferences.volumeOnStartup == .rememberFromLastAppLaunch ? 0 : 1
-        startupVolumeSlider.isEnabled = btnSpecifyVolume.state == 1
-        startupVolumeSlider.integerValue = Int(round(preferences.startupVolumeValue * AppConstants.volumeConversion_playerToUI))
-        lblStartupVolume.isEnabled = btnSpecifyVolume.state == 1
-        lblStartupVolume.stringValue = String(format: "%d%%", startupVolumeSlider.integerValue)
-        
-        let panDelta = Int(round(preferences.panDelta * AppConstants.panConversion_playerToUI))
-        panDeltaStepper.integerValue = panDelta
-        panDeltaField.stringValue = String(format: "%d%%", panDelta)
-        
-        btnAutoplayOnStartup.state = preferences.autoplayOnStartup ? 1 : 0
-        
-        btnAutoplayAfterAddingTracks.state = preferences.autoplayAfterAddingTracks ? 1 : 0
-        btnAutoplayIfNotPlaying.isEnabled = preferences.autoplayAfterAddingTracks
-        btnAutoplayIfNotPlaying.state = preferences.autoplayAfterAddingOption == .ifNotPlaying ? 1 : 0
-        btnAutoplayAlways.isEnabled = preferences.autoplayAfterAddingTracks
-        btnAutoplayAlways.state = preferences.autoplayAfterAddingOption == .always ? 1 : 0
-        
-        // Playlist preferences
-        if (preferences.playlistOnStartup == .empty) {
-            btnEmptyPlaylist.state = 1
-        } else {
-            btnRememberPlaylist.state = 1
-        }
-        
-        // View preferences
-        if (preferences.viewOnStartup.option == .specific) {
-            btnStartWithView.state = 1
-        } else {
-            btnRememberView.state = 1
-        }
-        
-        for item in startWithViewMenu.itemArray {
-            
-            if item.title == preferences.viewOnStartup.viewType.description {
-                startWithViewMenu.select(item)
-                break;
-            }
-        }
-        
-        startWithViewMenu.isEnabled = Bool(btnStartWithView.state)
-        
-        btnRememberWindowLocation.state = preferences.windowLocationOnStartup.option == .rememberFromLastAppLaunch ? 1 : 0
-        btnStartAtWindowLocation.state = preferences.windowLocationOnStartup.option == .specific ? 1 : 0
-        
-        startWindowLocationMenu.isEnabled = Bool(btnStartAtWindowLocation.state)
-        startWindowLocationMenu.selectItem(withTitle: preferences.windowLocationOnStartup.windowLocation.description)
-        
-        // Select the player prefs tab
-        playerPrefsTabViewAction(self)
-    }
-    
-    @IBAction func startupVolumeButtonAction(_ sender: Any) {
-        startupVolumeSlider.isEnabled = btnSpecifyVolume.state == 1
-        lblStartupVolume.isEnabled = btnSpecifyVolume.state == 1
-    }
-    
-    @IBAction func startupVolumeSliderAction(_ sender: Any) {
-        lblStartupVolume.stringValue = String(format: "%d%%", startupVolumeSlider.integerValue)
-    }
-    
-    @IBAction func windowLocationOnStartupAction(_ sender: Any) {        
-        startWindowLocationMenu.isEnabled = Bool(btnStartAtWindowLocation.state)
-    }
-    
+
     @IBAction func onlineUserGuideAction(_ sender: Any) {
         NSWorkspace.shared().open(AppConstants.onlineUserGuideURL)
     }
