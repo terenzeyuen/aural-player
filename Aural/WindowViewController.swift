@@ -1,6 +1,6 @@
 import Cocoa
 
-class CollapsibleViewController: NSViewController {
+class WindowViewController: NSViewController {
     
     @IBOutlet weak var window: NSWindow!
     
@@ -19,13 +19,18 @@ class CollapsibleViewController: NSViewController {
     
     var playlistCollapsibleView: CollapsibleView?
     var fxCollapsibleView: CollapsibleView?
- 
+    
+    
     override func viewDidLoad() {
+        let appState = AppInitializer.getUIAppState()
+        
+        // TODO: Where/when should this be done ?
+        positionWindow(appState.windowLocation)
+        window.isMovableByWindowBackground = true
+        window.makeKeyAndOrderFront(self)
         
         playlistCollapsibleView = CollapsibleView(views: [playlistBox, playlistControlsBox])
         fxCollapsibleView = CollapsibleView(views: [fxBox])
-        
-        let appState = AppInitializer.getUIAppState()
         
         if (appState.hidePlaylist) {
             toggleViewPlaylistAction(self)
@@ -34,6 +39,36 @@ class CollapsibleViewController: NSViewController {
         if (appState.hideEffects) {
             toggleViewEffectsAction(self)
         }
+    }
+    
+    func positionWindow(_ location: NSPoint) {
+        window.setFrameOrigin(location)
+    }
+    
+    @IBAction func hideAction(_ sender: AnyObject) {
+        window.miniaturize(self)
+    }
+    
+    @IBAction func closeAction(_ sender: AnyObject) {
+        
+        //        if let _ = player.getRecordingInfo() {
+        //
+        //            // Recording ongoing, prompt the user to save/discard it
+        //            let response = UIElements.saveRecordingAlert.runModal()
+        //
+        //            switch response {
+        //
+        //            case RecordingAlertResponse.dontExit.rawValue: return
+        //            case RecordingAlertResponse.saveAndExit.rawValue: stopRecording()
+        //            case RecordingAlertResponse.discardAndExit.rawValue: player.deleteRecording()
+        //
+        //            // Impossible
+        //            default: return
+        //
+        //            }
+        //        }
+        
+        NSApplication.shared().terminate(self)
     }
     
     // View menu item action
@@ -64,7 +99,7 @@ class CollapsibleViewController: NSViewController {
         if (playlistCollapsibleView?.hidden)! {
             resizeWindow(playlistShown: true, effectsShown: !(fxCollapsibleView?.hidden)!, sender !== self)
             playlistCollapsibleView!.show()
-            window.makeFirstResponder(playlistView)
+            //            window.makeFirstResponder(playlistView)
             btnTogglePlaylist.state = 1
             btnTogglePlaylist.image = UIConstants.imgPlaylistOn
             viewPlaylistMenuItem.state = 1
@@ -122,5 +157,16 @@ class CollapsibleViewController: NSViewController {
     
     private func isPlaylistShown() -> Bool {
         return playlistCollapsibleView?.hidden == false
+    }
+    
+    func tearDown() {
+        
+        //        let uiState = UIState()
+        //        uiState.windowLocationX = Float(window.frame.origin.x)
+        //        uiState.windowLocationY = Float(window.frame.origin.y)
+        //        uiState.showPlaylist = isPlaylistShown()
+        //        uiState.showEffects = isEffectsShown()
+        
+        //        player.appExiting(uiState)
     }
 }

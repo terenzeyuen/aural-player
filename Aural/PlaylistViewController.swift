@@ -14,6 +14,7 @@ class PlaylistViewController: NSViewController, EventSubscriber {
     
     // Search modal dialog fields
     @IBOutlet weak var searchPanel: NSPanel!
+    
     @IBOutlet weak var searchField: ColoredCursorSearchField!
     
     @IBOutlet weak var searchResultsSummaryLabel: NSTextField!
@@ -48,7 +49,7 @@ class PlaylistViewController: NSViewController, EventSubscriber {
     
     override func viewDidLoad() {
         
-        print("Fuck me !")
+        print("DILLON !!! YOUUUUUUUUUUUUUU SON OF A BITCH !")
         
         let appState = AppInitializer.getUIAppState()
         
@@ -478,7 +479,7 @@ class PlaylistViewController: NSViewController, EventSubscriber {
         //        showPlaylistSelectedRow()
     }
     
-    @IBAction func sortCancelBtnAction(_ sender: Any) {
+    @IBAction func sortCancelAction(_ sender: Any) {
         dismissModalDialog()
     }
     

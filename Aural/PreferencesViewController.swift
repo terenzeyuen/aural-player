@@ -290,3 +290,11 @@ class PreferencesViewController: NSViewController {
         startWindowLocationMenu.isEnabled = Bool(btnStartAtWindowLocation.state)
     }
 }
+
+
+// Int to Bool conversion
+extension Bool {
+    init<T: Integer>(_ num: T) {
+        self.init(num != 0)
+    }
+}

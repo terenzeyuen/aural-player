@@ -26,9 +26,9 @@ class KeyPressHandler {
         let app = self.app!
         
         // Modal dialog open, don't do anything
-        if (app.modalDialogOpen()) {
-            return
-        }
+//        if (app.modalDialogOpen()) {
+//            return
+//        }
         
         // Indicate whether or not Shift/Command were pressed
         let isShift: Bool = event.modifierFlags.contains(NSEventModifierFlags.shift)

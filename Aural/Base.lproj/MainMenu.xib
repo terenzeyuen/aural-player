@@ -13,124 +13,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Aural" customModuleProvider="target">
-            <connections>
-                <outlet property="btnAutoplayAfterAddingTracks" destination="auF-TB-XB2" id="VcG-Pu-bD3"/>
-                <outlet property="btnAutoplayAlways" destination="uvD-1v-wz2" id="moC-3i-0c5"/>
-                <outlet property="btnAutoplayIfNotPlaying" destination="uGw-1k-yU2" id="urg-f8-1OX"/>
-                <outlet property="btnAutoplayOnStartup" destination="gn8-VH-Na5" id="FcX-3T-ajH"/>
-                <outlet property="btnDelayBypass" destination="hFd-0O-hii" id="UXH-dM-P28"/>
-                <outlet property="btnEmptyPlaylist" destination="5Zl-DZ-Wz6" id="qaG-bt-UAc"/>
-                <outlet property="btnFilterBypass" destination="9sH-hV-CNS" id="G4b-mn-oex"/>
-                <outlet property="btnNextSearch" destination="BlR-U8-j24" id="f5G-AR-iHr"/>
-                <outlet property="btnPitchBypass" destination="OGV-jG-nOV" id="Ga3-rh-lAm"/>
-                <outlet property="btnPlayerPrefs" destination="VPQ-R5-z2I" id="gAd-wc-7ij"/>
-                <outlet property="btnPlaylistPrefs" destination="M8M-eC-agz" id="Un3-aQ-PBa"/>
-                <outlet property="btnPreviousSearch" destination="iYr-nA-dwT" id="RgB-X8-iBJ"/>
-                <outlet property="btnRecord" destination="caX-PX-mby" id="hiF-6n-jGG"/>
-                <outlet property="btnRememberPlaylist" destination="8na-ND-qME" id="jSx-5B-7TH"/>
-                <outlet property="btnRememberView" destination="7Y2-gM-UlV" id="tHx-JB-stD"/>
-                <outlet property="btnRememberVolume" destination="4q7-No-vcO" id="oLs-j0-suB"/>
-                <outlet property="btnRememberWindowLocation" destination="Nry-MO-jFY" id="BKQ-Pi-u2D"/>
-                <outlet property="btnRepeat" destination="Fpa-Ii-3YA" id="en0-OB-Uwa"/>
-                <outlet property="btnReverbBypass" destination="R9b-lC-8tk" id="EIK-S0-qLa"/>
-                <outlet property="btnShuffle" destination="kQL-4a-kyh" id="eJE-qZ-92B"/>
-                <outlet property="btnSpecifyVolume" destination="iIR-GC-hMW" id="0Ej-yc-T65"/>
-                <outlet property="btnStartAtWindowLocation" destination="8H3-Ji-WYJ" id="HTJ-oO-SPn"/>
-                <outlet property="btnStartWithView" destination="NO5-id-adN" id="gb3-BH-TMI"/>
-                <outlet property="btnTimeBypass" destination="KK7-yq-mkB" id="EAW-5b-HRs"/>
-                <outlet property="btnToggleEffects" destination="jtn-oJ-Dzg" id="M25-hU-iCb"/>
-                <outlet property="btnTogglePlaylist" destination="TTw-rh-Ama" id="Phj-Il-bwq"/>
-                <outlet property="btnViewPrefs" destination="A1g-Lb-y1B" id="cTH-Pe-FxH"/>
-                <outlet property="comparisonTypeBeginsWith" destination="Zim-kM-TMG" id="jbL-B5-f57"/>
-                <outlet property="comparisonTypeContains" destination="x2f-22-qf5" id="f7K-Gx-Lgk"/>
-                <outlet property="comparisonTypeEndsWith" destination="R1T-ao-6zp" id="u25-hX-eeF"/>
-                <outlet property="comparisonTypeEquals" destination="yPX-c1-L0X" id="KhE-S3-tsv"/>
-                <outlet property="delayAmountSlider" destination="w57-Jo-8d2" id="fXJ-R0-OV8"/>
-                <outlet property="delayCutoffSlider" destination="Czy-vK-eST" id="ec0-iO-Xbc"/>
-                <outlet property="delayFeedbackSlider" destination="D1K-bn-CdT" id="SeQ-DA-NoR"/>
-                <outlet property="delayTabViewButton" destination="frp-nG-aSH" id="6WY-lx-PoT"/>
-                <outlet property="delayTimeSlider" destination="n58-zU-hzG" id="qwH-1a-rYH"/>
-                <outlet property="eqGlobalGainSlider" destination="XKK-aS-eMn" id="iBk-45-gwb"/>
-                <outlet property="eqPresets" destination="hG3-Ir-qkY" id="aPR-W2-25b"/>
-                <outlet property="eqSlider128" destination="iEd-37-pLD" id="hxO-KV-1sG"/>
-                <outlet property="eqSlider16k" destination="z4B-Hr-jie" id="4pL-wK-EGe"/>
-                <outlet property="eqSlider1k" destination="JGZ-0h-WTH" id="O6Y-OX-8l3"/>
-                <outlet property="eqSlider256" destination="wuJ-l0-5ih" id="3gA-zF-eZU"/>
-                <outlet property="eqSlider2k" destination="DDL-Kj-I4h" id="2YX-yP-6T3"/>
-                <outlet property="eqSlider32" destination="lg0-FS-2I5" id="qJK-GR-TZM"/>
-                <outlet property="eqSlider4k" destination="VSQ-5C-2KO" id="eCB-Vg-BLI"/>
-                <outlet property="eqSlider512" destination="Lgr-1t-FRb" id="wGU-IT-afA"/>
-                <outlet property="eqSlider64" destination="mTb-nz-ndF" id="2vO-0Q-a5c"/>
-                <outlet property="eqSlider8k" destination="qHV-Kz-sUG" id="Qvt-Ah-CUu"/>
-                <outlet property="eqTabViewButton" destination="as6-oD-NUN" id="pkW-Kn-m2c"/>
-                <outlet property="filterBassSlider" destination="XX6-jc-QLj" id="4Gf-Fz-qgd"/>
-                <outlet property="filterMidSlider" destination="biY-3d-Z8S" id="MUo-oh-8nP"/>
-                <outlet property="filterTabViewButton" destination="jdg-7o-3QC" id="z6w-9W-kft"/>
-                <outlet property="filterTrebleSlider" destination="ULe-ja-6VD" id="WEt-HT-NId"/>
-                <outlet property="fxBox" destination="DYI-NL-cxu" id="yU3-ij-nVZ"/>
-                <outlet property="fxTabView" destination="ajb-w5-ueo" id="nb7-Ak-DyM"/>
-                <outlet property="lblDelayAmountValue" destination="xhl-Sb-0op" id="mpY-EF-gw6"/>
-                <outlet property="lblDelayFeedbackValue" destination="n4r-bH-QQU" id="9Wl-Ph-7J1"/>
-                <outlet property="lblDelayLowPassCutoffValue" destination="jZO-sF-ikU" id="qv7-jH-z2Z"/>
-                <outlet property="lblDelayTimeValue" destination="RWL-U9-yvU" id="aO7-lc-nCo"/>
-                <outlet property="lblFilterBassRange" destination="ifO-9e-3rV" id="myH-TS-LEc"/>
-                <outlet property="lblFilterMidRange" destination="bcc-sC-SIa" id="mnc-we-eLo"/>
-                <outlet property="lblFilterTrebleRange" destination="UbS-dH-wqD" id="Itw-Nb-IzQ"/>
-                <outlet property="lblPitchOverlapValue" destination="Lpb-r4-Ilp" id="tnW-vm-8pG"/>
-                <outlet property="lblPitchValue" destination="Kwu-xp-8qk" id="Lla-uh-ar0"/>
-                <outlet property="lblPlaylistSummary" destination="PC9-RH-ZoK" id="etP-46-7Hc"/>
-                <outlet property="lblRecorderDuration" destination="Uem-Yb-AdQ" id="1Ji-Z3-50m"/>
-                <outlet property="lblRecorderFileSize" destination="hb6-qg-MCr" id="nE7-ok-Q5O"/>
-                <outlet property="lblReverbAmountValue" destination="iQV-Fy-dGc" id="OEZ-OZ-5oJ"/>
-                <outlet property="lblStartupVolume" destination="vCp-DK-wqv" id="U1Y-3P-gnq"/>
-                <outlet property="lblTimeOverlapValue" destination="TVy-7n-XEc" id="DPG-TR-pCL"/>
-                <outlet property="lblTimeStretchRateValue" destination="hQy-Wa-pgf" id="zm0-u6-mbw"/>
-                <outlet property="panDeltaField" destination="No1-X0-ONc" id="tKk-Fo-zqy"/>
-                <outlet property="panDeltaStepper" destination="Xdc-nv-mZS" id="T09-L8-PJp"/>
-                <outlet property="pitchOverlapSlider" destination="9E2-MV-Hi7" id="y3H-9s-ozV"/>
-                <outlet property="pitchSlider" destination="g6a-qD-rnZ" id="HBk-Ja-Ags"/>
-                <outlet property="pitchTabViewButton" destination="ske-qV-fRn" id="2Co-PU-gRf"/>
-                <outlet property="playlistBox" destination="RMJ-vL-K67" id="n9m-9V-L46"/>
-                <outlet property="playlistControlsBox" destination="ft1-56-lTI" id="2Y4-JK-td4"/>
-                <outlet property="playlistView" destination="4Fk-6v-HSf" id="QZT-Zn-WBd"/>
-                <outlet property="playlistWorkSpinner" destination="Gb7-pn-6bV" id="ldq-jl-ZgH"/>
-                <outlet property="prefsPanel" destination="miy-XV-uzY" id="6pE-fU-45x"/>
-                <outlet property="prefsTabView" destination="k0I-lv-KcJ" id="ktw-lX-cLK"/>
-                <outlet property="recorderTabViewButton" destination="oIR-f6-2g1" id="tor-ak-Efj"/>
-                <outlet property="recordingInfoBox" destination="XTn-sI-WaY" id="VLn-JF-Hyw"/>
-                <outlet property="reverbMenu" destination="6kC-nQ-BsO" id="T7b-0N-Gyx"/>
-                <outlet property="reverbSlider" destination="SVL-7D-xpL" id="qkM-tE-q03"/>
-                <outlet property="reverbTabViewButton" destination="fJP-YC-RHa" id="hc6-vn-KF7"/>
-                <outlet property="searchByAlbum" destination="vJB-tQ-9gW" id="ZD2-lx-g8J"/>
-                <outlet property="searchByArtist" destination="alT-kE-ZJN" id="PHI-hr-kxF"/>
-                <outlet property="searchByName" destination="DT8-PC-txX" id="Nwc-5A-jOT"/>
-                <outlet property="searchByTitle" destination="9wf-Pu-L95" id="dfd-Bf-X1B"/>
-                <outlet property="searchCaseSensitive" destination="MSF-LB-dHT" id="0Cp-wV-9kO"/>
-                <outlet property="searchField" destination="KsO-rj-Fgq" id="FpJ-Jf-CKC"/>
-                <outlet property="searchPanel" destination="jhP-AH-EDd" id="oyW-7j-in7"/>
-                <outlet property="searchResultMatchInfo" destination="tV8-Yi-o5k" id="6fD-Ku-mGV"/>
-                <outlet property="searchResultsSummaryLabel" destination="cAy-bq-MqT" id="818-c4-lAX"/>
-                <outlet property="seekLengthField" destination="dBN-Nf-UUu" id="Oih-O4-bnl"/>
-                <outlet property="seekLengthSlider" destination="z2P-US-UeC" id="zjN-Ru-HNd"/>
-                <outlet property="sortAscending" destination="trl-at-P9S" id="E1I-uz-yBv"/>
-                <outlet property="sortByDuration" destination="Gd9-ah-OAB" id="l2o-N6-Xq1"/>
-                <outlet property="sortByName" destination="0Oe-zI-vsS" id="cDe-8R-GxK"/>
-                <outlet property="sortDescending" destination="7Ww-4w-TFU" id="InO-Qx-67b"/>
-                <outlet property="sortPanel" destination="Lw0-WI-3wy" id="Rl2-fd-34e"/>
-                <outlet property="startWindowLocationMenu" destination="h0Y-pW-3qj" id="tlI-79-XSP"/>
-                <outlet property="startWithViewMenu" destination="kck-JI-Q40" id="cG3-dN-O5N"/>
-                <outlet property="startupVolumeSlider" destination="fUW-L3-FhW" id="6cH-F4-FlI"/>
-                <outlet property="timeOverlapSlider" destination="ILK-wT-Zmn" id="bbb-ID-7KK"/>
-                <outlet property="timeSlider" destination="1pg-uy-Rlo" id="7eO-B3-o99"/>
-                <outlet property="timeTabViewButton" destination="H6U-2l-Q6T" id="h7R-yz-1Rh"/>
-                <outlet property="viewEffectsMenuItem" destination="fK8-7g-oqx" id="EQv-4S-gcr"/>
-                <outlet property="viewPlaylistMenuItem" destination="af4-4E-1QV" id="Dhx-XG-mI6"/>
-                <outlet property="volumeDeltaField" destination="2Tz-kD-WEf" id="Hhx-Me-ylP"/>
-                <outlet property="volumeDeltaStepper" destination="A38-ZO-IeG" id="xHt-gk-mUc"/>
-                <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
-            </connections>
-        </customObject>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Aural" customModuleProvider="target"/>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <window title="Aural" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" hasShadow="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" texturedBackground="YES"/>
@@ -150,9 +33,6 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
-                        <connections>
-                            <action selector="closeAction:" target="Voe-Tx-rLC" id="TVm-QP-DyS"/>
-                        </connections>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZLC-hp-2OD" userLabel="Hide Button">
                         <rect key="frame" x="30" y="604" width="14" height="14"/>
@@ -161,9 +41,6 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
-                        <connections>
-                            <action selector="hideAction:" target="Voe-Tx-rLC" id="WuL-eu-igo"/>
-                        </connections>
                     </button>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BNg-uu-doV" userLabel="AppIcon Image">
                         <rect key="frame" x="159" y="603" width="16" height="16"/>
@@ -196,9 +73,6 @@
                                 <color key="value" white="0.15242513020833334" alpha="0.75018728595890416" colorSpace="calibratedWhite"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
-                        <connections>
-                            <action selector="togglePlaylistAction:" target="Voe-Tx-rLC" id="Smj-Z6-fkP"/>
-                        </connections>
                     </button>
                     <button toolTip="Show/hide effects panel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jtn-oJ-Dzg" userLabel="Toggle Effects">
                         <rect key="frame" x="373" y="600" width="27" height="18"/>
@@ -212,9 +86,6 @@
                                 <color key="value" white="0.1503634982638889" alpha="0.75050834760273977" colorSpace="calibratedWhite"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
-                        <connections>
-                            <action selector="toggleEffectsAction:" target="Voe-Tx-rLC" id="H6S-tW-STK"/>
-                        </connections>
                     </button>
                     <box autoresizesSubviews="NO" fixedFrame="YES" boxType="custom" borderType="bezel" cornerRadius="5" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="r0W-tQ-AZF" userLabel="Now Playing Box">
                         <rect key="frame" x="15" y="495" width="385" height="88"/>
@@ -459,9 +330,6 @@ G1BhbiBTbGlkZXI
                                             <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="eqTabViewAction:" target="Voe-Tx-rLC" id="Y7K-tL-A5M"/>
-                                    </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ske-qV-fRn" userLabel="Pitch button">
                                     <rect key="frame" x="62" y="148" width="45" height="20"/>
@@ -475,9 +343,6 @@ G1BhbiBTbGlkZXI
                                             <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="pitchTabViewAction:" target="Voe-Tx-rLC" id="mA9-yR-RKq"/>
-                                    </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H6U-2l-Q6T" userLabel="Time button">
                                     <rect key="frame" x="109" y="148" width="40" height="20"/>
@@ -491,9 +356,6 @@ G1BhbiBTbGlkZXI
                                             <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="timeTabViewAction:" target="Voe-Tx-rLC" id="rNp-bQ-fbb"/>
-                                    </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fJP-YC-RHa" userLabel="Reverb button">
                                     <rect key="frame" x="151" y="148" width="53" height="20"/>
@@ -507,9 +369,6 @@ G1BhbiBTbGlkZXI
                                             <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="reverbTabViewAction:" target="Voe-Tx-rLC" id="CG5-Up-b8V"/>
-                                    </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="frp-nG-aSH" userLabel="Delay button">
                                     <rect key="frame" x="206" y="148" width="44" height="20"/>
@@ -523,9 +382,6 @@ G1BhbiBTbGlkZXI
                                             <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="delayTabViewAction:" target="Voe-Tx-rLC" id="LeX-Ji-bPC"/>
-                                    </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jdg-7o-3QC" userLabel="Filter button">
                                     <rect key="frame" x="252" y="148" width="41" height="20"/>
@@ -539,9 +395,6 @@ G1BhbiBTbGlkZXI
                                             <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="filterTabViewAction:" target="Voe-Tx-rLC" id="8Ug-EI-W7k"/>
-                                    </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oIR-f6-2g1" userLabel="Recorder button">
                                     <rect key="frame" x="295" y="148" width="66" height="20"/>
@@ -555,9 +408,6 @@ G1BhbiBTbGlkZXI
                                             <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="recorderTabViewAction:" target="Voe-Tx-rLC" id="euy-1W-2Mk"/>
-                                    </connections>
                                 </button>
                                 <tabView fixedFrame="YES" drawsBackground="NO" type="rightTabsBezelBorder" initialItem="McD-gg-qp9" translatesAutoresizingMaskIntoConstraints="NO" id="ajb-w5-ueo" userLabel="FX Tabbed group">
                                     <rect key="frame" x="-7" y="-10" width="450" height="160"/>
@@ -566,11 +416,11 @@ G1BhbiBTbGlkZXI
                                     <tabViewItems>
                                         <tabViewItem label="EQ" identifier="1" id="McD-gg-qp9" userLabel="EQ">
                                             <view key="view" ambiguous="YES" id="vC5-27-GiC">
-                                                <rect key="frame" x="10" y="7" width="409" height="140"/>
+                                                <rect key="frame" x="10" y="7" width="0.0" height="335"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EOh-fy-QB5" userLabel="Frequencies">
-                                                        <rect key="frame" x="73" y="125" width="271" height="17"/>
+                                                        <rect key="frame" x="73" y="320" width="271" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="32      64      128     256     512     1k       2k      4k       8k     16k" id="KZ1-aN-0Yl">
                                                             <font key="font" size="10" name="GillSans"/>
@@ -579,95 +429,62 @@ G1BhbiBTbGlkZXI
                                                         </textFieldCell>
                                                     </textField>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XKK-aS-eMn" userLabel="EQGlobalGain">
-                                                        <rect key="frame" x="27" y="20" width="18" height="103"/>
+                                                        <rect key="frame" x="27" y="215" width="18" height="103"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-20" maxValue="20" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="6vO-ax-c7J" customClass="EQSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                        <connections>
-                                                            <action selector="eqGlobalGainAction:" target="Voe-Tx-rLC" id="wpc-Cj-IP2"/>
-                                                        </connections>
                                                     </slider>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z4B-Hr-jie" userLabel="Eq Slider16k">
-                                                        <rect key="frame" x="320" y="20" width="18" height="103"/>
+                                                        <rect key="frame" x="320" y="215" width="18" height="103"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-20" maxValue="20" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="U2x-qh-bz3" customClass="EQSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                        <connections>
-                                                            <action selector="eqSlider16kAction:" target="Voe-Tx-rLC" id="vfV-ci-F1e"/>
-                                                        </connections>
                                                     </slider>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qHV-Kz-sUG" userLabel="Eq Slider8k">
-                                                        <rect key="frame" x="292" y="20" width="18" height="103"/>
+                                                        <rect key="frame" x="292" y="215" width="18" height="103"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-20" maxValue="20" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="57x-OJ-Uoc" customClass="EQSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                        <connections>
-                                                            <action selector="eqSlider8kAction:" target="Voe-Tx-rLC" id="f4J-eQ-Tr4"/>
-                                                        </connections>
                                                     </slider>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VSQ-5C-2KO" userLabel="Eq Slider4k">
-                                                        <rect key="frame" x="264" y="20" width="18" height="103"/>
+                                                        <rect key="frame" x="264" y="215" width="18" height="103"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-20" maxValue="20" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="mB8-98-dUb" customClass="EQSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                        <connections>
-                                                            <action selector="eqSlider4kAction:" target="Voe-Tx-rLC" id="Mke-8Q-CZP"/>
-                                                        </connections>
                                                     </slider>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DDL-Kj-I4h" userLabel="Eq Slider2k">
-                                                        <rect key="frame" x="236" y="20" width="18" height="103"/>
+                                                        <rect key="frame" x="236" y="215" width="18" height="103"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-20" maxValue="20" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="FlN-4s-jCz" customClass="EQSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                        <connections>
-                                                            <action selector="eqSlider2kAction:" target="Voe-Tx-rLC" id="a7W-Or-LcM"/>
-                                                        </connections>
                                                     </slider>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JGZ-0h-WTH" userLabel="Eq Slider1k">
-                                                        <rect key="frame" x="208" y="20" width="18" height="103"/>
+                                                        <rect key="frame" x="208" y="215" width="18" height="103"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-20" maxValue="20" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="cSC-j0-EcW" customClass="EQSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                        <connections>
-                                                            <action selector="eqSlider1kAction:" target="Voe-Tx-rLC" id="zv9-bj-u0I"/>
-                                                        </connections>
                                                     </slider>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lgr-1t-FRb">
-                                                        <rect key="frame" x="180" y="20" width="18" height="103"/>
+                                                        <rect key="frame" x="180" y="215" width="18" height="103"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-20" maxValue="20" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="LCt-es-pWZ" customClass="EQSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                        <connections>
-                                                            <action selector="eqSlider512Action:" target="Voe-Tx-rLC" id="nUA-21-SJO"/>
-                                                        </connections>
                                                     </slider>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wuJ-l0-5ih">
-                                                        <rect key="frame" x="152" y="20" width="18" height="103"/>
+                                                        <rect key="frame" x="152" y="215" width="18" height="103"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-20" maxValue="20" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="hbt-bq-h69" customClass="EQSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                        <connections>
-                                                            <action selector="eqSlider256Action:" target="Voe-Tx-rLC" id="HGZ-1k-AZX"/>
-                                                        </connections>
                                                     </slider>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iEd-37-pLD">
-                                                        <rect key="frame" x="124" y="20" width="18" height="103"/>
+                                                        <rect key="frame" x="124" y="215" width="18" height="103"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-20" maxValue="20" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="qQa-HK-oDY" customClass="EQSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                        <connections>
-                                                            <action selector="eqSlider128Action:" target="Voe-Tx-rLC" id="Q1c-gR-uI9"/>
-                                                        </connections>
                                                     </slider>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mTb-nz-ndF">
-                                                        <rect key="frame" x="96" y="20" width="18" height="103"/>
+                                                        <rect key="frame" x="96" y="215" width="18" height="103"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-20" maxValue="20" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="g3f-O3-rIn" customClass="EQSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                        <connections>
-                                                            <action selector="eqSlider64Action:" target="Voe-Tx-rLC" id="BCZ-3n-y2k"/>
-                                                        </connections>
                                                     </slider>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lg0-FS-2I5">
-                                                        <rect key="frame" x="68" y="20" width="18" height="103"/>
+                                                        <rect key="frame" x="68" y="215" width="18" height="103"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-20" maxValue="20" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="vmt-Be-jsH" customClass="EQSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                        <connections>
-                                                            <action selector="eqSlider32Action:" target="Voe-Tx-rLC" id="Vxs-ns-7Se"/>
-                                                        </connections>
                                                     </slider>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a3V-ab-jaC">
-                                                        <rect key="frame" x="47" y="103" width="20" height="21"/>
+                                                        <rect key="frame" x="47" y="298" width="20" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="+20" id="E9O-1s-8rC">
                                                             <font key="font" size="10" name="GillSans"/>
@@ -676,7 +493,7 @@ G1BhbiBTbGlkZXI
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dtf-Xs-OQp">
-                                                        <rect key="frame" x="47" y="13" width="20" height="21"/>
+                                                        <rect key="frame" x="47" y="208" width="20" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="-20" id="9U6-wA-5ze">
                                                             <font key="font" size="10" name="GillSans"/>
@@ -685,7 +502,7 @@ G1BhbiBTbGlkZXI
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Zm-Bg-NEY">
-                                                        <rect key="frame" x="48" y="64" width="15" height="16"/>
+                                                        <rect key="frame" x="48" y="259" width="15" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0" id="Je7-rK-ohz">
                                                             <font key="font" size="10" name="GillSans"/>
@@ -694,7 +511,7 @@ G1BhbiBTbGlkZXI
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vsR-0Q-cXe">
-                                                        <rect key="frame" x="277" y="1" width="62" height="18"/>
+                                                        <rect key="frame" x="277" y="196" width="62" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Presets" id="ems-fH-sOb">
                                                             <font key="font" size="12" name="GillSans"/>
@@ -703,7 +520,7 @@ G1BhbiBTbGlkZXI
                                                         </textFieldCell>
                                                     </textField>
                                                     <popUpButton horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hG3-Ir-qkY" userLabel="EQ Presets Menu">
-                                                        <rect key="frame" x="310" y="-1" width="34" height="18"/>
+                                                        <rect key="frame" x="310" y="194" width="34" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="disclosure" title="Vocal" bezelStyle="roundedDisclosure" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" inset="2" arrowPosition="noArrow" altersStateOfSelectedItem="NO" selectedItem="z8X-aR-fwU" id="fct-Jo-Wiy" customClass="EQPopupMenuCell" customModule="Aural" customModuleProvider="target">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -728,9 +545,6 @@ G1BhbiBTbGlkZXI
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
-                                                        <connections>
-                                                            <action selector="eqPresetsAction:" target="Voe-Tx-rLC" id="Kks-3X-9LI"/>
-                                                        </connections>
                                                     </popUpButton>
                                                 </subviews>
                                             </view>
@@ -756,9 +570,6 @@ G1BhbiBTbGlkZXI
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="pitchBypassAction:" target="Voe-Tx-rLC" id="VlM-FZ-Aiq"/>
-                                                        </connections>
                                                     </button>
                                                     <box fixedFrame="YES" boxType="custom" borderType="line" cornerRadius="3" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="Yu8-uy-WrY" userLabel="Controls Box">
                                                         <rect key="frame" x="62" y="5" width="293" height="68"/>
@@ -793,9 +604,6 @@ G1BhbiBTbGlkZXI
                                                                         <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </shadow>
                                                                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-2" maxValue="2" tickMarkPosition="below" numberOfTickMarks="5" sliderType="linear" id="z27-ON-8be" customClass="EffectsTickedSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                                    <connections>
-                                                                        <action selector="pitchAction:" target="Voe-Tx-rLC" id="QaL-0n-KjT"/>
-                                                                    </connections>
                                                                 </slider>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uOU-Zl-fv2" userLabel="-2 Octaves">
                                                                     <rect key="frame" x="46" y="38" width="20" height="15"/>
@@ -832,9 +640,6 @@ G1BhbiBTbGlkZXI
                                                                         <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </shadow>
                                                                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="3" maxValue="32" doubleValue="8" tickMarkPosition="below" numberOfTickMarks="2" sliderType="linear" id="dxd-fC-XwN" customClass="EffectsTickedSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                                    <connections>
-                                                                        <action selector="pitchOverlapAction:" target="Voe-Tx-rLC" id="gmc-Ks-U7t"/>
-                                                                    </connections>
                                                                 </slider>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ee3-6j-MM9" userLabel="3 Overlap values">
                                                                     <rect key="frame" x="46" y="9" width="20" height="15"/>
@@ -895,9 +700,6 @@ G1BhbiBTbGlkZXI
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="timeBypassAction:" target="Voe-Tx-rLC" id="ozM-rN-zrW"/>
-                                                        </connections>
                                                     </button>
                                                     <box fixedFrame="YES" boxType="custom" borderType="line" cornerRadius="3" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="y0c-x9-eVo" userLabel="Controls Box">
                                                         <rect key="frame" x="62" y="5" width="293" height="68"/>
@@ -941,9 +743,6 @@ G1BhbiBTbGlkZXI
                                                                         <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </shadow>
                                                                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="0.25" maxValue="4" doubleValue="1" tickMarkPosition="below" numberOfTickMarks="16" sliderType="linear" id="co5-6V-8Mf" customClass="EffectsTickedSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                                    <connections>
-                                                                        <action selector="timeStretchAction:" target="Voe-Tx-rLC" id="BZm-P7-D1d"/>
-                                                                    </connections>
                                                                 </slider>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hQy-Wa-pgf" userLabel="Lbl Rate Value">
                                                                     <rect key="frame" x="241" y="38" width="44" height="15"/>
@@ -971,9 +770,6 @@ G1BhbiBTbGlkZXI
                                                                         <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </shadow>
                                                                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="3" maxValue="32" doubleValue="8" tickMarkPosition="below" numberOfTickMarks="2" sliderType="linear" id="qgE-2g-Tt6" customClass="EffectsTickedSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                                    <connections>
-                                                                        <action selector="timeOverlapAction:" target="Voe-Tx-rLC" id="L0p-k7-9bn"/>
-                                                                    </connections>
                                                                 </slider>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aWU-EU-6sr" userLabel="3 Overlap values">
                                                                     <rect key="frame" x="41" y="9" width="25" height="15"/>
@@ -1031,9 +827,6 @@ G1BhbiBTbGlkZXI
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="reverbBypassAction:" target="Voe-Tx-rLC" id="vGA-4Y-v5A"/>
-                                                        </connections>
                                                     </button>
                                                     <box fixedFrame="YES" boxType="custom" borderType="line" cornerRadius="3" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="chO-yB-LP0" userLabel="Controls Box">
                                                         <rect key="frame" x="62" y="5" width="293" height="68"/>
@@ -1096,9 +889,6 @@ G1BhbiBTbGlkZXI
                                                                             </items>
                                                                         </menu>
                                                                     </popUpButtonCell>
-                                                                    <connections>
-                                                                        <action selector="reverbAction:" target="Voe-Tx-rLC" id="hE0-Ke-IZJ"/>
-                                                                    </connections>
                                                                 </popUpButton>
                                                                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SVL-7D-xpL" userLabel="ReverbAmount Slider">
                                                                     <rect key="frame" x="80" y="5" width="125" height="18"/>
@@ -1108,9 +898,6 @@ G1BhbiBTbGlkZXI
                                                                         <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </shadow>
                                                                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="below" numberOfTickMarks="3" sliderType="linear" id="X3x-xr-Pvi" customClass="EffectsTickedSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                                    <connections>
-                                                                        <action selector="reverbAmountAction:" target="Voe-Tx-rLC" id="k9q-nA-gpi"/>
-                                                                    </connections>
                                                                 </slider>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ja-8B-SwE">
                                                                     <rect key="frame" x="6" y="9" width="55" height="18"/>
@@ -1168,9 +955,6 @@ G1BhbiBTbGlkZXI
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="delayBypassAction:" target="Voe-Tx-rLC" id="CYe-eB-QhF"/>
-                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4YG-X5-3A9" userLabel="Delay Desc">
                                                         <rect key="frame" x="61" y="108" width="123" height="27"/>
@@ -1205,9 +989,6 @@ G1BhbiBTbGlkZXI
                                                                         <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </shadow>
                                                                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="2" doubleValue="1" tickMarkPosition="below" numberOfTickMarks="9" sliderType="linear" id="7vI-uT-xr0" customClass="EffectsTickedSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                                    <connections>
-                                                                        <action selector="delayTimeAction:" target="Voe-Tx-rLC" id="UAJ-iK-FRc"/>
-                                                                    </connections>
                                                                 </slider>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kgf-KN-kIc" userLabel="Zero Secs">
                                                                     <rect key="frame" x="50" y="74" width="30" height="15"/>
@@ -1253,9 +1034,6 @@ G1BhbiBTbGlkZXI
                                                                         <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </shadow>
                                                                     <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="100" doubleValue="33.2801094890511" tickMarkPosition="below" numberOfTickMarks="3" sliderType="linear" id="xXd-GB-Kij" customClass="EffectsTickedSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                                    <connections>
-                                                                        <action selector="delayAmountAction:" target="Voe-Tx-rLC" id="GAK-H4-U6d"/>
-                                                                    </connections>
                                                                 </slider>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QE3-J1-O6B">
                                                                     <rect key="frame" x="6" y="50" width="64" height="20"/>
@@ -1292,9 +1070,6 @@ G1BhbiBTbGlkZXI
                                                                         <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </shadow>
                                                                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-100" maxValue="100" doubleValue="50" tickMarkPosition="below" numberOfTickMarks="5" sliderType="linear" id="Sfn-GO-Dbz" customClass="EffectsTickedSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                                    <connections>
-                                                                        <action selector="delayFeedbackAction:" target="Voe-Tx-rLC" id="Q7h-Md-IXH"/>
-                                                                    </connections>
                                                                 </slider>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="asA-YU-fnH">
                                                                     <rect key="frame" x="6" y="28" width="66" height="20"/>
@@ -1349,9 +1124,6 @@ G1BhbiBTbGlkZXI
                                                                         <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </shadow>
                                                                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="10" maxValue="20480" doubleValue="15000" tickMarkPosition="below" numberOfTickMarks="2" sliderType="linear" id="mNy-W3-GyQ" customClass="EffectsTickedSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                                                    <connections>
-                                                                        <action selector="delayCutoffAction:" target="Voe-Tx-rLC" id="JkP-39-VrT"/>
-                                                                    </connections>
                                                                 </slider>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tcb-5c-KlH">
                                                                     <rect key="frame" x="6" y="6" width="56" height="20"/>
@@ -1400,9 +1172,6 @@ G1BhbiBTbGlkZXI
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="filterBypassAction:" target="Voe-Tx-rLC" id="dCb-Uo-E87"/>
-                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kQr-of-0kc" userLabel="Filter Desc">
                                                         <rect key="frame" x="61" y="107" width="277" height="28"/>
@@ -1588,9 +1357,6 @@ G1BhbiBTbGlkZXI
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                         <font key="font" metaFont="smallSystem"/>
                                                                     </buttonCell>
-                                                                    <connections>
-                                                                        <action selector="recorderAction:" target="Voe-Tx-rLC" id="mlm-nr-edj"/>
-                                                                    </connections>
                                                                 </button>
                                                                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Xv-Xz-5gy" userLabel="Format menu">
                                                                     <rect key="frame" x="65" y="53" width="175" height="22"/>
@@ -1684,9 +1450,6 @@ G1BhbiBTbGlkZXI
                                             </view>
                                         </tabViewItem>
                                     </tabViewItems>
-                                    <connections>
-                                        <outlet property="delegate" destination="Voe-Tx-rLC" id="M33-Qj-MWC"/>
-                                    </connections>
                                 </tabView>
                             </subviews>
                         </view>
@@ -1775,9 +1538,6 @@ G1BhbiBTbGlkZXI
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
-                                    <connections>
-                                        <action selector="searchPlaylistAction:" target="Voe-Tx-rLC" id="Nzo-hY-yhH"/>
-                                    </connections>
                                 </button>
                                 <button toolTip="Sort playlist" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7jt-oN-fFd" userLabel="Sort">
                                     <rect key="frame" x="136" y="4" width="19" height="19"/>
@@ -1786,9 +1546,6 @@ G1BhbiBTbGlkZXI
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
-                                    <connections>
-                                        <action selector="sortPlaylistAction:" target="Voe-Tx-rLC" id="Rde-kC-7mt"/>
-                                    </connections>
                                 </button>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PC9-RH-ZoK" userLabel="Playlist summary">
                                     <rect key="frame" x="242" y="6" width="139" height="20"/>
@@ -1957,18 +1714,53 @@ G1BhbiBTbGlkZXI
             </connections>
             <point key="canvasLocation" x="125" y="36"/>
         </window>
-        <viewController id="THs-LC-lDb" userLabel="Playlist TableView Controller" customClass="PlaylistTableViewController" customModule="Aural" customModuleProvider="target">
+        <viewController id="tEL-mV-KqR" userLabel="Window View Controller" customClass="WindowViewController" customModule="Aural" customModuleProvider="target">
             <connections>
-                <outlet property="view" destination="4Fk-6v-HSf" id="YyA-hM-ns1"/>
+                <outlet property="btnToggleEffects" destination="jtn-oJ-Dzg" id="0LD-K9-nol"/>
+                <outlet property="btnTogglePlaylist" destination="TTw-rh-Ama" id="eht-ud-wfZ"/>
+                <outlet property="fxBox" destination="DYI-NL-cxu" id="Kcx-ag-NrN"/>
+                <outlet property="fxTabView" destination="ajb-w5-ueo" id="K13-f9-QoC"/>
+                <outlet property="playlistBox" destination="RMJ-vL-K67" id="vbh-7D-OrY"/>
+                <outlet property="playlistControlsBox" destination="ft1-56-lTI" id="fid-Oz-Ii2"/>
+                <outlet property="view" destination="EiT-Mj-1SZ" id="OJ3-cC-Ham"/>
+                <outlet property="viewEffectsMenuItem" destination="fK8-7g-oqx" id="iOQ-0T-UMo"/>
+                <outlet property="viewPlaylistMenuItem" destination="af4-4E-1QV" id="v7Z-7Z-idv"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="Z90-2E-ccD"/>
             </connections>
         </viewController>
         <viewController id="svL-aC-wUu" userLabel="Playlist View Controller" customClass="PlaylistViewController" customModule="Aural" customModuleProvider="target">
             <connections>
+                <outlet property="btnNextSearch" destination="BlR-U8-j24" id="S5d-XJ-d6c"/>
+                <outlet property="btnPreviousSearch" destination="iYr-nA-dwT" id="Xiu-hp-Ybe"/>
                 <outlet property="btnRepeat" destination="Fpa-Ii-3YA" id="6EX-K5-aCp"/>
                 <outlet property="btnShuffle" destination="kQL-4a-kyh" id="IU0-EI-tbK"/>
+                <outlet property="comparisonTypeBeginsWith" destination="Zim-kM-TMG" id="02r-rp-xWp"/>
+                <outlet property="comparisonTypeContains" destination="x2f-22-qf5" id="nAu-b8-bWo"/>
+                <outlet property="comparisonTypeEndsWith" destination="R1T-ao-6zp" id="sUQ-ha-xta"/>
+                <outlet property="comparisonTypeEquals" destination="yPX-c1-L0X" id="TEa-Zg-ylH"/>
                 <outlet property="lblPlaylistSummary" destination="PC9-RH-ZoK" id="Ysj-NB-TZe"/>
                 <outlet property="playlistView" destination="4Fk-6v-HSf" id="zX0-aW-hPD"/>
+                <outlet property="playlistWorkSpinner" destination="Gb7-pn-6bV" id="Gy7-WN-Z5d"/>
+                <outlet property="searchByAlbum" destination="vJB-tQ-9gW" id="tPL-4g-1PI"/>
+                <outlet property="searchByArtist" destination="alT-kE-ZJN" id="ER0-6g-Zu9"/>
+                <outlet property="searchByName" destination="DT8-PC-txX" id="Xmy-ks-OcU"/>
+                <outlet property="searchByTitle" destination="9wf-Pu-L95" id="6HR-bk-kBU"/>
+                <outlet property="searchCaseSensitive" destination="MSF-LB-dHT" id="ybv-z9-zF1"/>
+                <outlet property="searchField" destination="KsO-rj-Fgq" id="GRx-8v-p2x"/>
+                <outlet property="searchPanel" destination="jhP-AH-EDd" id="xPP-Ih-CHu"/>
+                <outlet property="searchResultMatchInfo" destination="tV8-Yi-o5k" id="FFe-iN-7or"/>
+                <outlet property="searchResultsSummaryLabel" destination="cAy-bq-MqT" id="pVD-Yf-dKE"/>
+                <outlet property="sortAscending" destination="trl-at-P9S" id="C3P-ZE-cIu"/>
+                <outlet property="sortByDuration" destination="Gd9-ah-OAB" id="pjf-7h-tXr"/>
+                <outlet property="sortByName" destination="0Oe-zI-vsS" id="CWT-Tu-Ous"/>
+                <outlet property="sortDescending" destination="7Ww-4w-TFU" id="CSU-ZE-PLs"/>
+                <outlet property="sortPanel" destination="Lw0-WI-3wy" id="rA5-pv-tDm"/>
                 <outlet property="view" destination="RMJ-vL-K67" id="p39-vx-yjq"/>
+            </connections>
+        </viewController>
+        <viewController id="THs-LC-lDb" userLabel="Playlist TableView Controller" customClass="PlaylistTableViewController" customModule="Aural" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="4Fk-6v-HSf" id="YyA-hM-ns1"/>
             </connections>
         </viewController>
         <viewController id="LYs-ZH-DoR" userLabel="Player View Controller" customClass="PlayerViewController" customModule="Aural" customModuleProvider="target">
@@ -1987,28 +1779,23 @@ G1BhbiBTbGlkZXI
                 <outlet property="volumeSlider" destination="7fw-31-38g" id="qXS-id-XRz"/>
             </connections>
         </viewController>
+        <viewController id="J3C-aC-hav" customClass="EffectsViewController" customModule="Aural" customModuleProvider="target"/>
+        <viewController id="FEa-q8-ilX" customClass="PreferencesViewController" customModule="Aural" customModuleProvider="target"/>
+        <viewController id="TvF-Se-ssn" userLabel="Help View Controller" customClass="HelpViewController" customModule="Aural" customModuleProvider="target"/>
         <menu title="Main Menu" systemMenu="main" id="Cnt-hZ-QmI">
             <items>
                 <menuItem title="Aural" id="igd-xR-7Ij" userLabel="Aural">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Aural" systemMenu="apple" id="hQO-jN-9ss">
                         <items>
-                            <menuItem title="Preferences" keyEquivalent="," id="S2h-Uk-bNq">
-                                <connections>
-                                    <action selector="preferencesAction:" target="Voe-Tx-rLC" id="gIo-zj-zht"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title="Preferences" keyEquivalent="," id="S2h-Uk-bNq"/>
                             <menuItem isSeparatorItem="YES" id="KCy-Jo-pWQ"/>
                             <menuItem title="Hide Aural" keyEquivalent="h" id="Q8U-5t-wnF" userLabel="Hide Aural">
                                 <connections>
                                     <action selector="hide:" target="-1" id="Fub-xu-H2S"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Quit Aural" keyEquivalent="q" id="uhC-xR-Dzb">
-                                <connections>
-                                    <action selector="closeAction:" target="Voe-Tx-rLC" id="1vR-VD-rYm"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title="Quit Aural" keyEquivalent="q" id="uhC-xR-Dzb"/>
                         </items>
                     </menu>
                 </menuItem>
@@ -2066,16 +1853,9 @@ CA
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="bMd-aB-U0o"/>
-                            <menuItem title=" Search playlist" image="Search-Small" keyEquivalent="f" id="Pxd-7C-8tq">
-                                <connections>
-                                    <action selector="searchPlaylistMenuItemAction:" target="Voe-Tx-rLC" id="USw-Ot-4ok"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title=" Search playlist" image="Search-Small" keyEquivalent="f" id="Pxd-7C-8tq"/>
                             <menuItem title="Sort playlist" image="Sort-Small" keyEquivalent="s" id="ttf-Ix-LHp" userLabel="Sort playlist">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES"/>
-                                <connections>
-                                    <action selector="sortPlaylistMenuItemAction:" target="Voe-Tx-rLC" id="wIR-gs-wNE"/>
-                                </connections>
                             </menuItem>
                         </items>
                     </menu>
@@ -2086,60 +1866,26 @@ CA
                         <items>
                             <menuItem title=" Play / Pause" image="PlayPause-Small" keyEquivalent=" " id="T9r-Uq-EPf">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="togglePlayPauseMenuItemAction:" target="Voe-Tx-rLC" id="dA1-UD-t63"/>
-                                </connections>
                             </menuItem>
-                            <menuItem title=" Previous track" image="PreviousTrack-Small" keyEquivalent="" id="yq3-HU-6rh">
-                                <connections>
-                                    <action selector="previousTrackMenuItemAction:" target="Voe-Tx-rLC" id="85L-9O-UoG"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title=" Next track" image="NextTrack-Small" keyEquivalent="" id="z7s-9y-10c">
-                                <connections>
-                                    <action selector="nextTrackMenuItemAction:" target="Voe-Tx-rLC" id="FMj-Cc-23S"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title=" Previous track" image="PreviousTrack-Small" keyEquivalent="" id="yq3-HU-6rh"/>
+                            <menuItem title=" Next track" image="NextTrack-Small" keyEquivalent="" id="z7s-9y-10c"/>
                             <menuItem title=" Seek backward" image="SeekBackward-Small" keyEquivalent="" id="h8T-Of-b8S">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="seekBackwardMenuItemAction:" target="Voe-Tx-rLC" id="9Vp-ua-Ufi"/>
-                                </connections>
                             </menuItem>
                             <menuItem title=" Seek forward" image="SeekForward-Small" keyEquivalent="" id="dge-IA-2p7">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="seekForwardMenuItemAction:" target="Voe-Tx-rLC" id="tgJ-SA-zZE"/>
-                                </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="gze-sl-67j"/>
                             <menuItem title=" Mute / Unmute" image="Mute-Small" keyEquivalent="" id="TYd-HO-2Rv" userLabel="Mute/Unmute">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
-                                <connections>
-                                    <action selector="muteUnmuteMenuItemAction:" target="Voe-Tx-rLC" id="BdR-yz-w5t"/>
-                                </connections>
                             </menuItem>
-                            <menuItem title=" Decrease volume" image="VolumeLow-Small" keyEquivalent="" id="jOS-4R-SUx">
-                                <connections>
-                                    <action selector="decreaseVolumeMenuItemAction:" target="Voe-Tx-rLC" id="A3l-Pl-Qgs"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title=" Increase volume" image="VolumeHigh-Small" keyEquivalent="" id="py7-Wp-lx7">
-                                <connections>
-                                    <action selector="increaseVolumeMenuItemAction:" target="Voe-Tx-rLC" id="fCO-lJ-BdK"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title=" Decrease volume" image="VolumeLow-Small" keyEquivalent="" id="jOS-4R-SUx"/>
+                            <menuItem title=" Increase volume" image="VolumeHigh-Small" keyEquivalent="" id="py7-Wp-lx7"/>
                             <menuItem title=" Pan left" image="PanL-Small" keyEquivalent="" id="Cvz-HZ-RmP">
                                 <modifierMask key="keyEquivalentModifierMask" shift="YES"/>
-                                <connections>
-                                    <action selector="panLeftMenuItemAction:" target="Voe-Tx-rLC" id="1O9-O2-AK7"/>
-                                </connections>
                             </menuItem>
                             <menuItem title=" Pan right" image="PanR-Small" keyEquivalent="" id="qGf-Tr-MHz">
                                 <modifierMask key="keyEquivalentModifierMask" shift="YES"/>
-                                <connections>
-                                    <action selector="panRightMenuItemAction:" target="Voe-Tx-rLC" id="TI6-U6-VlK"/>
-                                </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="O1F-Wz-nQ9"/>
                             <menuItem title=" Toggle repeat mode" image="RepeatMode-Small" keyEquivalent="R" id="CXV-Nr-pIe">
@@ -2155,11 +1901,7 @@ CA
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="dsi-6a-jdq"/>
-                            <menuItem title=" Detailed track info" image="MoreInfo-Small" keyEquivalent="i" id="GCy-Rj-Mv5">
-                                <connections>
-                                    <action selector="trackInfoMenuItemAction:" target="Voe-Tx-rLC" id="FDP-DL-ibS"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title=" Detailed track info" image="MoreInfo-Small" keyEquivalent="i" id="GCy-Rj-Mv5"/>
                         </items>
                     </menu>
                 </menuItem>
@@ -2167,16 +1909,8 @@ CA
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="View" id="Fd0-9b-tm8">
                         <items>
-                            <menuItem title=" Playlist" state="on" image="TogglePlaylistView-Small" keyEquivalent="1" id="af4-4E-1QV" userLabel="Playlist">
-                                <connections>
-                                    <action selector="toggleViewPlaylistAction:" target="Voe-Tx-rLC" id="qy1-fM-T4F"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title=" Effects" state="on" image="ToggleEffectsView-Small" keyEquivalent="2" id="fK8-7g-oqx" userLabel="Effects">
-                                <connections>
-                                    <action selector="toggleViewEffectsAction:" target="Voe-Tx-rLC" id="Kiw-iQ-y6k"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title=" Playlist" state="on" image="TogglePlaylistView-Small" keyEquivalent="1" id="af4-4E-1QV" userLabel="Playlist"/>
+                            <menuItem title=" Effects" state="on" image="ToggleEffectsView-Small" keyEquivalent="2" id="fK8-7g-oqx" userLabel="Effects"/>
                         </items>
                     </menu>
                 </menuItem>
@@ -2186,21 +1920,15 @@ CA
                         <items>
                             <menuItem title="User guide (pdf)" id="jeW-fz-jW1" userLabel="User Guide (pdf)">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="pdfUserGuideAction:" target="Voe-Tx-rLC" id="gkR-3m-5dX"/>
-                                </connections>
                             </menuItem>
                             <menuItem title="User guide (online, HTML)" id="QqV-12-NGD" userLabel="User Guide (online HTML)">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="onlineUserGuideAction:" target="Voe-Tx-rLC" id="KzL-5z-M3Z"/>
-                                </connections>
                             </menuItem>
                         </items>
                     </menu>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="-156" y="-246"/>
+            <point key="canvasLocation" x="-28" y="-336"/>
         </menu>
         <window title="Search for tracks in playlist" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="jhP-AH-EDd" userLabel="Search Panel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES"/>
@@ -2251,7 +1979,7 @@ CA
                                         <font key="font" size="11" name="GillSans"/>
                                     </buttonCell>
                                     <connections>
-                                        <action selector="searchQueryChangedAction:" target="Voe-Tx-rLC" id="yD2-eJ-LyO"/>
+                                        <action selector="searchQueryChangedAction:" target="svL-aC-wUu" id="ETC-2u-YrO"/>
                                     </connections>
                                 </button>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V4x-eA-PhP" userLabel="Options:">
@@ -2280,7 +2008,7 @@ CA
                                         <font key="font" size="11" name="GillSans"/>
                                     </buttonCell>
                                     <connections>
-                                        <action selector="searchQueryChangedAction:" target="Voe-Tx-rLC" id="oPV-37-VbJ"/>
+                                        <action selector="searchQueryChangedAction:" target="svL-aC-wUu" id="2H8-AC-fho"/>
                                     </connections>
                                 </button>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x2f-22-qf5" userLabel="Contains">
@@ -2291,7 +2019,7 @@ CA
                                         <font key="font" size="11" name="GillSans"/>
                                     </buttonCell>
                                     <connections>
-                                        <action selector="searchQueryChangedAction:" target="Voe-Tx-rLC" id="foG-e2-Wgp"/>
+                                        <action selector="searchQueryChangedAction:" target="svL-aC-wUu" id="Yso-VT-Zq5"/>
                                     </connections>
                                 </button>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zim-kM-TMG" userLabel="Begins with">
@@ -2302,7 +2030,7 @@ CA
                                         <font key="font" size="11" name="GillSans"/>
                                     </buttonCell>
                                     <connections>
-                                        <action selector="searchQueryChangedAction:" target="Voe-Tx-rLC" id="zws-nv-zgs"/>
+                                        <action selector="searchQueryChangedAction:" target="svL-aC-wUu" id="XhO-IO-m85"/>
                                     </connections>
                                 </button>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R1T-ao-6zp" userLabel="Ends with">
@@ -2313,7 +2041,7 @@ CA
                                         <font key="font" size="11" name="GillSans"/>
                                     </buttonCell>
                                     <connections>
-                                        <action selector="searchQueryChangedAction:" target="Voe-Tx-rLC" id="bnB-4U-YjR"/>
+                                        <action selector="searchQueryChangedAction:" target="svL-aC-wUu" id="bPR-EO-v0M"/>
                                     </connections>
                                 </button>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DT8-PC-txX" userLabel="Name field">
@@ -2324,7 +2052,7 @@ CA
                                         <font key="font" size="11" name="GillSans"/>
                                     </buttonCell>
                                     <connections>
-                                        <action selector="searchQueryChangedAction:" target="Voe-Tx-rLC" id="dKM-IR-czW"/>
+                                        <action selector="searchQueryChangedAction:" target="svL-aC-wUu" id="jbA-7z-UI8"/>
                                     </connections>
                                 </button>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="alT-kE-ZJN" userLabel="Artist field">
@@ -2335,7 +2063,7 @@ CA
                                         <font key="font" size="11" name="GillSans"/>
                                     </buttonCell>
                                     <connections>
-                                        <action selector="searchQueryChangedAction:" target="Voe-Tx-rLC" id="dw2-8f-rfc"/>
+                                        <action selector="searchQueryChangedAction:" target="svL-aC-wUu" id="rpQ-9m-LKp"/>
                                     </connections>
                                 </button>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9wf-Pu-L95" userLabel="Title field">
@@ -2346,7 +2074,7 @@ CA
                                         <font key="font" size="11" name="GillSans"/>
                                     </buttonCell>
                                     <connections>
-                                        <action selector="searchQueryChangedAction:" target="Voe-Tx-rLC" id="a9n-R2-XkD"/>
+                                        <action selector="searchQueryChangedAction:" target="svL-aC-wUu" id="r2M-r5-mQc"/>
                                     </connections>
                                 </button>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vJB-tQ-9gW" userLabel="Album field">
@@ -2357,7 +2085,7 @@ CA
                                         <font key="font" size="11" name="GillSans"/>
                                     </buttonCell>
                                     <connections>
-                                        <action selector="searchQueryChangedAction:" target="Voe-Tx-rLC" id="xJg-wX-CgW"/>
+                                        <action selector="searchQueryChangedAction:" target="svL-aC-wUu" id="7py-89-fsY"/>
                                     </connections>
                                 </button>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oFi-Oz-wqi">
@@ -2406,9 +2134,6 @@ CA
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="cellTitle"/>
                                     </buttonCell>
-                                    <connections>
-                                        <action selector="previousSearchAction:" target="Voe-Tx-rLC" id="dPb-6U-S6f"/>
-                                    </connections>
                                 </button>
                                 <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BlR-U8-j24">
                                     <rect key="frame" x="272" y="26" width="28" height="19"/>
@@ -2417,9 +2142,6 @@ CA
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="cellTitle"/>
                                     </buttonCell>
-                                    <connections>
-                                        <action selector="nextSearchAction:" target="Voe-Tx-rLC" id="ksh-Kb-Wug"/>
-                                    </connections>
                                 </button>
                             </subviews>
                         </view>
@@ -2437,7 +2159,7 @@ Gw
 </string>
                         </buttonCell>
                         <connections>
-                            <action selector="searchDoneAction:" target="Voe-Tx-rLC" id="flT-qc-QqZ"/>
+                            <action selector="searchDoneAction:" target="svL-aC-wUu" id="YUp-4m-75j"/>
                         </connections>
                     </button>
                 </subviews>
@@ -2489,7 +2211,7 @@ Gw
                                                     <font key="font" size="11" name="GillSans"/>
                                                 </buttonCell>
                                                 <connections>
-                                                    <action selector="sortOptionsChangedAction:" target="Voe-Tx-rLC" id="G8c-V0-rHp"/>
+                                                    <action selector="sortOptionsChangedAction:" target="svL-aC-wUu" id="5xR-CS-5Wb"/>
                                                 </connections>
                                             </button>
                                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gd9-ah-OAB" userLabel="Duration field">
@@ -2500,7 +2222,7 @@ Gw
                                                     <font key="font" size="11" name="GillSans"/>
                                                 </buttonCell>
                                                 <connections>
-                                                    <action selector="sortOptionsChangedAction:" target="Voe-Tx-rLC" id="reG-uO-ccb"/>
+                                                    <action selector="sortOptionsChangedAction:" target="svL-aC-wUu" id="Xee-al-uu5"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -2530,7 +2252,7 @@ Gw
                                                     <font key="font" size="11" name="GillSans"/>
                                                 </buttonCell>
                                                 <connections>
-                                                    <action selector="sortOptionsChangedAction:" target="Voe-Tx-rLC" id="Spt-sv-w12"/>
+                                                    <action selector="sortOptionsChangedAction:" target="svL-aC-wUu" id="liA-NM-bUO"/>
                                                 </connections>
                                             </button>
                                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Ww-4w-TFU">
@@ -2541,7 +2263,7 @@ Gw
                                                     <font key="font" size="11" name="GillSans"/>
                                                 </buttonCell>
                                                 <connections>
-                                                    <action selector="sortOptionsChangedAction:" target="Voe-Tx-rLC" id="WZY-4C-3WT"/>
+                                                    <action selector="sortOptionsChangedAction:" target="svL-aC-wUu" id="0q4-h5-1av"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -2562,7 +2284,7 @@ DQ
 </string>
                         </buttonCell>
                         <connections>
-                            <action selector="sortBtnAction:" target="Voe-Tx-rLC" id="o8v-pU-Trm"/>
+                            <action selector="performSortAction:" target="svL-aC-wUu" id="1hB-Lz-QeP"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ffh-vZ-RWY" userLabel="Cancel button">
@@ -2576,7 +2298,7 @@ Gw
 </string>
                         </buttonCell>
                         <connections>
-                            <action selector="sortCancelBtnAction:" target="Voe-Tx-rLC" id="168-DV-8xJ"/>
+                            <action selector="sortCancelBtnAction:" target="svL-aC-wUu" id="P66-fe-1jy"/>
                         </connections>
                     </button>
                 </subviews>
@@ -2616,9 +2338,6 @@ Gw
 DQ
 </string>
                         </buttonCell>
-                        <connections>
-                            <action selector="savePreferencesAction:" target="Voe-Tx-rLC" id="afu-vs-dgm"/>
-                        </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BiP-3r-keA" userLabel="Cancel button">
                         <rect key="frame" x="331" y="11" width="73" height="19"/>
@@ -2630,9 +2349,6 @@ DQ
 Gw
 </string>
                         </buttonCell>
-                        <connections>
-                            <action selector="cancelPreferencesAction:" target="Voe-Tx-rLC" id="yVD-Oi-r2i"/>
-                        </connections>
                     </button>
                     <tabView fixedFrame="YES" drawsBackground="NO" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="k0I-lv-KcJ" userLabel="Preferences TabView">
                         <rect key="frame" x="13" y="42" width="391" height="237"/>
@@ -2673,9 +2389,6 @@ Gw
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="systemBold" size="10"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="seekLengthIncrementAction:" target="Voe-Tx-rLC" id="y0G-ep-sA8"/>
-                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Buf-vH-e4V">
                                             <rect key="frame" x="89" y="192" width="17" height="16"/>
@@ -2684,17 +2397,11 @@ Gw
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="systemBold" size="10"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="seekLengthDecrementAction:" target="Voe-Tx-rLC" id="iPh-Xz-U4a"/>
-                                            </connections>
                                         </button>
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z2P-US-UeC" userLabel="Seek Length Slider">
                                             <rect key="frame" x="109" y="193" width="177" height="15"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="3" maxValue="300" doubleValue="50" tickMarkPosition="below" sliderType="linear" id="VGi-B0-wqx" customClass="PreferencesSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                            <connections>
-                                                <action selector="seekLengthAction:" target="Voe-Tx-rLC" id="5WF-W0-LVH"/>
-                                            </connections>
                                         </slider>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Odv-ow-YMl" userLabel="Volume Increment Label">
                                             <rect key="frame" x="17" y="149" width="125" height="20"/>
@@ -2722,9 +2429,6 @@ Gw
                                             <rect key="frame" x="360" y="146" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="1" maxValue="25" doubleValue="5" id="UQQ-Lh-1wc"/>
-                                            <connections>
-                                                <action selector="volumeDeltaAction:" target="Voe-Tx-rLC" id="A5u-gJ-1WU"/>
-                                            </connections>
                                         </stepper>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xSo-AZ-SOf" userLabel="Volume on startup Label">
                                             <rect key="frame" x="17" y="112" width="125" height="20"/>
@@ -2742,9 +2446,6 @@ Gw
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" size="11" name="GillSans"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="startupVolumeButtonAction:" target="Voe-Tx-rLC" id="3Ol-KJ-pzP"/>
-                                            </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iIR-GC-hMW">
                                             <rect key="frame" x="29" y="71" width="90" height="20"/>
@@ -2753,17 +2454,11 @@ Gw
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" size="11" name="GillSans"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="startupVolumeButtonAction:" target="Voe-Tx-rLC" id="Ac4-wz-zdE"/>
-                                            </connections>
                                         </button>
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fUW-L3-FhW" userLabel="Startup Volume Slider">
                                             <rect key="frame" x="121" y="72" width="177" height="15"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <sliderCell key="cell" controlSize="small" continuous="YES" enabled="NO" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="below" sliderType="linear" id="leV-bZ-fp7" customClass="PreferencesSliderCell" customModule="Aural" customModuleProvider="target"/>
-                                            <connections>
-                                                <action selector="startupVolumeSliderAction:" target="Voe-Tx-rLC" id="ZsY-Qn-Lg1"/>
-                                            </connections>
                                         </slider>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vCp-DK-wqv" userLabel="Startup Volume Field">
                                             <rect key="frame" x="335" y="69" width="40" height="20"/>
@@ -2804,9 +2499,6 @@ Gw
                                             <rect key="frame" x="360" y="31" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="1" maxValue="25" doubleValue="10" id="fR7-Ff-J78"/>
-                                            <connections>
-                                                <action selector="panDeltaAction:" target="Voe-Tx-rLC" id="v6p-eQ-4NV"/>
-                                            </connections>
                                         </stepper>
                                     </subviews>
                                 </view>
@@ -2832,9 +2524,6 @@ Gw
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" size="11" name="GillSans"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="startupPlaylistPrefAction:" target="Voe-Tx-rLC" id="h8H-uP-iOi"/>
-                                            </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Zl-DZ-Wz6">
                                             <rect key="frame" x="29" y="150" width="146" height="20"/>
@@ -2843,9 +2532,6 @@ Gw
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" size="11" name="GillSans"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="startupPlaylistPrefAction:" target="Voe-Tx-rLC" id="NkS-pd-NDX"/>
-                                            </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rcJ-se-RYq" userLabel="Autoplay on startup">
                                             <rect key="frame" x="17" y="112" width="70" height="20"/>
@@ -2871,9 +2557,6 @@ Gw
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" size="11" name="GillSans"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="autoplayAfterAddingAction:" target="Voe-Tx-rLC" id="OtF-fP-6vE"/>
-                                            </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uGw-1k-yU2">
                                             <rect key="frame" x="53" y="50" width="202" height="20"/>
@@ -2882,9 +2565,6 @@ Gw
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" size="11" name="GillSans"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="autoplayAfterAddingRadioButtonAction:" target="Voe-Tx-rLC" id="7Wf-pC-eVW"/>
-                                            </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uvD-1v-wz2">
                                             <rect key="frame" x="53" y="31" width="137" height="20"/>
@@ -2893,9 +2573,6 @@ Gw
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" size="11" name="GillSans"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="autoplayAfterAddingRadioButtonAction:" target="Voe-Tx-rLC" id="snq-TU-407"/>
-                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -2912,9 +2589,6 @@ Gw
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="startupViewPrefAction:" target="Voe-Tx-rLC" id="iJl-Dq-xV6"/>
-                                            </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Y2-gM-UlV" userLabel="Remember view from last app launch">
                                             <rect key="frame" x="29" y="169" width="213" height="20"/>
@@ -2923,9 +2597,6 @@ Gw
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="startupViewPrefAction:" target="Voe-Tx-rLC" id="DhG-x5-gbE"/>
-                                            </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u8f-7O-VQt" userLabel="View on startup">
                                             <rect key="frame" x="17" y="193" width="92" height="20"/>
@@ -2968,9 +2639,6 @@ Gw
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="windowLocationOnStartupAction:" target="Voe-Tx-rLC" id="Yjb-fh-XJD"/>
-                                            </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nry-MO-jFY" userLabel="Remember location from last app launch">
                                             <rect key="frame" x="29" y="90" width="305" height="20"/>
@@ -2979,9 +2647,6 @@ Gw
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="windowLocationOnStartupAction:" target="Voe-Tx-rLC" id="KMT-u0-Fhq"/>
-                                            </connections>
                                         </button>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h0Y-pW-3qj" userLabel="Start window location menu">
                                             <rect key="frame" x="133" y="68" width="111" height="26"/>
@@ -3016,9 +2681,6 @@ Gw
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" size="13" name="GillSans"/>
                         </buttonCell>
-                        <connections>
-                            <action selector="playerPrefsTabViewAction:" target="Voe-Tx-rLC" id="e5f-J2-QcV"/>
-                        </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M8M-eC-agz" userLabel="Playlist tab button">
                         <rect key="frame" x="157" y="295" width="103" height="22"/>
@@ -3027,9 +2689,6 @@ Gw
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" size="13" name="GillSans"/>
                         </buttonCell>
-                        <connections>
-                            <action selector="playlistPrefsTabViewAction:" target="Voe-Tx-rLC" id="3J2-UJ-jZn"/>
-                        </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A1g-Lb-y1B" userLabel="View tab button">
                         <rect key="frame" x="266" y="295" width="103" height="22"/>
@@ -3038,9 +2697,6 @@ Gw
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" size="13" name="GillSans"/>
                         </buttonCell>
-                        <connections>
-                            <action selector="viewPrefsTabViewAction:" target="Voe-Tx-rLC" id="05y-6j-S8k"/>
-                        </connections>
                     </button>
                 </subviews>
             </view>
