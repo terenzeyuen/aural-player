@@ -2,6 +2,8 @@ import Cocoa
 
 class PlaylistViewController: NSViewController, EventSubscriber {
     
+    @IBOutlet weak var window: NSWindow!
+    
     private let delegate: AuralPlaylistControlDelegate = AppInitializer.getPlaylistControlDelegate()
     
     // Displays the playlist and summary
@@ -329,12 +331,12 @@ class PlaylistViewController: NSViewController, EventSubscriber {
         }
         
         // Position the search modal dialog and show it
-//        let searchFrameOrigin = NSPoint(x: window.frame.origin.x + 16, y: min(window.frame.origin.y + 227, window.frame.origin.y + window.frame.height - searchPanel.frame.height))
+        let searchFrameOrigin = NSPoint(x: window.frame.origin.x + 16, y: min(window.frame.origin.y + 227, window.frame.origin.y + window.frame.height - searchPanel.frame.height))
         
         searchField.stringValue = ""
         resetSearchFields()
         
-//        searchPanel.setFrameOrigin(searchFrameOrigin)
+        searchPanel.setFrameOrigin(searchFrameOrigin)
         searchPanel.setIsVisible(true)
         
         searchPanel.makeFirstResponder(searchField)
@@ -451,9 +453,9 @@ class PlaylistViewController: NSViewController, EventSubscriber {
         }
         
         // Position the sort modal dialog and show it
-//        let sortFrameOrigin = NSPoint(x: window.frame.origin.x + 73, y: min(window.frame.origin.y + 227, window.frame.origin.y + window.frame.height - sortPanel.frame.height))
-//        
-//        sortPanel.setFrameOrigin(sortFrameOrigin)
+        let sortFrameOrigin = NSPoint(x: window.frame.origin.x + 73, y: min(window.frame.origin.y + 227, window.frame.origin.y + window.frame.height - sortPanel.frame.height))
+        
+        sortPanel.setFrameOrigin(sortFrameOrigin)
         sortPanel.setIsVisible(true)
         
         NSApp.runModal(for: sortPanel)
@@ -464,7 +466,7 @@ class PlaylistViewController: NSViewController, EventSubscriber {
         // Do nothing ... this action function is just to get the radio button groups to work
     }
     
-    @IBAction func sortBtnAction(_ sender: Any) {
+    @IBAction func performSortAction(_ sender: Any) {
         
         // Gather field values
         let sortOptions = Sort()
@@ -479,7 +481,7 @@ class PlaylistViewController: NSViewController, EventSubscriber {
         //        showPlaylistSelectedRow()
     }
     
-    @IBAction func sortCancelAction(_ sender: Any) {
+    @IBAction func cancelSortAction(_ sender: Any) {
         dismissModalDialog()
     }
     
@@ -490,7 +492,6 @@ class PlaylistViewController: NSViewController, EventSubscriber {
     @IBAction func sortPlaylistMenuItemAction(_ sender: Any) {
         sortPlaylistAction(sender)
     }
-    
     
     func startedAddingTracks() {
         playlistWorkSpinner.doubleValue = 0

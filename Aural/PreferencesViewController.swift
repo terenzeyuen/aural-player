@@ -1,15 +1,9 @@
-//
-//  PreferencesViewController.swift
-//  Aural
-//
-//  Created by Kay Ven on 8/19/17.
-//  Copyright © 2017 Anonymous. All rights reserved.
-//
 
 import Cocoa
 
 class PreferencesViewController: NSViewController {
     
+    @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var prefsPanel: NSPanel!
     @IBOutlet weak var prefsTabView: NSTabView!
     
@@ -137,9 +131,9 @@ class PreferencesViewController: NSViewController {
         resetPreferencesFields()
         
         // Position the search modal dialog and show it
-//        let prefsFrameOrigin = NSPoint(x: window.frame.origin.x - 2, y: min(window.frame.origin.y + 227, window.frame.origin.y + window.frame.height - prefsPanel.frame.height))
-//        
-//        prefsPanel.setFrameOrigin(prefsFrameOrigin)
+        let prefsFrameOrigin = NSPoint(x: window.frame.origin.x - 2, y: min(window.frame.origin.y + 227, window.frame.origin.y + window.frame.height - prefsPanel.frame.height))
+        
+        prefsPanel.setFrameOrigin(prefsFrameOrigin)
         prefsPanel.setIsVisible(true)
         
         NSApp.runModal(for: prefsPanel)

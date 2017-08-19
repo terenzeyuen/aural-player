@@ -33,11 +33,11 @@ class WindowViewController: NSViewController {
         fxCollapsibleView = CollapsibleView(views: [fxBox])
         
         if (appState.hidePlaylist) {
-            toggleViewPlaylistAction(self)
+            togglePlaylist(false)
         }
         
         if (appState.hideEffects) {
-            toggleViewEffectsAction(self)
+            toggleEffects(false)
         }
     }
     
@@ -71,33 +71,30 @@ class WindowViewController: NSViewController {
         NSApplication.shared().terminate(self)
     }
     
-    // View menu item action
-    @IBAction func toggleViewEffectsAction(_ sender: AnyObject) {
-        
-        if (fxCollapsibleView?.hidden)! {
-            resizeWindow(playlistShown: !(playlistCollapsibleView?.hidden)!, effectsShown: true, sender !== self)
-            fxCollapsibleView!.show()
-            btnToggleEffects.state = 1
-            btnToggleEffects.image = UIConstants.imgEffectsOn
-            viewEffectsMenuItem.state = 1
-        } else {
-            fxCollapsibleView!.hide()
-            resizeWindow(playlistShown: !(playlistCollapsibleView?.hidden)!, effectsShown: false, sender !== self)
-            btnToggleEffects.state = 0
-            btnToggleEffects.image = UIConstants.imgEffectsOff
-            viewEffectsMenuItem.state = 0
-        }
-        
-        //        showPlaylistSelectedRow()
+    @IBAction func toggleEffectsMenuItemAction(_ sender: AnyObject) {
+        toggleEffects(true)
     }
     
-    // View menu item action
-    @IBAction func toggleViewPlaylistAction(_ sender: AnyObject) {
+    @IBAction func togglePlaylistMenuItemAction(_ sender: AnyObject) {
+        togglePlaylist(true)
+    }
+    
+    // Toggle button action
+    @IBAction func togglePlaylistAction(_ sender: AnyObject) {
+        togglePlaylist(true)
+    }
+    
+    // Toggle button action
+    @IBAction func toggleEffectsAction(_ sender: AnyObject) {
+        toggleEffects(true)
+    }
+    
+    private func togglePlaylist(_ animate: Bool) {
         
         // Set focus on playlist view if it's visible after the toggle
         
         if (playlistCollapsibleView?.hidden)! {
-            resizeWindow(playlistShown: true, effectsShown: !(fxCollapsibleView?.hidden)!, sender !== self)
+            resizeWindow(playlistShown: true, effectsShown: !(fxCollapsibleView?.hidden)!, animate)
             playlistCollapsibleView!.show()
             //            window.makeFirstResponder(playlistView)
             btnTogglePlaylist.state = 1
@@ -105,7 +102,7 @@ class WindowViewController: NSViewController {
             viewPlaylistMenuItem.state = 1
         } else {
             playlistCollapsibleView!.hide()
-            resizeWindow(playlistShown: false, effectsShown: !(fxCollapsibleView?.hidden)!, sender !== self)
+            resizeWindow(playlistShown: false, effectsShown: !(fxCollapsibleView?.hidden)!, animate)
             btnTogglePlaylist.state = 0
             btnTogglePlaylist.image = UIConstants.imgPlaylistOff
             viewPlaylistMenuItem.state = 0
@@ -114,8 +111,27 @@ class WindowViewController: NSViewController {
         //        showPlaylistSelectedRow()
     }
     
+    private func toggleEffects(_ animate: Bool) {
+        
+        if (fxCollapsibleView?.hidden)! {
+            resizeWindow(playlistShown: !(playlistCollapsibleView?.hidden)!, effectsShown: true, animate)
+            fxCollapsibleView!.show()
+            btnToggleEffects.state = 1
+            btnToggleEffects.image = UIConstants.imgEffectsOn
+            viewEffectsMenuItem.state = 1
+        } else {
+            fxCollapsibleView!.hide()
+            resizeWindow(playlistShown: !(playlistCollapsibleView?.hidden)!, effectsShown: false, animate)
+            btnToggleEffects.state = 0
+            btnToggleEffects.image = UIConstants.imgEffectsOff
+            viewEffectsMenuItem.state = 0
+        }
+        
+        //        showPlaylistSelectedRow()
+    }
+    
     // Called when toggling views
-    func resizeWindow(playlistShown: Bool, effectsShown: Bool, _ animate: Bool) {
+    private func resizeWindow(playlistShown: Bool, effectsShown: Bool, _ animate: Bool) {
         
         var wFrame = window.frame
         let oldOrigin = wFrame.origin
@@ -139,16 +155,6 @@ class WindowViewController: NSViewController {
         wFrame.origin = NSMakePoint(oldOrigin.x, shrinking ? oldOrigin.y + (oldHeight - newHeight) : oldOrigin.y - (newHeight - oldHeight))
         
         window.setFrame(wFrame, display: true, animate: animate)
-    }
-    
-    // Toggle button action
-    @IBAction func togglePlaylistAction(_ sender: AnyObject) {
-        toggleViewPlaylistAction(sender)
-    }
-    
-    // Toggle button action
-    @IBAction func toggleEffectsAction(_ sender: AnyObject) {
-        toggleViewEffectsAction(sender)
     }
     
     private func isEffectsShown() -> Bool {
