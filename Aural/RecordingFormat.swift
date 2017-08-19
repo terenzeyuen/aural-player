@@ -9,7 +9,6 @@ import AVFoundation
 
 enum RecordingFormat {
     
-    // TODO: Add mp3 recording support
     case mp3
     case aac
     

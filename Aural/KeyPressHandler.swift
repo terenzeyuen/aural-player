@@ -45,7 +45,8 @@ class KeyPressHandler {
                 app.playlistView.selectRowIndexes(IndexSet(integer: selRow - 1), byExtendingSelection: false)
             }
             
-            app.showPlaylistSelectedRow()
+            // TODO
+//            app.showPlaylistSelectedRow()
         }
         
         // (Down arrow) Change selection (down) in playlist
@@ -57,7 +58,8 @@ class KeyPressHandler {
                 app.playlistView.selectRowIndexes(IndexSet(integer: selRow + 1), byExtendingSelection: false)
             }
             
-            app.showPlaylistSelectedRow()
+            // TODO
+//            app.showPlaylistSelectedRow()
         }
         
         // NOTE - This keyboard shortcut is for debugging purposes only, not inteded for the end user

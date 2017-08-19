@@ -1,4 +1,3 @@
-
 import Cocoa
 
 /*
@@ -46,4 +45,34 @@ protocol AuralPlayerDelegate {
     
     // Returns the currently playing track, ensuring that detailed info is loaded in it. This is necessary due to lazy loading.
     func getMoreInfo() -> IndexedTrack?
+    
+    // Retrieves the current player volume
+    func getVolume() -> Float
+    
+    // Sets the player volume, specified as a percentage (0 to 100)
+    func setVolume(_ volumePercentage: Float)
+    
+    // Increases the player volume by a small increment. Returns the new player volume.
+    func increaseVolume() -> Float
+    
+    // Decreases the player volume by a small decrement. Returns the new player volume.
+    func decreaseVolume() -> Float
+    
+    // Toggles mute between on/off. Returns true if muted after method execution, false otherwise
+    func toggleMute() -> Bool
+    
+    // Determines whether player is currently muted
+    func isMuted() -> Bool
+    
+    // Retrieves the current L/R balance (aka pan)
+    func getBalance() -> Float
+    
+    // Sets the L/R balance (aka pan), specified as a percentage value between -100 (L) and 100 (R)
+    func setBalance(_ balancePercentage: Float)
+    
+    // Pans left by a small increment. Returns new balance value.
+    func panLeft() -> Float
+    
+    // Pans right by a small increment. Returns new balance value.
+    func panRight() -> Float
 }

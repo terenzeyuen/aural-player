@@ -17,7 +17,7 @@
                BlueprintIdentifier = "3E85F2551EFA78D6007BE830"
                BuildableName = "Aural.app"
                BlueprintName = "Aural"
-               ReferencedContainer = "container:Aural-makeover.xcodeproj">
+               ReferencedContainer = "container:Aural.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -78,7 +78,7 @@
             BlueprintIdentifier = "3E85F2551EFA78D6007BE830"
             BuildableName = "Aural.app"
             BlueprintName = "Aural"
-            ReferencedContainer = "container:Aural-makeover.xcodeproj">
+            ReferencedContainer = "container:Aural.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
