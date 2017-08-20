@@ -1,30 +1,36 @@
 import Foundation
 
-class RecorderDelegate: AuralRecorderDelegate {
+class RecorderDelegate: RecorderDelegateProtocol {
+    
+    private var recorder: RecorderProtocol
+    
+    init(_ recorder: RecorderProtocol) {
+        self.recorder = recorder
+    }
     
     func startRecording(_ format: RecordingFormat) {
-        player.startRecording(format)
+        recorder.startRecording(format)
     }
     
     func stopRecording() {
         DispatchQueue.global(qos: .userInitiated).async {
-            self.player.stopRecording()
+            self.recorder.stopRecording()
         }
     }
     
     func saveRecording(_ url: URL) {
         DispatchQueue.global(qos: .userInitiated).async {
-            self.player.saveRecording(url)
+            self.recorder.saveRecording(url)
         }
     }
     
     func deleteRecording() {
         DispatchQueue.global(qos: .userInitiated).async {
-            self.player.deleteRecording()
+            self.recorder.deleteRecording()
         }
     }
     
     func getRecordingInfo() -> RecordingInfo? {
-        return player.getRecordingInfo()
+        return recorder.getRecordingInfo()
     }
 }

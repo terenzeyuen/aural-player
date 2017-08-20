@@ -14,9 +14,9 @@ protocol PlaybackSequenceAccessor {
     
     func nextTrack() -> IndexedTrack?
     
-    func peekTrackAt(_ index: Int) -> IndexedTrack?
+    func peekTrackAt(_ index: Int?) -> IndexedTrack?
     
-    func selectTrackAt(_ index: Int) -> IndexedTrack?
+    func selectTrackAt(_ index: Int?) -> IndexedTrack?
     
     // Returns the currently playing track (with its index)
     func getPlayingTrack() -> IndexedTrack?

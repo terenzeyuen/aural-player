@@ -18,14 +18,7 @@ private func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     }
 }
 
-class Playlist: PlaybackSequenceAccessor, PlaylistCRUD {
-    
-    // Singleton instance
-    private static var singleton: Playlist = AppInitializer.getPlaylist()
-    
-    static func instance() -> Playlist {
-        return singleton
-    }
+class Playlist: PlaybackSequenceAccessor, PlaylistCRUD, PlaylistAccessor {
     
     private var tracks: [Track] = [Track]()
     private var tracksByFilename: [String: Track] = [String: Track]()
@@ -112,7 +105,7 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD {
     }
     
     // Searches the playlist for all tracks matching the specified criteria, and returns a set of results
-    func searchPlaylist(_ searchQuery: SearchQuery) -> SearchResults {
+    func search(_ searchQuery: SearchQuery) -> SearchResults {
         
         var results: [SearchResult] = [SearchResult]()
         
@@ -208,7 +201,7 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD {
         return (false, nil, nil)
     }
     
-    func sortPlaylist(_ sort: Sort) {
+    func sort(_ sort: Sort) {
         
         let playingTrack = getPlayingTrack()
         

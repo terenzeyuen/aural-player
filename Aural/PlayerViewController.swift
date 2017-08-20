@@ -2,15 +2,7 @@ import Cocoa
 
 class PlayerViewController: NSViewController, EventSubscriber, MessageSubscriber {
     
-    private let player: AuralPlayerDelegate = AppInitializer.getPlayerDelegate()
-    
-    // Toggle buttons (their images change)
-    @IBOutlet weak var btnVolume: NSButton!
     @IBOutlet weak var btnPlayPause: NSButton!
-    
-    // Volume/pan controls
-    @IBOutlet weak var volumeSlider: NSSlider!
-    @IBOutlet weak var panSlider: NSSlider!
     
     // Now playing track info
     @IBOutlet weak var lblTrackArtist: NSTextField!
@@ -27,8 +19,10 @@ class PlayerViewController: NSViewController, EventSubscriber, MessageSubscriber
     
     @IBOutlet weak var btnMoreInfo: NSButton!
     
+    private let player: PlayerDelegateProtocol = ObjectGraph.getPlayerDelegate()
+    
     // Popover view that displays detailed track info
-    lazy var popover: NSPopover = {
+    private lazy var popover: NSPopover = {
         let popover = NSPopover()
         popover.behavior = .semitransient
         let ctrlr = PopoverController(nibName: "PopoverController", bundle: Bundle.main)
@@ -39,11 +33,7 @@ class PlayerViewController: NSViewController, EventSubscriber, MessageSubscriber
     override func viewDidLoad() {
         print("FAAK YOU, ASSHOLLLLLLLLLE")
         
-        let appState = AppInitializer.getUIAppState()
-        
-        volumeSlider.floatValue = appState.volume
-        setVolumeImage(appState.muted)
-        panSlider.floatValue = appState.balance
+        let appState = ObjectGraph.getUIAppState()
         
         seekTimer = ScheduledTaskExecutor(intervalMillis: appState.seekTimerInterval, task: {self.updatePlayingTime()}, queue: DispatchQueue.main)
         
@@ -200,7 +190,7 @@ class PlayerViewController: NSViewController, EventSubscriber, MessageSubscriber
         
         if (player.getPlaybackState() == .playing) {
             
-            let seekPosn = player.getSeekSecondsAndPercentage()
+            let seekPosn = player.getSeekPosition()
             
             lblPlayingTime.stringValue = Utils.formatDuration(seekPosn.seconds)
             seekSlider.doubleValue = seekPosn.percentage
@@ -226,57 +216,6 @@ class PlayerViewController: NSViewController, EventSubscriber, MessageSubscriber
     @IBAction func seekSliderAction(_ sender: AnyObject) {
         player.seekToPercentage(seekSlider.doubleValue)
         updatePlayingTime()
-    }
-    
-    @IBAction func volumeAction(_ sender: AnyObject) {
-        player.setVolume(volumeSlider.floatValue)
-        setVolumeImage(player.isMuted())
-    }
-    
-    @IBAction func volumeBtnAction(_ sender: AnyObject) {
-        setVolumeImage(player.toggleMute())
-    }
-    
-    func increaseVolume() {
-        volumeSlider.floatValue = player.increaseVolume()
-        setVolumeImage(player.isMuted())
-    }
-    
-    func decreaseVolume() {
-        volumeSlider.floatValue = player.decreaseVolume()
-        setVolumeImage(player.isMuted())
-    }
-    
-    private func setVolumeImage(_ muted: Bool) {
-        
-        if (muted) {
-            btnVolume.image = UIConstants.imgMute
-        } else {
-            let vol = player.getVolume()
-            
-            // Zero / Low / Medium / High (different images)
-            if (vol > 200/3) {
-                btnVolume.image = UIConstants.imgVolumeHigh
-            } else if (vol > 100/3) {
-                btnVolume.image = UIConstants.imgVolumeMedium
-            } else if (vol > 0) {
-                btnVolume.image = UIConstants.imgVolumeLow
-            } else {
-                btnVolume.image = UIConstants.imgVolumeZero
-            }
-        }
-    }
-    
-    @IBAction func panAction(_ sender: AnyObject) {
-        player.setBalance(panSlider.floatValue)
-    }
-    
-    func panRight() {
-        panSlider.floatValue = player.panRight()
-    }
-    
-    func panLeft() {
-        panSlider.floatValue = player.panLeft()
     }
     
     @IBAction func moreInfoAction(_ sender: AnyObject) {
@@ -376,26 +315,6 @@ class PlayerViewController: NSViewController, EventSubscriber, MessageSubscriber
     
     @IBAction func seekBackwardMenuItemAction(_ sender: Any) {
         seekBackwardAction(sender as AnyObject)
-    }
-    
-    @IBAction func decreaseVolumeMenuItemAction(_ sender: Any) {
-        decreaseVolume()
-    }
-    
-    @IBAction func increaseVolumeMenuItemAction(_ sender: Any) {
-        increaseVolume()
-    }
-    
-    @IBAction func panLeftMenuItemAction(_ sender: Any) {
-        panLeft()
-    }
-    
-    @IBAction func panRightMenuItemAction(_ sender: Any) {
-        panRight()
-    }
-    
-    @IBAction func muteUnmuteMenuItemAction(_ sender: Any) {
-        volumeBtnAction(sender as AnyObject)
     }
     
     // Playlist info changed, need to reset the UI

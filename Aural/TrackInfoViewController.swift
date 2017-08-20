@@ -7,12 +7,14 @@ import AVFoundation
 
 class TrackInfoViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
+    private let player: PlayerDelegateProtocol = ObjectGraph.getPlayerDelegate()
+    
     var info: [(key: String, value: String)] = [(key: String, value: String)]()
     @IBOutlet weak var trackInfoView: NSTableView!
     
     func numberOfRows(in tableView: NSTableView) -> Int {
         
-        let _track = PlayerDelegate.instance().getPlayingTrack()?.track
+        let _track = player.getPlayingTrack()?.track
         if (_track == nil) {
             return 0
         }
@@ -55,7 +57,7 @@ class TrackInfoViewController: NSViewController, NSTableViewDataSource, NSTableV
     // Each track info view row contains one key-value pair
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
         
-        let _track = PlayerDelegate.instance().getPlayingTrack()?.track
+        let _track = player.getPlayingTrack()?.track
         if (_track == nil) {
             return nil
         }

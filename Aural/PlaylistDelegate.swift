@@ -1,12 +1,12 @@
 import Cocoa
 
-class PlaylistDelegate: AuralPlaylistDelegate {
+class PlaylistDelegate: PlaylistDelegateProtocol {
     
     private var playlist: PlaylistCRUD
-    private var player: PlaybackControl // ( for play(track) and stop() )
+    private var player: BasicPlayerDelegateProtocol // ( for play(track) and stop() )
     private var preferences: Preferences
     
-    init(_ playlist: PlaylistCRUD, _ player: PlaybackControl, _ preferences: Preferences) {
+    init(_ playlist: PlaylistCRUD, _ player: BasicPlayerDelegateProtocol, _ preferences: Preferences) {
         self.playlist = playlist
         self.player = player
         self.preferences = preferences
@@ -149,7 +149,7 @@ class PlaylistDelegate: AuralPlaylistDelegate {
     }
     
     func removeTrack(_ index: Int) -> Int? {
-        playlist.removeTrack()
+        playlist.removeTrack(index)
         
         // TODO: Return playing track index
         // TODO: publish message
@@ -158,10 +158,12 @@ class PlaylistDelegate: AuralPlaylistDelegate {
     
     func moveTrackUp(_ index: Int) -> Int {
         playlist.moveTrackUp(index)
+        return 0    // TODO
     }
     
     func moveTrackDown(_ index: Int) -> Int {
         playlist.moveTrackDown(index)
+        return 0    // TODO
     }
     
     func clear() {
@@ -189,10 +191,10 @@ class PlaylistDelegate: AuralPlaylistDelegate {
     }
     
     func toggleRepeatMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode) {
-        return playlist.toggleRepeatMode(repeatMode: repeatMode, shuffleMode: shuffleMode)
+        return playlist.toggleRepeatMode()
     }
     
     func toggleShuffleMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode) {
-        return playlist.toggleShuffleMode(repeatMode: repeatMode, shuffleMode: shuffleMode)
+        return playlist.toggleShuffleMode()
     }
 }

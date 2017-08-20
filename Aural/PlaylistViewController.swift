@@ -4,8 +4,6 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     
     @IBOutlet weak var window: NSWindow!
     
-    private let delegate: PlayerDelegate = AppInitializer.getPlaylistControlDelegate()
-    
     // Displays the playlist and summary
     @IBOutlet weak var playlistView: NSTableView!
     @IBOutlet weak var lblPlaylistSummary: NSTextField!
@@ -46,14 +44,16 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     @IBOutlet weak var sortAscending: NSButton!
     @IBOutlet weak var sortDescending: NSButton!
     
+    private let playlist: PlaylistDelegateProtocol = ObjectGraph.getPlaylistDelegate()
+    
     // Current playlist search results
-    var searchResults: SearchResults?
+    private var searchResults: SearchResults?
     
     override func viewDidLoad() {
         
         print("DILLON !!! YOUUUUUUUUUUUUUU SON OF A BITCH !")
         
-        let appState = AppInitializer.getUIAppState()
+        let appState = ObjectGraph.getUIAppState()
         
         // Enable drag n drop into the playlist view
         playlistView.register(forDraggedTypes: [String(kUTTypeFileURL)])
@@ -104,7 +104,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     
     func addFiles(_ files: [URL]) {
        // TODO startedAddingTracks()
-        delegate.addFiles(files)
+        playlist.addFiles(files)
     }
     
     @IBAction func removeAction(_ sender: Any) {
@@ -115,7 +115,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         
         if (index >= 0) {
             
-            let newPlayingTrackIndex = delegate.removeTrack(index)
+            let newPlayingTrackIndex = playlist.removeTrack(index)
             
             // The new number of rows (after track removal) is one less than the size of the playlist view, because the view has not yet been updated
             let numRows = playlistView.numberOfRows - 1
@@ -144,7 +144,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     // If tracks are currently being added to the playlist, the optional progress argument contains progress info that the spinner control uses for its animation
     func updatePlaylistSummary(_ trackAddProgress: TrackAddedEventProgress? = nil) {
         
-        let summary = delegate.getPlaylistSummary()
+        let summary = playlist.getSummary()
         let numTracks = summary.numTracks
         
         lblPlaylistSummary.stringValue = String(format: "%d %@   %@", numTracks, numTracks == 1 ? "track" : "tracks", Utils.formatDuration(summary.totalDuration))
@@ -168,7 +168,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
             if (modalResponse == NSModalResponseOK) {
                 
                 let file = dialog.url
-                delegate.savePlaylist(file!)
+                playlist.save(file!)
             }
         }
     }
@@ -182,7 +182,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
             return
         }
         
-        let newSelectedRow = delegate.moveTrackUp(curSelectedRow)
+        let newSelectedRow = playlist.moveTrackUp(curSelectedRow)
         swapRows(curSelectedRow, newSelectedRow, newSelectedRow)
         showPlaylistSelectedRow()
     }
@@ -196,7 +196,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
             return
         }
         
-        let newSelectedRow = delegate.moveTrackDown(curSelectedRow)
+        let newSelectedRow = playlist.moveTrackDown(curSelectedRow)
         swapRows(curSelectedRow, newSelectedRow, newSelectedRow)
         showPlaylistSelectedRow()
     }
@@ -213,7 +213,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         
         print("Papasami")
         
-        delegate.clearPlaylist()
+        playlist.clear()
         playlistView.reloadData()
         
         UIMessenger.publishMessage(StopPlaybackRequest.instance)
@@ -271,7 +271,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     
     @IBAction func repeatAction(_ sender: AnyObject) {
         
-        let modes = delegate.toggleRepeatMode()
+        let modes = playlist.toggleRepeatMode()
         
         switch modes.repeatMode {
             
@@ -291,7 +291,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     
     @IBAction func shuffleAction(_ sender: AnyObject) {
         
-        let modes = delegate.toggleShuffleMode()
+        let modes = playlist.toggleShuffleMode()
         
         switch modes.shuffleMode {
             
@@ -379,7 +379,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
             query.type = .endsWith
         }
         
-        searchResults = delegate.searchPlaylist(searchQuery: query)
+        searchResults = playlist.search(searchQuery: query)
         
         if ((searchResults?.count)! > 0) {
             
@@ -468,7 +468,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         sortOptions.field = sortByName.state == 1 ? SortField.name : SortField.duration
         sortOptions.order = sortAscending.state == 1 ? SortOrder.ascending : SortOrder.descending
         
-        delegate.sortPlaylist(sort: sortOptions)
+        playlist.sort(sort: sortOptions)
         dismissModalDialog()
         
         playlistView.reloadData()
@@ -587,7 +587,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         DispatchQueue.main.async {
             
             // First, select the problem track and update the now playing info
-//            let playingTrack = self.delegate.getPlayingTrack()
+//            let playingTrack = self.playlist.getPlayingTrack()
 ////            self.trackChange(playingTrack, true)
 //            let playingTrackIndex = playingTrack!.index!
 //            self.removeSingleTrack(playingTrackIndex)

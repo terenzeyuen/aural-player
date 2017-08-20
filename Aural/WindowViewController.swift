@@ -20,9 +20,9 @@ class WindowViewController: NSViewController {
     var playlistCollapsibleView: CollapsibleView?
     var fxCollapsibleView: CollapsibleView?
     
-    
     override func viewDidLoad() {
-        let appState = AppInitializer.getUIAppState()
+        
+        let appState = ObjectGraph.getUIAppState()
         
         // TODO: Where/when should this be done ?
         positionWindow(appState.windowLocation)

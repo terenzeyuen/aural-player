@@ -4,16 +4,16 @@ protocol PlaylistCRUD {
     
     func addTrack(_ file: URL) throws -> Int
     
-    func removeTrack()
+    func removeTrack(_ index: Int)
     
     // Clears the entire playlist of all tracks
     func clear()
     
     // Moves the track at the specified index, up one index, in the playlist, if it is not already at the top. Returns the new index of the track (same if it didn't move)
-    func moveTrackUp(_ index: Int) -> Int
+    func moveTrackUp(_ index: Int)
     
     // Moves the track at the specified index, down one index, in the playlist, if it is not already at the bottom. Returns the new index of the track (same if it didn't move)
-    func moveTrackDown(_ index: Int) -> Int
+    func moveTrackDown(_ index: Int)
     
     // Toggles between repeat modes. See RepeatMode for more details. Returns the new repeat and shuffle mode after performing the toggle operation.
     func toggleRepeatMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode)

@@ -50,7 +50,7 @@ class PreferencesViewController: NSViewController {
     @IBOutlet weak var btnStartAtWindowLocation: NSButton!
     @IBOutlet weak var startWindowLocationMenu: NSPopUpButton!
     
-    private let preferences: Preferences = AppInitializer.getPreferences()
+    private let preferences: Preferences = ObjectGraph.getPreferences()
     
     override func viewDidLoad() {
         
@@ -69,18 +69,18 @@ class PreferencesViewController: NSViewController {
         seekLengthSlider.integerValue = seekLength
         seekLengthField.stringValue = Utils.formatDuration_minSec(seekLength)
         
-        let volumeDelta = Int(round(preferences.volumeDelta * AppConstants.volumeConversion_playerToUI))
+        let volumeDelta = Int(round(preferences.volumeDelta * AppConstants.volumeConversion_graphToUI))
         volumeDeltaStepper.integerValue = volumeDelta
         volumeDeltaField.stringValue = String(format: "%d%%", volumeDelta)
         
         btnRememberVolume.state = preferences.volumeOnStartup == .rememberFromLastAppLaunch ? 1 : 0
         btnSpecifyVolume.state = preferences.volumeOnStartup == .rememberFromLastAppLaunch ? 0 : 1
         startupVolumeSlider.isEnabled = btnSpecifyVolume.state == 1
-        startupVolumeSlider.integerValue = Int(round(preferences.startupVolumeValue * AppConstants.volumeConversion_playerToUI))
+        startupVolumeSlider.integerValue = Int(round(preferences.startupVolumeValue * AppConstants.volumeConversion_graphToUI))
         lblStartupVolume.isEnabled = btnSpecifyVolume.state == 1
         lblStartupVolume.stringValue = String(format: "%d%%", startupVolumeSlider.integerValue)
         
-        let panDelta = Int(round(preferences.panDelta * AppConstants.panConversion_playerToUI))
+        let panDelta = Int(round(preferences.panDelta * AppConstants.panConversion_graphToUI))
         panDeltaStepper.integerValue = panDelta
         panDeltaField.stringValue = String(format: "%d%%", panDelta)
         
@@ -155,12 +155,12 @@ class PreferencesViewController: NSViewController {
     @IBAction func savePreferencesAction(_ sender: Any) {
         
         preferences.seekLength = seekLengthSlider.integerValue
-        preferences.volumeDelta = volumeDeltaStepper.floatValue * AppConstants.volumeConversion_UIToPlayer
+        preferences.volumeDelta = volumeDeltaStepper.floatValue * AppConstants.volumeConversion_UIToGraph
         
         preferences.volumeOnStartup = btnRememberVolume.state == 1 ? .rememberFromLastAppLaunch : .specific
-        preferences.startupVolumeValue = Float(startupVolumeSlider.integerValue) * AppConstants.volumeConversion_UIToPlayer
+        preferences.startupVolumeValue = Float(startupVolumeSlider.integerValue) * AppConstants.volumeConversion_UIToGraph
         
-        preferences.panDelta = panDeltaStepper.floatValue * AppConstants.panConversion_UIToPlayer
+        preferences.panDelta = panDeltaStepper.floatValue * AppConstants.panConversion_UIToGraph
         preferences.autoplayOnStartup = Bool(btnAutoplayOnStartup.state)
         preferences.autoplayAfterAddingTracks = Bool(btnAutoplayAfterAddingTracks.state)
         preferences.autoplayAfterAddingOption = btnAutoplayIfNotPlaying.state == 1 ? .ifNotPlaying : .always

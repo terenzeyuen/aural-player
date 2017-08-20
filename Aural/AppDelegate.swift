@@ -10,12 +10,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         
+        AppDelegate.configureLogging()
+        
+        ObjectGraph.initialize()
+        
         // Set up key press handler
         KeyPressHandler.initialize(self)
         NSEvent.addLocalMonitorForEvents(matching: NSEventMask.keyDown, handler: {(evt: NSEvent!) -> NSEvent in
             KeyPressHandler.handle(evt)
             return evt;
         });
+    }
+    
+    // Make sure all logging is done to the app's log file
+    private static func configureLogging() {
+        
+        let allPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = allPaths.first!
+        let pathForLog = documentsDirectory + ("/" + AppConstants.logFileName)
+        
+        freopen(pathForLog.cString(using: String.Encoding.ascii)!, "a+", stderr)
     }
     
     func applicationWillTerminate(_ aNotification: Notification) {

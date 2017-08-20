@@ -4,7 +4,7 @@
 
 import Cocoa
 
-protocol AuralRecorderDelegate {
+protocol RecorderDelegateProtocol {
     
     // Starts a recording with the specified format
     func startRecording(_ format: RecordingFormat)

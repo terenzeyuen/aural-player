@@ -1,6 +1,6 @@
 import Foundation
 
-protocol PlaybackControl {
+protocol BasicPlayerDelegateProtocol {
     
     func play(_ track: IndexedTrack, _ interruptPlayingTrack: Bool)
     

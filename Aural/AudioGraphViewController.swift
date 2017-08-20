@@ -1,6 +1,11 @@
 import Cocoa
 
-class EffectsViewController: NSViewController {
+class AudioGraphViewController: NSViewController {
+    
+    // Volume/pan controls
+    @IBOutlet weak var btnVolume: NSButton!
+    @IBOutlet weak var volumeSlider: NSSlider!
+    @IBOutlet weak var panSlider: NSSlider!
     
     @IBOutlet weak var fxTabView: NSTabView!
     
@@ -57,12 +62,6 @@ class EffectsViewController: NSViewController {
     @IBOutlet weak var lblFilterMidRange: NSTextField!
     @IBOutlet weak var lblFilterTrebleRange: NSTextField!
     
-    // Recorder controls
-    @IBOutlet weak var btnRecord: NSButton!
-    @IBOutlet weak var lblRecorderDuration: NSTextField!
-    @IBOutlet weak var lblRecorderFileSize: NSTextField!
-    @IBOutlet weak var recordingInfoBox: NSBox!
-    
     // Parametric equalizer controls
     @IBOutlet weak var eqGlobalGainSlider: NSSlider!
     @IBOutlet weak var eqSlider1k: NSSlider!
@@ -77,16 +76,11 @@ class EffectsViewController: NSViewController {
     @IBOutlet weak var eqSlider128: NSSlider!
     @IBOutlet weak var eqPresets: NSPopUpButton!
     
-    // Timer that periodically updates the recording duration (only when recorder is active)
-    private var recorderTimer: ScheduledTaskExecutor?
-    
-    private var player: EffectsDelegate = AppInitializer.getPlayerDelegate()
+    private let graph: AudioGraphDelegateProtocol = ObjectGraph.getAudioGraphDelegate()
     
     override func viewDidLoad() {
         
-        let appState = AppInitializer.getUIAppState()
-        
-        recorderTimer = ScheduledTaskExecutor(intervalMillis: UIConstants.recorderTimerIntervalMillis, task: {self.updateRecordingInfo()}, queue: DispatchQueue.main)
+        let appState = ObjectGraph.getUIAppState()
         
         // Set up the filter control sliders
         
@@ -189,6 +183,79 @@ class EffectsViewController: NSViewController {
         eqPresets.selectItem(at: -1)
     }
     
+    
+    @IBAction func volumeAction(_ sender: AnyObject) {
+        graph.setVolume(volumeSlider.floatValue)
+        setVolumeImage(graph.isMuted())
+    }
+    
+    @IBAction func volumeBtnAction(_ sender: AnyObject) {
+        setVolumeImage(graph.toggleMute())
+    }
+    
+    func increaseVolume() {
+        volumeSlider.floatValue = graph.increaseVolume()
+        setVolumeImage(graph.isMuted())
+    }
+    
+    func decreaseVolume() {
+        volumeSlider.floatValue = graph.decreaseVolume()
+        setVolumeImage(graph.isMuted())
+    }
+    
+    private func setVolumeImage(_ muted: Bool) {
+        
+        if (muted) {
+            btnVolume.image = UIConstants.imgMute
+        } else {
+            let vol = graph.getVolume()
+            
+            // Zero / Low / Medium / High (different images)
+            if (vol > 200/3) {
+                btnVolume.image = UIConstants.imgVolumeHigh
+            } else if (vol > 100/3) {
+                btnVolume.image = UIConstants.imgVolumeMedium
+            } else if (vol > 0) {
+                btnVolume.image = UIConstants.imgVolumeLow
+            } else {
+                btnVolume.image = UIConstants.imgVolumeZero
+            }
+        }
+    }
+    
+    @IBAction func panAction(_ sender: AnyObject) {
+        graph.setBalance(panSlider.floatValue)
+    }
+    
+    func panRight() {
+        panSlider.floatValue = graph.panRight()
+    }
+    
+    func panLeft() {
+        panSlider.floatValue = graph.panLeft()
+    }
+    
+    
+    @IBAction func decreaseVolumeMenuItemAction(_ sender: Any) {
+        decreaseVolume()
+    }
+    
+    @IBAction func increaseVolumeMenuItemAction(_ sender: Any) {
+        increaseVolume()
+    }
+    
+    @IBAction func panLeftMenuItemAction(_ sender: Any) {
+        panLeft()
+    }
+    
+    @IBAction func panRightMenuItemAction(_ sender: Any) {
+        panRight()
+    }
+    
+    @IBAction func muteUnmuteMenuItemAction(_ sender: Any) {
+        volumeBtnAction(sender as AnyObject)
+    }
+    
     private func updateEQSliders(_ eqBands: [Int: Float]) {
         
         eqSlider32.floatValue = eqBands[32]!
@@ -208,7 +275,7 @@ class EffectsViewController: NSViewController {
         let preset = EQPresets.fromDescription((eqPresets.selectedItem?.title)!)
         
         let eqBands: [Int: Float] = preset.bands
-        player.setEQBands(eqBands)
+        graph.setEQBands(eqBands)
         updateEQSliders(eqBands)
         
         eqPresets.selectItem(at: -1)
@@ -216,7 +283,7 @@ class EffectsViewController: NSViewController {
     
     @IBAction func pitchBypassAction(_ sender: AnyObject) {
         
-        let newBypassState = player.togglePitchBypass()
+        let newBypassState = graph.togglePitchBypass()
         
         (pitchTabViewButton.cell as! EffectsUnitButtonCell).shouldHighlight = !newBypassState
         pitchTabViewButton.needsDisplay = true
@@ -226,18 +293,18 @@ class EffectsViewController: NSViewController {
     
     @IBAction func pitchAction(_ sender: AnyObject) {
         
-        let pitchValueStr = player.setPitch(pitchSlider.floatValue)
+        let pitchValueStr = graph.setPitch(pitchSlider.floatValue)
         lblPitchValue.stringValue = pitchValueStr
     }
     
     @IBAction func pitchOverlapAction(_ sender: AnyObject) {
-        let pitchOverlapValueStr = player.setPitchOverlap(pitchOverlapSlider.floatValue)
+        let pitchOverlapValueStr = graph.setPitchOverlap(pitchOverlapSlider.floatValue)
         lblPitchOverlapValue.stringValue = pitchOverlapValueStr
     }
     
     @IBAction func timeBypassAction(_ sender: AnyObject) {
         
-        let newBypassState = player.toggleTimeBypass()
+        let newBypassState = graph.toggleTimeBypass()
         
         (timeTabViewButton.cell as! EffectsUnitButtonCell).shouldHighlight = !newBypassState
         timeTabViewButton.needsDisplay = true
@@ -252,7 +319,7 @@ class EffectsViewController: NSViewController {
         //
         //            seekTimer = ScheduledTaskExecutor(intervalMillis: interval, task: {self.updatePlayingTime()}, queue: DispatchQueue.main)
         //
-        //            if (player.getPlaybackState() == .playing) {
+        //            if (graph.getPlaybackState() == .playing) {
         //                setSeekTimerState(true)
         //            }
         //        }
@@ -260,10 +327,10 @@ class EffectsViewController: NSViewController {
     
     @IBAction func timeStretchAction(_ sender: AnyObject) {
         
-        let rateValueStr = player.setTimeStretchRate(timeSlider.floatValue)
+        let rateValueStr = graph.setTimeStretchRate(timeSlider.floatValue)
         lblTimeStretchRateValue.stringValue = rateValueStr
         
-        let timeStretchActive = !player.isTimeBypass()
+        let timeStretchActive = !graph.isTimeBypass()
         if (timeStretchActive) {
             
             //            let interval = Int(1000 / (2 * timeSlider.floatValue))
@@ -272,7 +339,7 @@ class EffectsViewController: NSViewController {
             //
             //            seekTimer = ScheduledTaskExecutor(intervalMillis: interval, task: {self.updatePlayingTime()}, queue: DispatchQueue.main)
             //
-            //            if (player.getPlaybackState() == .playing) {
+            //            if (graph.getPlaybackState() == .playing) {
             //                setSeekTimerState(true)
             //            }
         }
@@ -280,13 +347,13 @@ class EffectsViewController: NSViewController {
     
     @IBAction func timeOverlapAction(_ sender: Any) {
         
-        let timeOverlapValueStr = player.setTimeOverlap(timeOverlapSlider.floatValue)
+        let timeOverlapValueStr = graph.setTimeOverlap(timeOverlapSlider.floatValue)
         lblTimeOverlapValue.stringValue = timeOverlapValueStr
     }
     
     @IBAction func reverbBypassAction(_ sender: AnyObject) {
         
-        let newBypassState = player.toggleReverbBypass()
+        let newBypassState = graph.toggleReverbBypass()
         
         (reverbTabViewButton.cell as! EffectsUnitButtonCell).shouldHighlight = !newBypassState
         reverbTabViewButton.needsDisplay = true
@@ -297,17 +364,17 @@ class EffectsViewController: NSViewController {
     @IBAction func reverbAction(_ sender: AnyObject) {
         
         let preset: ReverbPresets = ReverbPresets.fromDescription((reverbMenu.selectedItem?.title)!)
-        player.setReverb(preset)
+        graph.setReverb(preset)
     }
     
     @IBAction func reverbAmountAction(_ sender: AnyObject) {
-        let reverbAmountValueStr = player.setReverbAmount(reverbSlider.floatValue)
+        let reverbAmountValueStr = graph.setReverbAmount(reverbSlider.floatValue)
         lblReverbAmountValue.stringValue = reverbAmountValueStr
     }
     
     @IBAction func delayBypassAction(_ sender: AnyObject) {
         
-        let newBypassState = player.toggleDelayBypass()
+        let newBypassState = graph.toggleDelayBypass()
         
         (delayTabViewButton.cell as! EffectsUnitButtonCell).shouldHighlight = !newBypassState
         delayTabViewButton.needsDisplay = true
@@ -316,28 +383,28 @@ class EffectsViewController: NSViewController {
     }
     
     @IBAction func delayAmountAction(_ sender: AnyObject) {
-        let delayAmountValueStr = player.setDelayAmount(delayAmountSlider.floatValue)
+        let delayAmountValueStr = graph.setDelayAmount(delayAmountSlider.floatValue)
         lblDelayAmountValue.stringValue = delayAmountValueStr
     }
     
     @IBAction func delayTimeAction(_ sender: AnyObject) {
-        let delayTimeValueStr = player.setDelayTime(delayTimeSlider.doubleValue)
+        let delayTimeValueStr = graph.setDelayTime(delayTimeSlider.doubleValue)
         lblDelayTimeValue.stringValue = delayTimeValueStr
     }
     
     @IBAction func delayFeedbackAction(_ sender: AnyObject) {
-        let delayFeedbackValueStr = player.setDelayFeedback(delayFeedbackSlider.floatValue)
+        let delayFeedbackValueStr = graph.setDelayFeedback(delayFeedbackSlider.floatValue)
         lblDelayFeedbackValue.stringValue = delayFeedbackValueStr
     }
     
     @IBAction func delayCutoffAction(_ sender: AnyObject) {
-        let delayCutoffValueStr = player.setDelayLowPassCutoff(delayCutoffSlider.floatValue)
+        let delayCutoffValueStr = graph.setDelayLowPassCutoff(delayCutoffSlider.floatValue)
         lblDelayLowPassCutoffValue.stringValue = delayCutoffValueStr
     }
     
     @IBAction func filterBypassAction(_ sender: AnyObject) {
         
-        let newBypassState = player.toggleFilterBypass()
+        let newBypassState = graph.toggleFilterBypass()
         
         (filterTabViewButton.cell as! EffectsUnitButtonCell).shouldHighlight = !newBypassState
         filterTabViewButton.needsDisplay = true
@@ -346,114 +413,61 @@ class EffectsViewController: NSViewController {
     }
     
     @IBAction func eqGlobalGainAction(_ sender: AnyObject) {
-        player.setEQGlobalGain(eqGlobalGainSlider.floatValue)
+        graph.setEQGlobalGain(eqGlobalGainSlider.floatValue)
     }
     
     @IBAction func eqSlider32Action(_ sender: AnyObject) {
-        player.setEQBand(32, gain: eqSlider32.floatValue)
+        graph.setEQBand(32, gain: eqSlider32.floatValue)
     }
     
     @IBAction func eqSlider64Action(_ sender: AnyObject) {
-        player.setEQBand(64, gain: eqSlider64.floatValue)
+        graph.setEQBand(64, gain: eqSlider64.floatValue)
     }
     
     @IBAction func eqSlider128Action(_ sender: AnyObject) {
-        player.setEQBand(128, gain: eqSlider128.floatValue)
+        graph.setEQBand(128, gain: eqSlider128.floatValue)
     }
     
     @IBAction func eqSlider256Action(_ sender: AnyObject) {
-        player.setEQBand(256, gain: eqSlider256.floatValue)
+        graph.setEQBand(256, gain: eqSlider256.floatValue)
     }
     
     @IBAction func eqSlider512Action(_ sender: AnyObject) {
-        player.setEQBand(512, gain: eqSlider512.floatValue)
+        graph.setEQBand(512, gain: eqSlider512.floatValue)
     }
     
     @IBAction func eqSlider1kAction(_ sender: AnyObject) {
-        player.setEQBand(1024, gain: eqSlider1k.floatValue)
+        graph.setEQBand(1024, gain: eqSlider1k.floatValue)
     }
     
     @IBAction func eqSlider2kAction(_ sender: AnyObject) {
-        player.setEQBand(2048, gain: eqSlider2k.floatValue)
+        graph.setEQBand(2048, gain: eqSlider2k.floatValue)
     }
     
     @IBAction func eqSlider4kAction(_ sender: AnyObject) {
-        player.setEQBand(4096, gain: eqSlider4k.floatValue)
+        graph.setEQBand(4096, gain: eqSlider4k.floatValue)
     }
     
     @IBAction func eqSlider8kAction(_ sender: AnyObject) {
-        player.setEQBand(8192, gain: eqSlider8k.floatValue)
+        graph.setEQBand(8192, gain: eqSlider8k.floatValue)
     }
     
     @IBAction func eqSlider16kAction(_ sender: AnyObject) {
-        player.setEQBand(16384, gain: eqSlider16k.floatValue)
-    }
-    
-    @IBAction func recorderAction(_ sender: Any) {
-        
-        let isRecording: Bool = player.getRecordingInfo() != nil
-        
-        if (isRecording) {
-            stopRecording()
-        } else {
-            
-            // Only AAC format works for now
-            player.startRecording(RecordingFormat.aac)
-            btnRecord.image = UIConstants.imgRecorderStop
-            recorderTimer?.startOrResume()
-            lblRecorderDuration.stringValue = UIConstants.zeroDurationString
-            lblRecorderFileSize.stringValue = Size.ZERO.toString()
-            recordingInfoBox.isHidden = false
-            
-            (recorderTabViewButton.cell as! EffectsUnitButtonCell).shouldHighlight = true
-            recorderTabViewButton.needsDisplay = true
-        }
-    }
-    
-    func stopRecording() {
-        
-        player.stopRecording()
-        btnRecord.image = UIConstants.imgRecord
-        recorderTimer?.pause()
-        
-        (recorderTabViewButton.cell as! EffectsUnitButtonCell).shouldHighlight = false
-        recorderTabViewButton.needsDisplay = true
-        
-        saveRecording()
-        recordingInfoBox.isHidden = true
-    }
-    
-    func saveRecording() {
-        
-        let dialog = UIElements.saveRecordingDialog
-        let modalResponse = dialog.runModal()
-        
-        if (modalResponse == NSModalResponseOK) {
-            player.saveRecording(dialog.url!)
-        } else {
-            player.deleteRecording()
-        }
-    }
-    
-    func updateRecordingInfo() {
-        
-        let recInfo = player.getRecordingInfo()!
-        lblRecorderDuration.stringValue = Utils.formatDuration(recInfo.duration)
-        lblRecorderFileSize.stringValue = recInfo.fileSize.toString()
+        graph.setEQBand(16384, gain: eqSlider16k.floatValue)
     }
     
     func filterBassChanged() {
-        let filterBassRangeStr = player.setFilterBassBand(Float(filterBassSlider.start), Float(filterBassSlider.end))
+        let filterBassRangeStr = graph.setFilterBassBand(Float(filterBassSlider.start), Float(filterBassSlider.end))
         lblFilterBassRange.stringValue = filterBassRangeStr
     }
     
     func filterMidChanged() {
-        let filterMidRangeStr = player.setFilterMidBand(Float(filterMidSlider.start), Float(filterMidSlider.end))
+        let filterMidRangeStr = graph.setFilterMidBand(Float(filterMidSlider.start), Float(filterMidSlider.end))
         lblFilterMidRange.stringValue = filterMidRangeStr
     }
     
     func filterTrebleChanged() {
-        let filterTrebleRangeStr = player.setFilterTrebleBand(Float(filterTrebleSlider.start), Float(filterTrebleSlider.end))
+        let filterTrebleRangeStr = graph.setFilterTrebleBand(Float(filterTrebleSlider.start), Float(filterTrebleSlider.end))
         lblFilterTrebleRange.stringValue = filterTrebleRangeStr
     }
     

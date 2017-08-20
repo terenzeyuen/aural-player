@@ -5,15 +5,15 @@ import Cocoa
  
  See AuralPlayerDelegate, AuralSoundTuningDelegate, and EventSubscriber protocols to learn more about the public functions implemented here.
  */
-class PlayerDelegate: AuralPlayerDelegate, PlaybackControl, EventSubscriber {
-    
-    private var preferences: Preferences
+class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, EventSubscriber {
     
     // The actual audio player
-    private var player: AuralPlayer
+    private var player: PlayerProtocol
     
     // The current player playlist
     private var playlist: PlaybackSequenceAccessor
+    
+    private var preferences: Preferences
     
     // Currently playing track
     private var playingTrack: IndexedTrack?
@@ -24,27 +24,17 @@ class PlayerDelegate: AuralPlayerDelegate, PlaybackControl, EventSubscriber {
     // See PlaybackState
     private var playbackState: PlaybackState = .noTrack
     
-    init(_ player: Player, _ appState: AppState, _ playlist: Playlist) {
+    init(_ player: PlayerProtocol, _ playlist: PlaybackSequenceAccessor, _ preferences: Preferences) {
         
         self.player = player
         self.playlist = playlist
-        self.appState = appState
+        self.preferences = preferences
         
         self.trackPrepQueue = OperationQueue()
         trackPrepQueue.underlyingQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         trackPrepQueue.maxConcurrentOperationCount = 1
         
         EventRegistry.subscribe(EventType.playbackCompleted, subscriber: self, dispatchQueue: DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive))
-    }
-    
-    func appLoaded() -> UIAppState {
-        
-        if (preferences.playlistOnStartup == .rememberFromLastAppLaunch) {
-            EventRegistry.publishEvent(.startedAddingTracks, StartedAddingTracksEvent.instance)
-            loadPlaylistFromSavedState()
-        }
-        
-        return UIAppState(appState, preferences)
     }
     
     func autoplay() {
@@ -127,13 +117,13 @@ class PlayerDelegate: AuralPlayerDelegate, PlaybackControl, EventSubscriber {
     }
     
     func continuePlaying() throws -> IndexedTrack? {
-        try play(playlist.continuePlaying())
+        try play(playlist.subsequentTrack())
         return playingTrack
     }
 
     func nextTrack() throws -> IndexedTrack? {
     
-        let nextTrack = playlist.next()
+        let nextTrack = playlist.nextTrack()
         if (nextTrack != nil) {
             try play(nextTrack)
         }
@@ -143,7 +133,7 @@ class PlayerDelegate: AuralPlayerDelegate, PlaybackControl, EventSubscriber {
     
     func previousTrack() throws -> IndexedTrack? {
         
-        let prevTrack = playlist.previous()
+        let prevTrack = playlist.previousTrack()
         if (prevTrack != nil) {
             try play(prevTrack)
         }
@@ -185,13 +175,13 @@ class PlayerDelegate: AuralPlayerDelegate, PlaybackControl, EventSubscriber {
         let nextTracksSet = NSMutableSet()
         
         // The three possible tracks that could play next
-        let peekContinue = self.playlist.peekContinuePlaying()?.track
-        let peekNext = self.playlist.peekNext()?.track
-        let peekPrevious = self.playlist.peekPrevious()?.track
+        let peekSubsequent = self.playlist.peekSubsequentTrack()?.track
+        let peekNext = self.playlist.peekNextTrack()?.track
+        let peekPrevious = self.playlist.peekPreviousTrack()?.track
         
         // Add each of the three tracks to the set of tracks to be prepped, as long as they're non-nil and not equal to the playing track (which has already been prepped, since it is playing)
-        if (peekContinue != nil && playingTrack?.track !== peekContinue) {
-            nextTracksSet.add(peekContinue!)
+        if (peekSubsequent != nil && playingTrack?.track !== peekSubsequent) {
+            nextTracksSet.add(peekSubsequent!)
         }
         
         if (peekNext != nil) {
@@ -237,7 +227,7 @@ class PlayerDelegate: AuralPlayerDelegate, PlaybackControl, EventSubscriber {
         return playbackState
     }
     
-    func getSeekSecondsAndPercentage() -> (seconds: Double, percentage: Double) {
+    func getSeekPosition() -> (seconds: Double, percentage: Double) {
         
         let seconds = playingTrack != nil ? player.getSeekPosition() : 0
         let percentage = playingTrack != nil ? seconds * 100 / playingTrack!.track!.duration! : 0
@@ -303,82 +293,6 @@ class PlayerDelegate: AuralPlayerDelegate, PlaybackControl, EventSubscriber {
         return playlist.getPlayingTrack()
     }
     
-    func getVolume() -> Float {
-        return round(player.getVolume() * AppConstants.volumeConversion_playerToUI)
-    }
-    
-    func setVolume(_ volumePercentage: Float) {
-        player.setVolume(volumePercentage * AppConstants.volumeConversion_UIToPlayer)
-    }
-    
-    func increaseVolume() -> Float {
-        let curVolume = player.getVolume()
-        let newVolume = min(1, curVolume + preferences.volumeDelta)
-        player.setVolume(newVolume)
-        return round(newVolume * AppConstants.volumeConversion_playerToUI)
-    }
-    
-    func decreaseVolume() -> Float {
-        let curVolume = player.getVolume()
-        let newVolume = max(0, curVolume - preferences.volumeDelta)
-        player.setVolume(newVolume)
-        return round(newVolume * AppConstants.volumeConversion_playerToUI)
-    }
-    
-    func toggleMute() -> Bool {
-        
-        let muted = isMuted()
-        if muted {
-            player.unmute()
-        } else {
-            player.mute()
-        }
-        
-        return !muted
-    }
-    
-    func isMuted() -> Bool {
-        return player.isMuted()
-    }
-    
-    func getBalance() -> Float {
-        return round(player.getBalance() * AppConstants.panConversion_playerToUI)
-    }
-    
-    func setBalance(_ balance: Float) {
-        player.setBalance(balance * AppConstants.panConversion_UIToPlayer)
-    }
-    
-    func panLeft() -> Float {
-        
-        let curBalance = player.getBalance()
-        var newBalance = max(-1, curBalance - preferences.panDelta)
-        
-        // Snap to center
-        if (curBalance > 0 && newBalance < 0) {
-            newBalance = 0
-        }
-        
-        player.setBalance(newBalance)
-        
-        return round(newBalance * AppConstants.panConversion_playerToUI)
-    }
-    
-    func panRight() -> Float {
-        
-        let curBalance = player.getBalance()
-        var newBalance = min(1, curBalance + preferences.panDelta)
-        
-        // Snap to center
-        if (curBalance < 0 && newBalance > 0) {
-            newBalance = 0
-        }
-        
-        player.setBalance(newBalance)
-        
-        return round(newBalance * AppConstants.panConversion_playerToUI)
-    }
-    
     // Called when playback of the current track completes
     func consumeEvent(_ event: Event) {
         
@@ -426,7 +340,7 @@ class PlayerDelegate: AuralPlayerDelegate, PlaybackControl, EventSubscriber {
         if (shouldPlay) {
             
             do {
-                play(track)
+                try play(track)
             } catch let error as Error {
                 
                 if (error is InvalidTrackError) {
@@ -442,15 +356,15 @@ class PlayerDelegate: AuralPlayerDelegate, PlaybackControl, EventSubscriber {
     
     func appExiting(_ uiState: UIState) {
         
-        player.tearDown()
-        
-        let playerState = player.getState()
-        
-        let playlistState = playlist.getState()
-        
-        let appState = AppState(uiState, playerState, playlistState)
-        
-        AppStateIO.save(appState)
+//        player.tearDown()
+//        
+//        let playerState = player.getState()
+//        
+//        let playlistState = playlist.getState()
+//        
+//        let appState = AppState(uiState, playerState, playlistState)
+//        
+//        AppStateIO.save(appState)
     }
 }
 

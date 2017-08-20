@@ -7,7 +7,7 @@ import AVFoundation
 
 class PlaylistTableViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
-    var playlist: Playlist = Playlist.instance()
+    var playlist: PlaylistAccessor = ObjectGraph.getPlaylistAccessor()
     
     func numberOfRows(in tableView: NSTableView) -> Int {
         return playlist.size()
@@ -20,7 +20,7 @@ class PlaylistTableViewController: NSViewController, NSTableViewDataSource, NSTa
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         
-        let track = (playlist.getTrackAt(row)?.track)!
+        let track = (playlist.peekTrackAt(row)?.track)!
         
         if (tableColumn?.identifier == UIConstants.trackNameColumnID) {
             
