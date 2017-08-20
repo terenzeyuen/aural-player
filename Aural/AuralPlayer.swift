@@ -1,4 +1,3 @@
-
 import Cocoa
 
 /*
@@ -26,6 +25,27 @@ protocol AuralPlayer {
     
     // Gets the playback position (in seconds) of the currently playing track
     func getSeekPosition() -> Double
+    
+    // Retrieves the current player volume
+    func getVolume() -> Float
+    
+    // Sets the player volume, specified as a value between 0 and 1
+    func setVolume(_ volume: Float)
+    
+    // Retrieves the current L/R balance (aka pan)
+    func getBalance() -> Float
+    
+    // Sets the L/R balance (aka pan), specified as a value between -1 (L) and 1 (R)
+    func setBalance(_ balance: Float)
+    
+    // Mutes the player
+    func mute()
+    
+    // Unmutes the player
+    func unmute()
+    
+    // Determines whether the player is currently muted
+    func isMuted() -> Bool
     
     // Encapsulates all current player state in an object and returns it. This is useful when persisting "remembered" player state prior to app shutdown
     func getState() -> PlayerState

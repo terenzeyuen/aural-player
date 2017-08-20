@@ -3,7 +3,7 @@
 */
 import Cocoa
 
-protocol AuralSoundTuningDelegate {
+protocol AuralEffectsDelegate {
     
     // NOTE - All setter functions that return String values return user-friendly text representations of the value being set, for display in the UI. For instance, setDelayLowPassCutoff(64) might return a value like "64 Hz"
     

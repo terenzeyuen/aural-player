@@ -2,9 +2,15 @@ import Cocoa
 
 class PlaylistDelegate: AuralPlaylistDelegate {
     
-    private var preferences: Preferences = Preferences.instance()
+    private var playlist: PlaylistCRUD
+    private var player: PlaybackControl // ( for play(track) and stop() )
+    private var preferences: Preferences
     
-    private var playlist: Playlist
+    init(_ playlist: PlaylistCRUD, _ player: PlaybackControl, _ preferences: Preferences) {
+        self.playlist = playlist
+        self.player = player
+        self.preferences = preferences
+    }
     
     // This method should only be called from outside this class. For adding tracks within this class, always call the private method addFiles_sync().
     func addFiles(_ files: [URL]) {
@@ -25,6 +31,8 @@ class PlaylistDelegate: AuralPlaylistDelegate {
             if (progress.errors.count > 0) {
                 EventRegistry.publishEvent(.tracksNotAdded, TracksNotAddedEvent(progress.errors))
             }
+            
+            // TODO: Autoplay
         }
     }
     
@@ -74,7 +82,8 @@ class PlaylistDelegate: AuralPlaylistDelegate {
                             
                             if (autoplay && !progress.autoplayed && index >= 0) {
                                 
-                                self.autoplay(index)
+                                // TODO: Autoplay
+//                                self.autoplay(index)
                                 progress.autoplayed = true
                             }
                             
@@ -101,7 +110,6 @@ class PlaylistDelegate: AuralPlaylistDelegate {
         let newTrackIndex = try playlist.addTrack(file)
         if (newTrackIndex >= 0) {
             notifyTrackAdded(newTrackIndex, progress)
-            prepareNextTracksForPlayback()
         }
         return newTrackIndex
     }
@@ -132,18 +140,34 @@ class PlaylistDelegate: AuralPlaylistDelegate {
     }
     
     // Publishes a notification that a new track has been added to the playlist
-    func notifyTrackAdded(_ trackIndex: Int, _ progress: TrackAddedEventProgress) {
+    private func notifyTrackAdded(_ trackIndex: Int, _ progress: TrackAddedEventProgress) {
         
         let trackAddedEvent = TrackAddedEvent(trackIndex, progress)
         EventRegistry.publishEvent(.trackAdded, trackAddedEvent)
+        
+        // TODO: publish message
     }
     
     func removeTrack(_ index: Int) -> Int? {
+        playlist.removeTrack()
         
+        // TODO: Return playing track index
+        // TODO: publish message
+        return 0
+    }
+    
+    func moveTrackUp(_ index: Int) -> Int {
+        playlist.moveTrackUp(index)
+    }
+    
+    func moveTrackDown(_ index: Int) -> Int {
+        playlist.moveTrackDown(index)
     }
     
     func clear() {
         playlist.clear()
+        
+        // TODO: publish message
     }
     
     func save(_ file: URL) {
@@ -152,35 +176,23 @@ class PlaylistDelegate: AuralPlaylistDelegate {
         }
     }
     
-    func search(searchQuery: SearchQuery) -> SearchResults {
-        
-    }
-    
-    func sort(sort: Sort) {
-        
-    }
-    
     func getSummary() -> (numTracks: Int, totalDuration: Double) {
         return (playlist.size(), playlist.totalDuration())
     }
     
-    func getSize() -> Int {
-        return playlist.size()
+    func search(searchQuery: SearchQuery) -> SearchResults {
+        return playlist.search(searchQuery)
     }
     
-    func moveTrackUp(_ index: Int) -> Int {
-        
-    }
-    
-    func moveTrackDown(_ index: Int) -> Int {
-        
+    func sort(sort: Sort) {
+        playlist.sort(sort)
     }
     
     func toggleRepeatMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode) {
-        
+        return playlist.toggleRepeatMode(repeatMode: repeatMode, shuffleMode: shuffleMode)
     }
     
     func toggleShuffleMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode) {
-        
+        return playlist.toggleShuffleMode(repeatMode: repeatMode, shuffleMode: shuffleMode)
     }
 }

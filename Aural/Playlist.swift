@@ -37,6 +37,8 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD {
         playbackSequence = PlaybackSequence(0, repeatMode, shuffleMode)
     }
     
+    // ---------------------------------- BEGIN CRUD methods ----------------------------------
+    
     // Add a track to this playlist and return its index
     // Assume valid existing and supported file
     func addTrack(_ file: URL) throws -> Int {
@@ -110,7 +112,7 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD {
     }
     
     // Searches the playlist for all tracks matching the specified criteria, and returns a set of results
-    func searchPlaylist(searchQuery: SearchQuery) -> SearchResults {
+    func searchPlaylist(_ searchQuery: SearchQuery) -> SearchResults {
         
         var results: [SearchResult] = [SearchResult]()
         
@@ -206,9 +208,9 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD {
         return (false, nil, nil)
     }
     
-    func sortPlaylist(sort: Sort) {
+    func sortPlaylist(_ sort: Sort) {
         
-        let playingTrack = getTrackAt(cursor())
+        let playingTrack = getPlayingTrack()
         
         switch sort.field {
             
@@ -232,6 +234,14 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD {
         } else {
             playbackSequence.playlistReordered(nil)
         }
+    }
+    
+    private func indexOf(_ track: Track?) -> Int?  {
+        if (track == nil) {
+            return nil
+        }
+        
+        return tracks.index(where: {$0 == track})
     }
     
     // Comparison functions for different sort criteria
@@ -271,6 +281,43 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD {
         return totalDuration
     }
     
+    // ---------------------------------- END CRUD methods ----------------------------------
+    
+    // ---------------------------------- BEGIN sequence accessor methods ----------------------------------
+    
+    // Determines which track will play next if subsequentTrack() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
+    func peekSubsequentTrack() -> IndexedTrack? {
+        let continueIndex = playbackSequence.peekContinuePlaying()
+        return continueIndex == nil ? nil : IndexedTrack(tracks[continueIndex!], continueIndex)
+    }
+    
+    func subsequentTrack() -> IndexedTrack? {
+        let continueIndex = playbackSequence.continuePlaying()
+        return continueIndex == nil ? nil : IndexedTrack(tracks[continueIndex!], continueIndex)
+    }
+    
+    // Determines which track will play next if previousTrack() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
+    func peekPreviousTrack() -> IndexedTrack? {
+        let prevIndex = playbackSequence.peekPrevious()
+        return prevIndex == nil ? nil : IndexedTrack(tracks[prevIndex!], prevIndex)
+    }
+    
+    func previousTrack() -> IndexedTrack? {
+        let prevIndex = playbackSequence.previous()
+        return prevIndex == nil ? nil : IndexedTrack(tracks[prevIndex!], prevIndex)
+    }
+    
+    // Determines which track will play next if nextTrack() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
+    func peekNextTrack() -> IndexedTrack? {
+        let nextIndex = playbackSequence.peekNext()
+        return nextIndex == nil ? nil : IndexedTrack(tracks[nextIndex!], nextIndex)
+    }
+    
+    func nextTrack() -> IndexedTrack? {
+        let nextIndex = playbackSequence.next()
+        return nextIndex == nil ? nil : IndexedTrack(tracks[nextIndex!], nextIndex)
+    }
+    
     // Retrieves the track at the given index
     func peekTrackAt(_ index: Int?) -> IndexedTrack? {
         return index == nil || index == -1 ? nil : IndexedTrack(tracks[index!], index)
@@ -280,59 +327,14 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD {
     func selectTrackAt(_ index: Int?) -> IndexedTrack? {
         
         // Assume index is valid
-        let track = getTrackAt(index)
+        let track = peekTrackAt(index)
         playbackSequence.randomTrackSelected(index!)
         return track
     }
     
     // Returns the index of the currently playing track in the playlist
-    func cursor() -> Int? {
-        return playbackSequence.getCursor()
-    }
-    
-    private func indexOf(_ track: Track?) -> Int?  {
-        if (track == nil) {
-            return nil
-        }
-        
-        return tracks.index(where: {$0 == track})
-    }
-    
-    func getTracks() -> [Track] {
-        return tracks
-    }
-    
-    func subsequentTrack() -> IndexedTrack? {
-        let continueIndex = playbackSequence.continuePlaying()
-        return continueIndex == nil ? nil : IndexedTrack(tracks[continueIndex!], continueIndex)
-    }
-    
-    // Determines which track will play next if subsequentTrack() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
-    func peekSubsequentTrack() -> IndexedTrack? {
-        let continueIndex = playbackSequence.peekContinuePlaying()
-        return continueIndex == nil ? nil : IndexedTrack(tracks[continueIndex!], continueIndex)
-    }
-    
-    func nextTrack() -> IndexedTrack? {
-        let nextIndex = playbackSequence.next()
-        return nextIndex == nil ? nil : IndexedTrack(tracks[nextIndex!], nextIndex)
-    }
-    
-    // Determines which track will play next if nextTrack() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
-    func peekNext() -> IndexedTrack? {
-        let nextIndex = playbackSequence.peekNext()
-        return nextIndex == nil ? nil : IndexedTrack(tracks[nextIndex!], nextIndex)
-    }
-    
-    func previousTrack() -> IndexedTrack? {
-        let prevIndex = playbackSequence.previous()
-        return prevIndex == nil ? nil : IndexedTrack(tracks[prevIndex!], prevIndex)
-    }
-    
-    // Determines which track will play next if previousTrack() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
-    func peekPreviousTrack() -> IndexedTrack? {
-        let prevIndex = playbackSequence.peekPrevious()
-        return prevIndex == nil ? nil : IndexedTrack(tracks[prevIndex!], prevIndex)
+    func getPlayingTrack() -> IndexedTrack? {
+        return peekTrackAt(playbackSequence.cursor)
     }
     
     func getRepeatMode() -> RepeatMode {
@@ -341,6 +343,13 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD {
     
     func getShuffleMode() -> ShuffleMode {
         return playbackSequence.shuffleMode
+    }
+    
+    // ---------------------------------- END sequence accessor methods ----------------------------------
+    
+    // TODO: Called by PlaylistIO. Put in DAO protocol ?
+    func getTracks() -> [Track] {
+        return tracks
     }
     
     func getPersistentState() -> PlaylistState {

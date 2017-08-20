@@ -20,4 +20,8 @@ protocol PlaybackSequenceAccessor {
     
     // Returns the currently playing track (with its index)
     func getPlayingTrack() -> IndexedTrack?
+    
+    func getRepeatMode() -> RepeatMode
+    
+    func getShuffleMode() -> ShuffleMode
 }

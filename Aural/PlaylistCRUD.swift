@@ -2,7 +2,7 @@ import Foundation
 
 protocol PlaylistCRUD {
     
-    func addTrack()
+    func addTrack(_ file: URL) throws -> Int
     
     func removeTrack()
     
@@ -22,14 +22,17 @@ protocol PlaylistCRUD {
     func toggleShuffleMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode)
     
     // For a given search query, returns all tracks that match the query
-    func search(searchQuery: SearchQuery) -> SearchResults
+    func search(_ searchQuery: SearchQuery) -> SearchResults
     
     // Sorts the playlist according to the specified sort parameters
-    func sort(sort: Sort)
+    func sort(_ sort: Sort)
     
     func isEmpty() -> Bool
     
     func size() -> Int
     
     func totalDuration() -> Double
+    
+    // Returns the currently playing track in the playlist
+    func getPlayingTrack() -> IndexedTrack?
 }

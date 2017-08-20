@@ -6,27 +6,6 @@ import AVFoundation
 
 protocol AuralSoundTuner {
     
-    // Retrieves the current player volume
-    func getVolume() -> Float
-    
-    // Sets the player volume, specified as a value between 0 and 1
-    func setVolume(_ volume: Float)
-    
-    // Retrieves the current L/R balance (aka pan)
-    func getBalance() -> Float
-    
-    // Sets the L/R balance (aka pan), specified as a value between -1 (L) and 1 (R)
-    func setBalance(_ balance: Float)
-    
-    // Mutes the player
-    func mute()
-    
-    // Unmutes the player
-    func unmute()
-    
-    // Determines whether the player is currently muted
-    func isMuted() -> Bool
-    
     // Sets global gain (or preamp) for the equalizer
     func setEQGlobalGain(_ gain: Float)
     

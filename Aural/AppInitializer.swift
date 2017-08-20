@@ -8,6 +8,8 @@ class AppInitializer {
     
     private static var playerDelegate: PlayerDelegate?
     
+    private static var effectsDelegate: EffectsDelegate?
+    
     private static var appState: AppState?
     
     private static var uiAppState: UIAppState?
@@ -106,6 +108,15 @@ class AppInitializer {
         }
         
         return playerDelegate!
+    }
+    
+    static func getEffectsDelegate() -> EffectsDelegate {
+        
+        if (!initialized) {
+            initialize()
+        }
+        
+        return effectsDelegate!
     }
     
     static func getPreferences() -> Preferences {

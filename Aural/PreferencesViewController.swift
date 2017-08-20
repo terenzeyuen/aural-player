@@ -6,7 +6,7 @@ class PreferencesViewController: NSViewController {
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var prefsPanel: NSPanel!
     @IBOutlet weak var prefsTabView: NSTabView!
-    
+
     private var prefsTabViewButtons: [NSButton]?
     
     // Player prefs

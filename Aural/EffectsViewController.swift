@@ -80,7 +80,7 @@ class EffectsViewController: NSViewController {
     // Timer that periodically updates the recording duration (only when recorder is active)
     private var recorderTimer: ScheduledTaskExecutor?
     
-    private var player: PlayerDelegate = AppInitializer.getPlayerDelegate()
+    private var player: EffectsDelegate = AppInitializer.getPlayerDelegate()
     
     override func viewDidLoad() {
         
