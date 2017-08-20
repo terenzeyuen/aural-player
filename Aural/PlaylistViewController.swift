@@ -4,7 +4,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     
     @IBOutlet weak var window: NSWindow!
     
-    private let delegate: AuralPlaylistDelegate = AppInitializer.getPlaylistControlDelegate()
+    private let delegate: PlayerDelegate = AppInitializer.getPlaylistControlDelegate()
     
     // Displays the playlist and summary
     @IBOutlet weak var playlistView: NSTableView!

@@ -19,13 +19,13 @@ protocol AuralPlaylistDelegate {
     func moveTrackDown(_ index: Int) -> Int
     
     // Clears the entire playlist of all tracks
-    func clearPlaylist()
+    func clear()
     
     // Saves the current playlist to a file
-    func savePlaylist(_ file: URL)
+    func save(_ file: URL)
     
     // Retrieves a summary of the current playlist - the total number of tracks and their total duration
-    func getPlaylistSummary() -> (numTracks: Int, totalDuration: Double)
+    func getSummary() -> (numTracks: Int, totalDuration: Double)
     
     // Toggles between repeat modes. See RepeatMode for more details. Returns the new repeat and shuffle mode after performing the toggle operation.
     func toggleRepeatMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode)
@@ -34,8 +34,8 @@ protocol AuralPlaylistDelegate {
     func toggleShuffleMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode)
     
     // For a given search query, returns all tracks that match the query
-    func searchPlaylist(searchQuery: SearchQuery) -> SearchResults
+    func search(searchQuery: SearchQuery) -> SearchResults
     
     // Sorts the playlist according to the specified sort parameters
-    func sortPlaylist(sort: Sort)
+    func sort(sort: Sort)
 }

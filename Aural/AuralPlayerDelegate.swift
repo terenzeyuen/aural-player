@@ -14,7 +14,7 @@ protocol AuralPlayerDelegate {
     func play(_ index: Int) throws -> IndexedTrack
     
     // Stops playback
-    func stop()
+//    func stop()
     
     // Continues playback within the player playlist, according to repeat/shuffle modes. Called either before any tracks are played or after playback of a track has completed. Returns the new track, if any, that is selected for playback
     // Note - Throws an error if the track selected for playback cannot be played back

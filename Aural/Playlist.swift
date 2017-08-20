@@ -18,69 +18,23 @@ private func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     }
 }
 
-class Playlist {
-    
-    private var tracks: [Track] = [Track]()
-    private var tracksByFilename: [String: Track] = [String: Track]()
+class Playlist: PlaybackSequenceAccessor, PlaylistCRUD {
     
     // Singleton instance
     private static var singleton: Playlist = AppInitializer.getPlaylist()
+    
+    static func instance() -> Playlist {
+        return singleton
+    }
+    
+    private var tracks: [Track] = [Track]()
+    private var tracksByFilename: [String: Track] = [String: Track]()
     
     // The playback sequence associated with this playlist
     private var playbackSequence: PlaybackSequence
     
     init(_ repeatMode: RepeatMode, _ shuffleMode: ShuffleMode) {
         playbackSequence = PlaybackSequence(0, repeatMode, shuffleMode)
-    }
-    
-    static func instance() -> Playlist {
-        return singleton
-    }
-    
-    func isEmpty() -> Bool {
-        return tracks.count == 0
-    }
-    
-    func size() -> Int {
-        return tracks.count
-    }
-    
-    func getState() -> PlaylistState {
-        
-        let state = PlaylistState()
-        state.repeatMode = self.playbackSequence.repeatMode
-        state.shuffleMode = self.playbackSequence.shuffleMode
-        
-        for track in tracks {
-            state.tracks.append(track.file!.path)
-        }
-        
-        return state
-    }
-    
-    func totalDuration() -> Double {
-        
-        var totalDuration: Double = 0
-        
-        for track in tracks {
-            totalDuration += track.duration!
-        }
-        
-        return totalDuration
-    }
-    
-    // Retrieves the track at the given index
-    func getTrackAt(_ index: Int?) -> IndexedTrack? {
-        return index == nil || index == -1 ? nil : IndexedTrack(tracks[index!], index)
-    }
-    
-    // Retrieves the track at the given index, and selects it for playback, i.e., moves the cursor to the given index
-    func selectTrackAt(_ index: Int?) -> IndexedTrack? {
-        
-        // Assume index is valid
-        let track = getTrackAt(index)
-        playbackSequence.randomTrackSelected(index!)
-        return track
     }
     
     // Add a track to this playlist and return its index
@@ -115,72 +69,15 @@ class Playlist {
         }
     }
     
-    // Returns the index of the currently playing track in the playlist
-    func cursor() -> Int? {
-        return playbackSequence.getCursor()
-    }
-    
-    private func indexOf(_ track: Track?) -> Int?  {
-        if (track == nil) {
-            return nil
-        }
-        
-        return tracks.index(where: {$0 == track})
-    }
-    
     func clear() {
         tracks.removeAll()
         tracksByFilename.removeAll()
         playbackSequence.clear()
     }
     
-    func getTracks() -> [Track] {
-        return tracks
-    }
-    
-    func toggleRepeatMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode) {
-        return playbackSequence.toggleRepeatMode()
-    }
-    
-    func toggleShuffleMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode) {
-        return playbackSequence.toggleShuffleMode()
-    }
-    
-    func continuePlaying() -> IndexedTrack? {
-        let continueIndex = playbackSequence.continuePlaying()
-        return continueIndex == nil ? nil : IndexedTrack(tracks[continueIndex!], continueIndex)
-    }
-    
-    // Determines which track will play next if continuePlaying() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
-    func peekContinuePlaying() -> IndexedTrack? {
-        let continueIndex = playbackSequence.peekContinuePlaying()
-        return continueIndex == nil ? nil : IndexedTrack(tracks[continueIndex!], continueIndex)
-    }
-    
-    func next() -> IndexedTrack? {
-        let nextIndex = playbackSequence.next()
-        return nextIndex == nil ? nil : IndexedTrack(tracks[nextIndex!], nextIndex)
-    }
-    
-    // Determines which track will play next if next() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
-    func peekNext() -> IndexedTrack? {
-        let nextIndex = playbackSequence.peekNext()
-        return nextIndex == nil ? nil : IndexedTrack(tracks[nextIndex!], nextIndex)
-    }
-    
-    func previous() -> IndexedTrack? {
-        let prevIndex = playbackSequence.previous()
-        return prevIndex == nil ? nil : IndexedTrack(tracks[prevIndex!], prevIndex)
-    }
-    
-    // Determines which track will play next if previous() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
-    func peekPrevious() -> IndexedTrack? {
-        let prevIndex = playbackSequence.peekPrevious()
-        return prevIndex == nil ? nil : IndexedTrack(tracks[prevIndex!], prevIndex)
-    }
     
     // Shifts a single track up in the playlist order
-    func shiftTrackUp(_ index: Int) {
+    func moveTrackUp(_ index: Int) {
         
         if (index > 0) {
             let upIndex = index - 1
@@ -190,7 +87,7 @@ class Playlist {
     }
     
     // Shifts a single track down in the playlist order
-    func shiftTrackDown(_ index: Int) {
+    func moveTrackDown(_ index: Int) {
         
         if (index < (tracks.count - 1)) {
             let downIndex = index + 1
@@ -202,6 +99,14 @@ class Playlist {
     // Swaps two tracks in the array of tracks
     private func swapTracks(_ trackIndex1: Int, _ trackIndex2: Int) {
         swap(&tracks[trackIndex1], &tracks[trackIndex2])
+    }
+    
+    func toggleRepeatMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode) {
+        return playbackSequence.toggleRepeatMode()
+    }
+    
+    func toggleShuffleMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode) {
+        return playbackSequence.toggleShuffleMode()
     }
     
     // Searches the playlist for all tracks matching the specified criteria, and returns a set of results
@@ -331,20 +236,103 @@ class Playlist {
     
     // Comparison functions for different sort criteria
     
-    func compareTracks_ascendingByName(aTrack: Track, anotherTrack: Track) -> Bool {
+    private func compareTracks_ascendingByName(aTrack: Track, anotherTrack: Track) -> Bool {
         return aTrack.shortDisplayName?.compare(anotherTrack.shortDisplayName!) == ComparisonResult.orderedAscending
     }
     
-    func compareTracks_descendingByName(aTrack: Track, anotherTrack: Track) -> Bool {
+    private func compareTracks_descendingByName(aTrack: Track, anotherTrack: Track) -> Bool {
         return aTrack.shortDisplayName?.compare(anotherTrack.shortDisplayName!) == ComparisonResult.orderedDescending
     }
     
-    func compareTracks_ascendingByDuration(aTrack: Track, anotherTrack: Track) -> Bool {
+    private func compareTracks_ascendingByDuration(aTrack: Track, anotherTrack: Track) -> Bool {
         return aTrack.duration! < anotherTrack.duration!
     }
     
-    func compareTracks_descendingByDuration(aTrack: Track, anotherTrack: Track) -> Bool {
+    private func compareTracks_descendingByDuration(aTrack: Track, anotherTrack: Track) -> Bool {
         return aTrack.duration! > anotherTrack.duration!
+    }
+    
+    func isEmpty() -> Bool {
+        return tracks.count == 0
+    }
+    
+    func size() -> Int {
+        return tracks.count
+    }
+    
+    func totalDuration() -> Double {
+        
+        var totalDuration: Double = 0
+        
+        for track in tracks {
+            totalDuration += track.duration!
+        }
+        
+        return totalDuration
+    }
+    
+    // Retrieves the track at the given index
+    func peekTrackAt(_ index: Int?) -> IndexedTrack? {
+        return index == nil || index == -1 ? nil : IndexedTrack(tracks[index!], index)
+    }
+    
+    // Retrieves the track at the given index, and selects it for playback, i.e., moves the cursor to the given index
+    func selectTrackAt(_ index: Int?) -> IndexedTrack? {
+        
+        // Assume index is valid
+        let track = getTrackAt(index)
+        playbackSequence.randomTrackSelected(index!)
+        return track
+    }
+    
+    // Returns the index of the currently playing track in the playlist
+    func cursor() -> Int? {
+        return playbackSequence.getCursor()
+    }
+    
+    private func indexOf(_ track: Track?) -> Int?  {
+        if (track == nil) {
+            return nil
+        }
+        
+        return tracks.index(where: {$0 == track})
+    }
+    
+    func getTracks() -> [Track] {
+        return tracks
+    }
+    
+    func subsequentTrack() -> IndexedTrack? {
+        let continueIndex = playbackSequence.continuePlaying()
+        return continueIndex == nil ? nil : IndexedTrack(tracks[continueIndex!], continueIndex)
+    }
+    
+    // Determines which track will play next if subsequentTrack() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
+    func peekSubsequentTrack() -> IndexedTrack? {
+        let continueIndex = playbackSequence.peekContinuePlaying()
+        return continueIndex == nil ? nil : IndexedTrack(tracks[continueIndex!], continueIndex)
+    }
+    
+    func nextTrack() -> IndexedTrack? {
+        let nextIndex = playbackSequence.next()
+        return nextIndex == nil ? nil : IndexedTrack(tracks[nextIndex!], nextIndex)
+    }
+    
+    // Determines which track will play next if nextTrack() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
+    func peekNext() -> IndexedTrack? {
+        let nextIndex = playbackSequence.peekNext()
+        return nextIndex == nil ? nil : IndexedTrack(tracks[nextIndex!], nextIndex)
+    }
+    
+    func previousTrack() -> IndexedTrack? {
+        let prevIndex = playbackSequence.previous()
+        return prevIndex == nil ? nil : IndexedTrack(tracks[prevIndex!], prevIndex)
+    }
+    
+    // Determines which track will play next if previousTrack() is invoked, if any. This is used to eagerly prep tracks for future playback. Nil return value indicates no track.
+    func peekPreviousTrack() -> IndexedTrack? {
+        let prevIndex = playbackSequence.peekPrevious()
+        return prevIndex == nil ? nil : IndexedTrack(tracks[prevIndex!], prevIndex)
     }
     
     func getRepeatMode() -> RepeatMode {
@@ -353,5 +341,18 @@ class Playlist {
     
     func getShuffleMode() -> ShuffleMode {
         return playbackSequence.shuffleMode
+    }
+    
+    func getPersistentState() -> PlaylistState {
+        
+        let state = PlaylistState()
+        state.repeatMode = self.playbackSequence.repeatMode
+        state.shuffleMode = self.playbackSequence.shuffleMode
+        
+        for track in tracks {
+            state.tracks.append(track.file!.path)
+        }
+        
+        return state
     }
 }

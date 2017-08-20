@@ -2,86 +2,17 @@ import Cocoa
 
 class PlaylistDelegate: AuralPlaylistDelegate {
     
-    // The current player playlist
+    private var preferences: Preferences = Preferences.instance()
+    
     private var playlist: Playlist
     
-    func appLoaded() -> UIAppState {
-        
-        if (preferences.playlistOnStartup == .rememberFromLastAppLaunch) {
-            EventRegistry.publishEvent(.startedAddingTracks, StartedAddingTracksEvent.instance)
-            loadPlaylistFromSavedState()
-        }
-        
-        return UIAppState(appState, preferences)
-    }
-    
-    // This is called when the app loads initially. Loads the playlist from the app state file on disk. Only meant to be called once.
-    private func loadPlaylistFromSavedState() {
-        
-        // Add tracks async, notifying the UI one at a time
-        DispatchQueue.global(qos: .userInteractive).async {
-            
-            // NOTE - Assume that all entries are valid tracks (supported audio files), not playlists and not directories. i.e. assume that saved state file has not been corrupted.
-            
-            var errors: [InvalidTrackError] = [InvalidTrackError]()
-            let autoplay: Bool = self.preferences.autoplayOnStartup
-            var autoplayed: Bool = false
-            
-            let tracks = self.appState.playlistState.tracks
-            let totalTracks = tracks.count
-            var tracksAdded = 0
-            
-            for trackPath in tracks {
-                
-                tracksAdded += 1
-                
-                // Playlists might contain broken file references
-                if (!FileSystemUtils.fileExists(trackPath)) {
-                    errors.append(FileNotFoundError(URL(fileURLWithPath: trackPath)))
-                    continue
-                }
-                
-                let resolvedFileInfo = FileSystemUtils.resolveTruePath(URL(fileURLWithPath: trackPath))
-                
-                do {
-                    
-                    let progress = TrackAddedEventProgress(tracksAdded, totalTracks)
-                    try self.addTrack(resolvedFileInfo.resolvedURL, progress)
-                    
-                    if (autoplay && !autoplayed) {
-                        self.autoplay()
-                        autoplayed = true
-                    }
-                    
-                } catch let error as Error {
-                    
-                    if (error is InvalidTrackError) {
-                        errors.append(error as! InvalidTrackError)
-                    }
-                }
-            }
-            
-            EventRegistry.publishEvent(.doneAddingTracks, DoneAddingTracksEvent.instance)
-            
-            // If errors > 0, send event to UI
-            if (errors.count > 0) {
-                EventRegistry.publishEvent(.tracksNotAdded, TracksNotAddedEvent(errors))
-            }
-        }
-    }
- 
     // This method should only be called from outside this class. For adding tracks within this class, always call the private method addFiles_sync().
     func addFiles(_ files: [URL]) {
         
         // Move to a background thread to unblock the main thread
         DispatchQueue.global(qos: .userInteractive).async {
             
-            let autoplayPref: Bool = self.preferences.autoplayAfterAddingTracks
-            let alwaysAutoplay: Bool = self.preferences.autoplayAfterAddingOption == .always
-            let noPlayingTrack: Bool = self.playingTrack == nil
-            
-            // Autoplay if the preference is selected AND either the "always" option is selected or no track is currently playing
-            let autoplay: Bool = autoplayPref && (alwaysAutoplay || noPlayingTrack)
+            let autoplay: Bool = self.preferences.autoplayAfterAddingTracks
             
             // Progress
             let progress = TrackAddOperationProgress(0, files.count, [InvalidTrackError](), false)
@@ -209,114 +140,47 @@ class PlaylistDelegate: AuralPlaylistDelegate {
     
     func removeTrack(_ index: Int) -> Int? {
         
-        let removingPlayingTrack: Bool = (index == playlist.cursor())
-        playlist.removeTrack(index)
-        
-        // If the removed track is not the playing track, continue playing !
-        if (removingPlayingTrack) {
-            stopPlayback()
-        }
-        
-        // Update playing track index (which may have changed)
-        playingTrack?.index = playlist.cursor()
-        
-        if (playlist.size() > 0) {
-            prepareNextTracksForPlayback()
-        }
-        
-        return playlist.cursor()
     }
     
-    func moveTrackDown(_ index: Int) -> Int {
-        
-        var newIndex = index
-        
-        if (index < (playlist.size() - 1)) {
-            playlist.shiftTrackDown(index)
-            
-            // Update playing track index (which may have changed)
-            playingTrack?.index = playlist.cursor()
-            
-            newIndex = index + 1
-        }
-        
-        prepareNextTracksForPlayback()
-        return newIndex
-    }
-    
-    func moveTrackUp(_ index: Int) -> Int {
-        
-        var newIndex = index
-        
-        if (index > 0) {
-            playlist.shiftTrackUp(index)
-            
-            // Update playing track index (which may have changed)
-            playingTrack?.index = playlist.cursor()
-            
-            newIndex = index - 1
-        }
-        
-        prepareNextTracksForPlayback()
-        return newIndex
-    }
-    
-    func clearPlaylist() {
-        stopPlayback()
+    func clear() {
         playlist.clear()
-        
-        // This may not be needed
-        trackPrepQueue.cancelAllOperations()
     }
     
-    private func stopPlayback() {
-        PlaybackSession.endCurrent()
-        player.stop()
-        playbackState = .noTrack
-        playingTrack = nil
-    }
-    
-    func savePlaylist(_ file: URL) {
+    func save(_ file: URL) {
         DispatchQueue.global(qos: .userInitiated).async {
             PlaylistIO.savePlaylist(file)
         }
     }
     
-    func getPlayingTrack() -> IndexedTrack? {
-        return playingTrack
+    func search(searchQuery: SearchQuery) -> SearchResults {
+        
     }
     
-    func getPlaylistSummary() -> (numTracks: Int, totalDuration: Double) {
+    func sort(sort: Sort) {
+        
+    }
+    
+    func getSummary() -> (numTracks: Int, totalDuration: Double) {
         return (playlist.size(), playlist.totalDuration())
     }
     
-    
-    func searchPlaylist(searchQuery: SearchQuery) -> SearchResults {
-        return playlist.searchPlaylist(searchQuery: searchQuery)
+    func getSize() -> Int {
+        return playlist.size()
     }
     
-    func sortPlaylist(sort: Sort) {
-        playlist.sortPlaylist(sort: sort)
+    func moveTrackUp(_ index: Int) -> Int {
         
-        // Update playing track index (which may have changed)
-        playingTrack?.index = playlist.cursor()
-        
-        prepareNextTracksForPlayback()
     }
-}
-
-// Indicates current progress for an operation that adds tracks to the playlist
-class TrackAddOperationProgress {
     
-    var tracksAdded: Int
-    var totalTracks: Int
-    var errors: [InvalidTrackError]
-    var autoplayed: Bool
+    func moveTrackDown(_ index: Int) -> Int {
+        
+    }
     
-    init(_ tracksAdded: Int, _ totalTracks: Int, _ errors: [InvalidTrackError], _ autoplayed: Bool) {
-        self.tracksAdded = tracksAdded
-        self.totalTracks = totalTracks
-        self.errors = errors
-        self.autoplayed = autoplayed
+    func toggleRepeatMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode) {
+        
+    }
+    
+    func toggleShuffleMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode) {
+        
     }
 }
