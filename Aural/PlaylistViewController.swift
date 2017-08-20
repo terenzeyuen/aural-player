@@ -1,10 +1,10 @@
 import Cocoa
 
-class PlaylistViewController: NSViewController, EventSubscriber {
+class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscriber {
     
     @IBOutlet weak var window: NSWindow!
     
-    private let delegate: AuralPlaylistControlDelegate = AppInitializer.getPlaylistControlDelegate()
+    private let delegate: AuralPlaylistDelegate = AppInitializer.getPlaylistControlDelegate()
     
     // Displays the playlist and summary
     @IBOutlet weak var playlistView: NSTableView!
@@ -55,9 +55,6 @@ class PlaylistViewController: NSViewController, EventSubscriber {
         
         let appState = AppInitializer.getUIAppState()
         
-        // Set up a mouse listener (for double clicks -> play selected track)
-        playlistView.doubleAction = #selector(self.playlistDoubleClickAction(_:))
-        
         // Enable drag n drop into the playlist view
         playlistView.register(forDraggedTypes: [String(kUTTypeFileURL)])
         
@@ -81,21 +78,17 @@ class PlaylistViewController: NSViewController, EventSubscriber {
         
         // Register self as a subscriber to various event notifications
         EventRegistry.subscribe(.trackChanged, subscriber: self, dispatchQueue: DispatchQueue.main)
-        
         EventRegistry.subscribe(.trackAdded, subscriber: self, dispatchQueue: DispatchQueue.main)
-        
         EventRegistry.subscribe(.trackNotPlayed, subscriber: self, dispatchQueue: DispatchQueue.main)
-        
         EventRegistry.subscribe(.tracksNotAdded, subscriber: self, dispatchQueue: DispatchQueue.main)
-        
         EventRegistry.subscribe(.startedAddingTracks, subscriber: self, dispatchQueue: DispatchQueue.main)
-        
         EventRegistry.subscribe(.doneAddingTracks, subscriber: self, dispatchQueue: DispatchQueue.main)
+        
+        // Register self as a subscriber to various message notifications
+        UIMessenger.subscribe(.trackChangedNotification, subscriber: self)
     }
     
     @IBAction func addAction(_ sender: Any) {
-        
-        print("Muthusami !")
         
         let selRow = playlistView.selectedRow
         let dialog = UIElements.openDialog
@@ -222,6 +215,8 @@ class PlaylistViewController: NSViewController, EventSubscriber {
         
         delegate.clearPlaylist()
         playlistView.reloadData()
+        
+        UIMessenger.publishMessage(StopPlaybackRequest.instance)
     }
     
     func selectTrack(_ index: Int?) {
@@ -255,7 +250,7 @@ class PlaylistViewController: NSViewController, EventSubscriber {
     }
     
     @IBAction func playSelectedTrackMenuItemAction(_ sender: Any) {
-//        playSelectedTrack()
+        playSelectedTrack()
     }
     
     @IBAction func moveTrackUpMenuItemAction(_ sender: Any) {
@@ -516,26 +511,23 @@ class PlaylistViewController: NSViewController, EventSubscriber {
         playlistWorkSpinner.frame.origin.x = newX
     }
     
-    func playlistDoubleClickAction(_ sender: AnyObject) {
+    @IBAction func playlistDoubleClickAction(_ sender: Any) {
+        
+        print("YEAH ... I LIKE THAT !")
         playSelectedTrack()
     }
     
+//    func playlistDoubleClickAction(_ sender: AnyObject) {
+//        
+//    }
+    
     func playSelectedTrack() {
-        if (playlistView.selectedRow >= 0) {
-            
-            do {
-                
-//                let track = try delegate.play(playlistView.selectedRow)
-                //                trackChange(track)
-                
-                // TODO: send a cmd to player to play sel track
-                
-            } catch let error as Error {
-                
-                if (error is InvalidTrackError) {
-                    //                    handleTrackNotPlayedError(error as! InvalidTrackError)
-                }
-            }
+        
+        let selRow = playlistView.selectedRow
+        
+        if (selRow >= 0) {
+            let trackPlaybackRequest = TrackPlaybackRequest(selRow)
+            UIMessenger.publishMessage(trackPlaybackRequest)
         }
     }
     
@@ -575,6 +567,17 @@ class PlaylistViewController: NSViewController, EventSubscriber {
         if event is TrackInfoUpdatedEvent {
             let _event = event as! TrackInfoUpdatedEvent
             playlistView.reloadData(forRowIndexes: IndexSet([_event.trackIndex]), columnIndexes: UIConstants.playlistViewColumnIndexes)
+        }
+    }
+    
+    func consumeMessage(_ message: Message) {
+        
+        if message is TrackChangedNotification {
+            
+            let _msg = message as! TrackChangedNotification
+            let newTrack = _msg.newTrack
+            let index = newTrack?.index
+            selectTrack(index)
         }
     }
     

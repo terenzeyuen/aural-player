@@ -92,6 +92,9 @@
 		3EB2A7EE1F04697E001DF748 /* GraphicsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB2A7ED1F04697E001DF748 /* GraphicsUtils.swift */; };
 		3EC593981F28A0C600153D34 /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC593971F28A0C600153D34 /* RangeSlider.swift */; };
 		3ECCEE651F41158000858331 /* PrefsTabButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECCEE641F41158000858331 /* PrefsTabButtonCell.swift */; };
+		3ED0F4601F490965003005AF /* UIMessenger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED0F45F1F490965003005AF /* UIMessenger.swift */; };
+		3ED0F4621F490A05003005AF /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED0F4611F490A05003005AF /* Message.swift */; };
+		3ED0F4641F491EE7003005AF /* PlaylistDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED0F4631F491EE7003005AF /* PlaylistDelegate.swift */; };
 		3ED5264F1F2FA27200001A97 /* PlaylistChangeListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED5264E1F2FA27200001A97 /* PlaylistChangeListener.swift */; };
 		3ED526511F3003A800001A97 /* AppInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED526501F3003A800001A97 /* AppInitializer.swift */; };
 		3EF5A54E1F40388E00C5A2D2 /* PreferencesPopupMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF5A54D1F40388E00C5A2D2 /* PreferencesPopupMenuCell.swift */; };
@@ -191,6 +194,9 @@
 		3EB2A7ED1F04697E001DF748 /* GraphicsUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicsUtils.swift; sourceTree = "<group>"; };
 		3EC593971F28A0C600153D34 /* RangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
 		3ECCEE641F41158000858331 /* PrefsTabButtonCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefsTabButtonCell.swift; sourceTree = "<group>"; };
+		3ED0F45F1F490965003005AF /* UIMessenger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIMessenger.swift; sourceTree = "<group>"; };
+		3ED0F4611F490A05003005AF /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		3ED0F4631F491EE7003005AF /* PlaylistDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistDelegate.swift; sourceTree = "<group>"; };
 		3ED5264E1F2FA27200001A97 /* PlaylistChangeListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistChangeListener.swift; sourceTree = "<group>"; };
 		3ED526501F3003A800001A97 /* AppInitializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInitializer.swift; sourceTree = "<group>"; };
 		3EF5A54D1F40388E00C5A2D2 /* PreferencesPopupMenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesPopupMenuCell.swift; sourceTree = "<group>"; };
@@ -229,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				3E3C20A01F0A39D500AF5A62 /* PlayerDelegate.swift */,
+				3ED0F4631F491EE7003005AF /* PlaylistDelegate.swift */,
 				3E3C209D1F0A385300AF5A62 /* Protocols */,
 			);
 			name = Delegates;
@@ -351,6 +358,7 @@
 		3EA262671F0EFD9600D9BCD9 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				3ED0F45E1F490955003005AF /* Messaging */,
 				3E20E8B71F483A6200445771 /* Controllers */,
 				3E5FA43F1EFFF039001669C5 /* Views */,
 				3E6D75F71EFF79E0007F22A3 /* KeyPressHandler.swift */,
@@ -384,6 +392,15 @@
 				3E9871A11F418CB1009AE9E6 /* UIUtils.swift */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		3ED0F45E1F490955003005AF /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				3ED0F45F1F490965003005AF /* UIMessenger.swift */,
+				3ED0F4611F490A05003005AF /* Message.swift */,
+			);
+			name = Messaging;
 			sourceTree = "<group>";
 		};
 		3ED2AF201F00E8B7000F702C /* Domain */ = {
@@ -578,12 +595,14 @@
 				3E20E8BF1F4845F000445771 /* WindowViewController.swift in Sources */,
 				3E20E8991F47EC1B00445771 /* PlaylistViewController.swift in Sources */,
 				3E6D75F81EFF79E0007F22A3 /* KeyPressHandler.swift in Sources */,
+				3ED0F4641F491EE7003005AF /* PlaylistDelegate.swift in Sources */,
 				3E426F7E1EFDD9CF002F5F18 /* Player.swift in Sources */,
 				3E3DCD251F0F913800E09ADC /* EventTypes.swift in Sources */,
 				3E2188A41F0763F50085BAB3 /* TrackInfoViewController.swift in Sources */,
 				3E3BAF241F274771008F090E /* Sort.swift in Sources */,
 				3EC593981F28A0C600153D34 /* RangeSlider.swift in Sources */,
 				3E85FF9F1F40DE3F00A21B0D /* AutoplayPreferences.swift in Sources */,
+				3ED0F4601F490965003005AF /* UIMessenger.swift in Sources */,
 				3EA29AD51F0B470600DA239E /* EventRegistry.swift in Sources */,
 				3EB20B491EFF230C008138A4 /* AppStateIO.swift in Sources */,
 				3E3C209F1F0A388600AF5A62 /* AuralPlayerDelegate.swift in Sources */,
@@ -602,6 +621,7 @@
 				3E047B0E1F01436700ADE0F1 /* ReverbPresets.swift in Sources */,
 				3E33B4A41F3F08B8005EF359 /* Preferences.swift in Sources */,
 				3E9463971F29960F00A9019C /* EffectsUnitButtonCell.swift in Sources */,
+				3ED0F4621F490A05003005AF /* Message.swift in Sources */,
 				3E09C6BB1F2F388B007BB489 /* PlaybackSequence.swift in Sources */,
 				3E911CEF1F441BE1009C1572 /* UIAppState.swift in Sources */,
 				3E9871A21F418CB1009AE9E6 /* UIUtils.swift in Sources */,

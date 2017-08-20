@@ -1,6 +1,6 @@
 import Cocoa
 
-class PlayerViewController: NSViewController, EventSubscriber {
+class PlayerViewController: NSViewController, EventSubscriber, MessageSubscriber {
     
     private let player: AuralPlayerDelegate = AppInitializer.getPlayerDelegate()
     
@@ -41,18 +41,19 @@ class PlayerViewController: NSViewController, EventSubscriber {
         
         let appState = AppInitializer.getUIAppState()
         
-        // TODO Initialize controls, subscribe to events
         volumeSlider.floatValue = appState.volume
         setVolumeImage(appState.muted)
         panSlider.floatValue = appState.balance
         
-        // TODO: Timer interval depends on whether time stretch unit is active. Check app state.
-        let interval = UIConstants.seekTimerIntervalMillis
-        seekTimer = ScheduledTaskExecutor(intervalMillis: interval, task: {self.updatePlayingTime()}, queue: DispatchQueue.main)
+        seekTimer = ScheduledTaskExecutor(intervalMillis: appState.seekTimerInterval, task: {self.updatePlayingTime()}, queue: DispatchQueue.main)
         
         // Register self as a subscriber to various event notifications
         EventRegistry.subscribe(.trackChanged, subscriber: self, dispatchQueue: DispatchQueue.main)
         EventRegistry.subscribe(.trackNotPlayed, subscriber: self, dispatchQueue: DispatchQueue.main)
+        
+        // Register self as a subscriber to various UI message notifications
+        UIMessenger.subscribe(.trackPlaybackRequest, subscriber: self)
+        UIMessenger.subscribe(.stopPlaybackRequest, subscriber: self)
     }
     
     @IBAction func playPauseAction(_ sender: Any) {
@@ -137,7 +138,9 @@ class PlayerViewController: NSViewController, EventSubscriber {
         }
         
         resetPlayingTime()
-//        selectTrack(newTrack == nil ? nil : newTrack!.index)
+        
+        let trackChangedMessage = TrackChangedNotification(newTrack)
+        UIMessenger.publishMessage(trackChangedMessage)
     }
     
     func showNowPlayingInfo(_ track: Track) {
@@ -336,7 +339,20 @@ class PlayerViewController: NSViewController, EventSubscriber {
         }
     }
     
-    
+    private func playTrack(_ index: Int) {
+        
+        do {
+            
+            let newTrack = try player.play(index)
+            trackChange(newTrack)
+            
+        } catch let error as Error {
+            
+            if (error is InvalidTrackError) {
+                //                handleTrackNotPlayedError(error as! InvalidTrackError)
+            }
+        }
+    }
     
     @IBAction func togglePlayPauseMenuItemAction(_ sender: Any) {
         playPauseAction(sender as AnyObject)
@@ -389,11 +405,15 @@ class PlayerViewController: NSViewController, EventSubscriber {
             setSeekTimerState(false)
             let _event = event as! TrackChangedEvent
             trackChange(_event.newTrack)
+            
+            return
         }
         
         if event is TrackNotPlayedEvent {
             let _evt = event as! TrackNotPlayedEvent
             handleTrackNotPlayedError(_evt.error)
+            
+            return
         }
     }
     
@@ -415,6 +435,21 @@ class PlayerViewController: NSViewController, EventSubscriber {
             alert.window.setIsVisible(true)
             
             alert.runModal()
+        }
+    }
+    
+    func consumeMessage(_ message: Message) {
+        
+        if (message is TrackPlaybackRequest) {
+            let _msg = message as! TrackPlaybackRequest
+            let trackIndex = _msg.trackIndex
+            playTrack(trackIndex)
+            
+            return
+        }
+        
+        if (message is StopPlaybackRequest) {
+            
         }
     }
 }
