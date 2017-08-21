@@ -1,13 +1,16 @@
 import Foundation
 
-class AudioGraphDelegate: AudioGraphDelegateProtocol {
+class AudioGraphDelegate: AudioGraphDelegateProtocol, MessageSubscriber {
     
     private let graph: AudioGraphProtocol
     private let preferences: Preferences
     
     init(_ graph: AudioGraphProtocol, _ preferences: Preferences) {
+        
         self.graph = graph
         self.preferences = preferences
+        
+        SyncMessenger.subscribe(.appExitNotification, subscriber: self)
     }
     
     func getVolume() -> Float {
@@ -186,5 +189,20 @@ class AudioGraphDelegate: AudioGraphDelegateProtocol {
     func setFilterTrebleBand(_ min: Float, _ max: Float) -> String {
         graph.setFilterTrebleBand(min, max)
         return ValueFormatter.formatFilterFrequencyRange(min, max)
+    }
+    
+    func consumeMessage(_ message: Message) {
+        
+        if (message is AppExitNotification) {
+            saveGraphState()
+        }
+    }
+    
+    private func saveGraphState() {
+        
+        let appState = ObjectGraph.getAppState()
+        
+        let graphState = graph.getPersistentState()
+        appState.audioGraphState = graphState
     }
 }

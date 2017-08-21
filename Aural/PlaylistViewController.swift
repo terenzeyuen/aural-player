@@ -51,8 +51,6 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     
     override func viewDidLoad() {
         
-        print("DILLON !!! YOUUUUUUUUUUUUUU SON OF A BITCH !")
-        
         let appState = ObjectGraph.getUIAppState()
         
         // Enable drag n drop into the playlist view
@@ -63,19 +61,18 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         
         switch appState.repeatMode {
             
-            case .off: btnRepeat.image = UIConstants.imgRepeatOff
-            case .one: btnRepeat.image = UIConstants.imgRepeatOne
-            case .all: btnRepeat.image = UIConstants.imgRepeatAll
+        case .off: btnRepeat.image = UIConstants.imgRepeatOff
+        case .one: btnRepeat.image = UIConstants.imgRepeatOne
+        case .all: btnRepeat.image = UIConstants.imgRepeatAll
             
         }
         
         switch appState.shuffleMode {
             
-            case .off: btnShuffle.image = UIConstants.imgShuffleOff
-            case .on: btnShuffle.image = UIConstants.imgShuffleOn
+        case .off: btnShuffle.image = UIConstants.imgShuffleOff
+        case .on: btnShuffle.image = UIConstants.imgShuffleOn
             
         }
-        
         // Register self as a subscriber to various event notifications
         EventRegistry.subscribe(.trackChanged, subscriber: self, dispatchQueue: DispatchQueue.main)
         EventRegistry.subscribe(.trackAdded, subscriber: self, dispatchQueue: DispatchQueue.main)
@@ -85,7 +82,8 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         EventRegistry.subscribe(.doneAddingTracks, subscriber: self, dispatchQueue: DispatchQueue.main)
         
         // Register self as a subscriber to various message notifications
-        UIMessenger.subscribe(.trackChangedNotification, subscriber: self)
+        SyncMessenger.subscribe(.trackChangedNotification, subscriber: self)
+        SyncMessenger.subscribe(.searchQueryChanged, subscriber: self)
     }
     
     @IBAction func addAction(_ sender: Any) {
@@ -103,7 +101,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     }
     
     func addFiles(_ files: [URL]) {
-       // TODO startedAddingTracks()
+        startedAddingTracks()
         playlist.addFiles(files)
     }
     
@@ -115,7 +113,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         
         if (index >= 0) {
             
-            let newPlayingTrackIndex = playlist.removeTrack(index)
+            playlist.removeTrack(index)
             
             // The new number of rows (after track removal) is one less than the size of the playlist view, because the view has not yet been updated
             let numRows = playlistView.numberOfRows - 1
@@ -131,14 +129,13 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
             playlistView.noteNumberOfRowsChanged()
             
             updatePlaylistSummary()
+            let newPlayingTrackIndex = playlist.getPlayingTrack()?.index
             selectTrack(newPlayingTrackIndex)
             
             if (newPlayingTrackIndex == nil) {
-//                clearNowPlayingInfo()
+                //                clearNowPlayingInfo()
             }
         }
-        
-        showPlaylistSelectedRow()
     }
     
     // If tracks are currently being added to the playlist, the optional progress argument contains progress info that the spinner control uses for its animation
@@ -175,8 +172,6 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     
     @IBAction func upAction(_ sender: Any) {
         
-        print("Samimuthu")
-        
         let curSelectedRow = playlistView.selectedRow
         if (curSelectedRow < 1) {
             return
@@ -184,12 +179,9 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         
         let newSelectedRow = playlist.moveTrackUp(curSelectedRow)
         swapRows(curSelectedRow, newSelectedRow, newSelectedRow)
-        showPlaylistSelectedRow()
     }
     
     @IBAction func downAction(_ sender: Any) {
-        
-        print("Samimuthupapa")
         
         let curSelectedRow = playlistView.selectedRow
         if (curSelectedRow >= playlistView.numberOfRows - 1) {
@@ -198,7 +190,6 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         
         let newSelectedRow = playlist.moveTrackDown(curSelectedRow)
         swapRows(curSelectedRow, newSelectedRow, newSelectedRow)
-        showPlaylistSelectedRow()
     }
     
     private func swapRows(_ row1: Int, _ row2: Int, _ newSelectedRow: Int) {
@@ -206,17 +197,16 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         // Reload data in the two affected rows
         let rowIndexes = IndexSet([row1, row2])
         playlistView.reloadData(forRowIndexes: rowIndexes, columnIndexes: UIConstants.playlistViewColumnIndexes)
-        playlistView.selectRowIndexes(IndexSet(integer: newSelectedRow), byExtendingSelection: false)
+        selectTrack(newSelectedRow)
     }
     
     @IBAction func clearAction(_ sender: Any) {
         
-        print("Papasami")
-        
         playlist.clear()
         playlistView.reloadData()
+        updatePlaylistSummary()
         
-        UIMessenger.publishMessage(StopPlaybackRequest.instance)
+        SyncMessenger.publishMessage(StopPlaybackRequest.instance)
     }
     
     func selectTrack(_ index: Int?) {
@@ -229,7 +219,6 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         } else {
             // Select first track in list, if list not empty
             if (playlistView.numberOfRows > 0) {
-                
                 playlistView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
             }
         }
@@ -316,7 +305,6 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     @IBAction func toggleShuffleModeMenuItemAction(_ sender: Any) {
         shuffleAction(sender as AnyObject)
     }
-    
     
     @IBAction func searchPlaylistAction(_ sender: Any) {
         
@@ -417,7 +405,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     func updateSearchPanelWithResult(searchResult: SearchResult) {
         
         // Select the track in the playlist view, to show the user where the track is
-        //        selectTrack(searchResult.index)
+        selectTrack(searchResult.index)
         
         let resultsText = (searchResults?.count)! == 1 ? "result found" : "results found"
         searchResultsSummaryLabel.stringValue = String(format: "%d %@. Selected %d / %d", (searchResults?.count)!, resultsText, (searchResults?.cursor)! + 1, (searchResults?.count)!)
@@ -472,8 +460,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         dismissModalDialog()
         
         playlistView.reloadData()
-        //        selectTrack(player.getPlayingTrack()?.index)
-        //        showPlaylistSelectedRow()
+        selectTrack(playlist.getPlayingTrack()?.index)
     }
     
     @IBAction func cancelSortAction(_ sender: Any) {
@@ -512,14 +499,8 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     }
     
     @IBAction func playlistDoubleClickAction(_ sender: Any) {
-        
-        print("YEAH ... I LIKE THAT !")
         playSelectedTrack()
     }
-    
-//    func playlistDoubleClickAction(_ sender: AnyObject) {
-//        
-//    }
     
     func playSelectedTrack() {
         
@@ -527,7 +508,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         
         if (selRow >= 0) {
             let trackPlaybackRequest = TrackPlaybackRequest(selRow)
-            UIMessenger.publishMessage(trackPlaybackRequest)
+            SyncMessenger.publishMessage(trackPlaybackRequest)
         }
     }
     
@@ -552,7 +533,7 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         
         if event is TracksNotAddedEvent {
             let _evt = event as! TracksNotAddedEvent
-//                        handleTracksNotAddedError(_evt.errors)
+            //                        handleTracksNotAddedError(_evt.errors)
         }
         
         if event is StartedAddingTracksEvent {
@@ -572,12 +553,18 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
     
     func consumeMessage(_ message: Message) {
         
-        if message is TrackChangedNotification {
+        if (message is TrackChangedNotification) {
             
             let _msg = message as! TrackChangedNotification
             let newTrack = _msg.newTrack
             let index = newTrack?.index
             selectTrack(index)
+            
+            return
+        }
+        
+        if (message is SearchQueryChanged) {
+            searchQueryChanged()
         }
     }
     
@@ -587,10 +574,10 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
         DispatchQueue.main.async {
             
             // First, select the problem track and update the now playing info
-//            let playingTrack = self.playlist.getPlayingTrack()
-////            self.trackChange(playingTrack, true)
-//            let playingTrackIndex = playingTrack!.index!
-//            self.removeSingleTrack(playingTrackIndex)
+            //            let playingTrack = self.playlist.getPlayingTrack()
+            ////            self.trackChange(playingTrack, true)
+            //            let playingTrackIndex = playingTrack!.index!
+            //            self.removeSingleTrack(playingTrackIndex)
         }
     }
     
@@ -601,9 +588,9 @@ class PlaylistViewController: NSViewController, EventSubscriber, MessageSubscrib
             
             let alert = UIElements.tracksNotAddedAlertWithErrors(errors)
             
-//            let orig = NSPoint(x: self.window.frame.origin.x, y: min(self.window.frame.origin.y + 227, self.window.frame.origin.y + self.window.frame.height - alert.window.frame.height))
-//            
-//            alert.window.setFrameOrigin(orig)
+            //            let orig = NSPoint(x: self.window.frame.origin.x, y: min(self.window.frame.origin.y + 227, self.window.frame.origin.y + self.window.frame.height - alert.window.frame.height))
+            //
+            //            alert.window.setFrameOrigin(orig)
             alert.window.setIsVisible(true)
             
             alert.runModal()

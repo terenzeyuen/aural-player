@@ -1,16 +1,94 @@
 import Cocoa
 
-class PlaylistDelegate: PlaylistDelegateProtocol {
+class PlaylistDelegate: PlaylistDelegateProtocol, MessageSubscriber {
     
     private var playlist: PlaylistCRUD
-    private var player: BasicPlayerDelegateProtocol // ( for play(track) and stop() )
+    private var changeListeners: [PlaylistChangeListener]
+    private var player: BasicPlayerDelegateProtocol
+    
+    private var playlistState: PlaylistState
     private var preferences: Preferences
     
-    init(_ playlist: PlaylistCRUD, _ player: BasicPlayerDelegateProtocol, _ preferences: Preferences) {
+    init(_ playlist: PlaylistCRUD, _ player: BasicPlayerDelegateProtocol, _ changeListeners: [PlaylistChangeListener], _ playlistState: PlaylistState, _ preferences: Preferences) {
+        
         self.playlist = playlist
         self.player = player
+        self.changeListeners = changeListeners
+        
+        self.playlistState = playlistState
         self.preferences = preferences
+        
+        SyncMessenger.subscribe(.appLoadedNotification, subscriber: self)
+        SyncMessenger.subscribe(.appExitNotification, subscriber: self)
     }
+    
+    // This is called when the app loads initially. Loads the playlist from the app state file on disk. Only meant to be called once.
+    private func loadPlaylist() {
+        
+        if (preferences.playlistOnStartup == .rememberFromLastAppLaunch) {
+            
+            EventRegistry.publishEvent(.startedAddingTracks, StartedAddingTracksEvent.instance)
+            
+            // Add tracks async, notifying the UI one at a time
+            DispatchQueue.global(qos: .userInteractive).async {
+                
+                // NOTE - Assume that all entries are valid tracks (supported audio files), not playlists and not directories. i.e. assume that saved state file has not been corrupted.
+                
+                var errors: [InvalidTrackError] = [InvalidTrackError]()
+                let autoplay: Bool = self.preferences.autoplayOnStartup
+                var autoplayed: Bool = false
+                
+                let tracks = self.playlistState.tracks
+                let totalTracks = tracks.count
+                var tracksAdded = 0
+                
+                for trackPath in tracks {
+                    
+                    tracksAdded += 1
+                    
+                    // Playlists might contain broken file references
+                    if (!FileSystemUtils.fileExists(trackPath)) {
+                        errors.append(FileNotFoundError(URL(fileURLWithPath: trackPath)))
+                        continue
+                    }
+                    
+                    let resolvedFileInfo = FileSystemUtils.resolveTruePath(URL(fileURLWithPath: trackPath))
+                    
+                    do {
+                        
+                        let progress = TrackAddedEventProgress(tracksAdded, totalTracks)
+                        let index = try self.addTrack(resolvedFileInfo.resolvedURL, progress)
+                        
+                        if (autoplay && !autoplayed) {
+                            self.autoplay(index, false)
+                            autoplayed = true
+                        }
+                        
+                    } catch let error as Error {
+                        
+                        if (error is InvalidTrackError) {
+                            errors.append(error as! InvalidTrackError)
+                        }
+                    }
+                }
+                
+                EventRegistry.publishEvent(.doneAddingTracks, DoneAddingTracksEvent.instance)
+                
+                // If errors > 0, send event to UI
+                if (errors.count > 0) {
+                    EventRegistry.publishEvent(.tracksNotAdded, TracksNotAddedEvent(errors))
+                }
+            }
+        }
+    }
+    
+    func autoplay(_ trackIndex: Int, _ interruptPlayingTrack: Bool) {
+        
+        DispatchQueue.main.async {
+            self.player.play(trackIndex, interruptPlayingTrack)
+        }
+    }
+    
     
     // This method should only be called from outside this class. For adding tracks within this class, always call the private method addFiles_sync().
     func addFiles(_ files: [URL]) {
@@ -19,11 +97,12 @@ class PlaylistDelegate: PlaylistDelegateProtocol {
         DispatchQueue.global(qos: .userInteractive).async {
             
             let autoplay: Bool = self.preferences.autoplayAfterAddingTracks
+            let interruptPlayback: Bool = self.preferences.autoplayAfterAddingOption == .always
             
             // Progress
             let progress = TrackAddOperationProgress(0, files.count, [InvalidTrackError](), false)
             
-            self.addFiles_sync(files, autoplay, progress)
+            self.addFiles_sync(files, autoplay, interruptPlayback, progress)
             
             EventRegistry.publishEvent(.doneAddingTracks, DoneAddingTracksEvent.instance)
             
@@ -39,7 +118,7 @@ class PlaylistDelegate: PlaylistDelegateProtocol {
     // Adds a bunch of files synchronously
     // The autoplay argument indicates whether or not autoplay is enabled. Make sure to pass it into functions that call back here recursively (addPlaylist() or addDirectory()).
     // The autoplayed argument indicates whether or not autoplay, if enabled, has already been executed. This value is passed by reference so that recursive calls back here will all see the same value.
-    private func addFiles_sync(_ files: [URL], _ autoplay: Bool, _ progress: TrackAddOperationProgress) {
+    private func addFiles_sync(_ files: [URL], _ autoplay: Bool, _ interruptPlayback: Bool, _ progress: TrackAddOperationProgress) {
         
         if (files.count > 0) {
             
@@ -58,7 +137,7 @@ class PlaylistDelegate: PlaylistDelegateProtocol {
                 if (resolvedFileInfo.isDirectory) {
                     
                     // Directory
-                    addDirectory(file, autoplay, progress)
+                    addDirectory(file, autoplay, interruptPlayback, progress)
                     
                 } else {
                     
@@ -68,7 +147,7 @@ class PlaylistDelegate: PlaylistDelegateProtocol {
                     if (AppConstants.supportedPlaylistFileTypes.contains(fileExtension)) {
                         
                         // Playlist
-                        addPlaylist(file, autoplay, progress)
+                        addPlaylist(file, autoplay, interruptPlayback, progress)
                         
                     } else if (AppConstants.supportedAudioFileTypes.contains(fileExtension)) {
                         
@@ -82,8 +161,7 @@ class PlaylistDelegate: PlaylistDelegateProtocol {
                             
                             if (autoplay && !progress.autoplayed && index >= 0) {
                                 
-                                // TODO: Autoplay
-//                                self.autoplay(index)
+                                self.autoplay(index, interruptPlayback)
                                 progress.autoplayed = true
                             }
                             
@@ -114,7 +192,7 @@ class PlaylistDelegate: PlaylistDelegateProtocol {
         return newTrackIndex
     }
     
-    private func addPlaylist(_ playlistFile: URL, _ autoplay: Bool, _ progress: TrackAddOperationProgress) {
+    private func addPlaylist(_ playlistFile: URL, _ autoplay: Bool, _ interruptPlayback: Bool, _ progress: TrackAddOperationProgress) {
         
         let loadedPlaylist = PlaylistIO.loadPlaylist(playlistFile)
         if (loadedPlaylist != nil) {
@@ -122,11 +200,11 @@ class PlaylistDelegate: PlaylistDelegateProtocol {
             progress.totalTracks -= 1
             progress.totalTracks += (loadedPlaylist?.tracks.count)!
             
-            addFiles_sync(loadedPlaylist!.tracks, autoplay, progress)
+            addFiles_sync(loadedPlaylist!.tracks, autoplay, interruptPlayback, progress)
         }
     }
     
-    private func addDirectory(_ dir: URL, _ autoplay: Bool, _ progress: TrackAddOperationProgress) {
+    private func addDirectory(_ dir: URL, _ autoplay: Bool, _ interruptPlayback: Bool, _ progress: TrackAddOperationProgress) {
         
         let dirContents = FileSystemUtils.getContentsOfDirectory(dir)
         if (dirContents != nil) {
@@ -135,7 +213,7 @@ class PlaylistDelegate: PlaylistDelegateProtocol {
             progress.totalTracks += (dirContents?.count)!
             
             // Add them
-            addFiles_sync(dirContents!, autoplay, progress)
+            addFiles_sync(dirContents!, autoplay, interruptPlayback, progress)
         }
     }
     
@@ -148,28 +226,45 @@ class PlaylistDelegate: PlaylistDelegateProtocol {
         // TODO: publish message
     }
     
-    func removeTrack(_ index: Int) -> Int? {
+    func removeTrack(_ index: Int) {
         playlist.removeTrack(index)
-        
-        // TODO: Return playing track index
-        // TODO: publish message
-        return 0
+        for listener in changeListeners {
+            listener.trackRemoved(index)
+        }
     }
     
     func moveTrackUp(_ index: Int) -> Int {
-        playlist.moveTrackUp(index)
-        return 0    // TODO
+        
+        var newIndex = playlist.moveTrackUp(index)
+            
+        if (newIndex != index) {
+            
+            for listener in changeListeners {
+                listener.trackReordered(index, newIndex)
+            }
+        }
+        
+        return newIndex
     }
     
     func moveTrackDown(_ index: Int) -> Int {
-        playlist.moveTrackDown(index)
-        return 0    // TODO
+        
+        let newIndex = playlist.moveTrackDown(index)
+        
+        if (newIndex != index) {
+            
+            for listener in changeListeners {
+                listener.trackReordered(index, newIndex)
+            }
+        }
+        
+        return newIndex
     }
     
     func clear() {
-        playlist.clear()
         
-        // TODO: publish message
+        playlist.clear()
+        player.stop()
     }
     
     func save(_ file: URL) {
@@ -196,5 +291,28 @@ class PlaylistDelegate: PlaylistDelegateProtocol {
     
     func toggleShuffleMode() -> (repeatMode: RepeatMode, shuffleMode: ShuffleMode) {
         return playlist.toggleShuffleMode()
+    }
+    
+    func getPlayingTrack() -> IndexedTrack? {
+        return playlist.getPlayingTrack()
+    }
+    
+    func consumeMessage(_ message: Message) {
+        
+        if (message is AppLoadedNotification) {
+            loadPlaylist()
+        }
+        
+        if (message is AppExitNotification) {
+            savePlaylistState()
+        }
+    }
+    
+    private func savePlaylistState() {
+        
+        let appState = ObjectGraph.getAppState()
+        
+        let playlistState = playlist.getPersistentState()
+        appState.playlistState = playlistState
     }
 }

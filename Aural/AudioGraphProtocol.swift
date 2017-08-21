@@ -92,6 +92,8 @@ protocol AudioGraphProtocol {
     
     // Sets the treble band of the filter to the specified frequency range
     func setFilterTrebleBand(_ min: Float, _ max: Float)
+    
+    func getPersistentState() -> AudioGraphState
 }
 
 protocol PlayerGraphProtocol {

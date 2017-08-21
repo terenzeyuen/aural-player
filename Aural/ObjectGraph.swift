@@ -32,10 +32,14 @@ class ObjectGraph {
     
     private static var preferences: Preferences?
     
-    // Flag
+    // Hack to run initialization code only once
     private static var initialized: Bool = false
     
-    static func initialize() {
+    private static func initialize() {
+        
+        if (initialized) {
+            return
+        }
         
         preferences = Preferences.instance()
         
@@ -55,7 +59,7 @@ class ObjectGraph {
         
         playlist = Playlist(repeatMode, shuffleMode)
         
-        audioGraph = AudioGraph()
+        audioGraph = AudioGraph(appState!.audioGraphState)
         if (preferences!.volumeOnStartup == .specific) {
             audioGraph?.setVolume(preferences!.startupVolumeValue)
         }
@@ -64,9 +68,9 @@ class ObjectGraph {
         
         recorder = Recorder(audioGraph!)
         
-        playlistDelegate = PlaylistDelegate(playlist!, playerDelegate!, preferences!)
-        
         playerDelegate = PlayerDelegate(player!, playlist!, preferences!)
+        
+        playlistDelegate = PlaylistDelegate(playlist!, playerDelegate!, [playerDelegate!], appState!.playlistState, preferences!)
         
         audioGraphDelegate = AudioGraphDelegate(audioGraph!, preferences!)
         
@@ -83,24 +87,15 @@ class ObjectGraph {
         
         return uiAppState!
     }
-//    
-//    static func getPlaylist() -> Playlist {
-//        
-//        if (!initialized) {
-//            initialize()
-//        }
-//        
-//        return playlist!
-//    }
-//    
-//    static func getPlayer() -> Player {
-//        
-//        if (!initialized) {
-//            initialize()
-//        }
-//        
-//        return player!
-//    }
+    
+    static func getAppState() -> AppState {
+        
+        if (!initialized) {
+            initialize()
+        }
+        
+        return appState!
+    }
     
     static func getPlayerDelegate() -> PlayerDelegateProtocol {
         
@@ -154,5 +149,9 @@ class ObjectGraph {
         }
         
         return preferences!
+    }
+    
+    static func tearDown() {
+        AppStateIO.save(appState!)
     }
 }

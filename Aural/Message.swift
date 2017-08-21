@@ -16,13 +16,28 @@ protocol Message {
     var messageType: MessageType {get}
 }
 
+protocol MessageResponse {
+    var responseType: MessageResponseType {get}
+}
+
 // Enumeration of the different message types. See the various Message structs below, for descriptions of each message type.
 enum MessageType {
     
+    case trackRemovedNotification
     case trackChangedNotification
     case trackPlaybackRequest
     case stopPlaybackRequest
     case seekTimerIntervalChangeRequest
+    case searchQueryChanged
+    
+    case appLoadedNotification
+    case appExitNotification
+}
+
+// Enumeration of the different message response types. See the various MessageResponse structs below, for descriptions of each message response type.
+enum MessageResponseType {
+    
+    case okToExit
 }
 
 // Notification from the player that the playing track has changed (for instance, "next track" or when a track has finished playing)
@@ -33,6 +48,17 @@ struct TrackChangedNotification: Message {
     
     init(_ newTrack: IndexedTrack?) {
         self.newTrack = newTrack
+    }
+}
+
+// Notification from the playlist that a certain track has been removed.
+struct TrackRemovedNotification: Message {
+    
+    var messageType: MessageType = .trackRemovedNotification
+    var removedTrackIndex: Int
+    
+    init(_ removedTrackIndex: Int) {
+        self.removedTrackIndex = removedTrackIndex
     }
 }
 
@@ -65,4 +91,36 @@ struct SeekTimerIntervalChangeRequest: Message {
     init(_ newIntervalMillis: Int) {
         self.newIntervalMillis = newIntervalMillis
     }
+}
+
+struct SearchQueryChanged: Message {
+    
+    var messageType: MessageType = .searchQueryChanged
+    static let instance: SearchQueryChanged = SearchQueryChanged()
+    
+    private init() {}
+}
+
+struct AppLoadedNotification: Message {
+    
+    var messageType: MessageType = .appLoadedNotification
+    static let instance: AppLoadedNotification = AppLoadedNotification()
+    
+    private init() {}
+}
+
+struct AppExitNotification: Message {
+    
+    var messageType: MessageType = .appExitNotification
+    static let instance: AppExitNotification = AppExitNotification()
+    
+    private init() {}
+}
+
+struct OkToExit: MessageResponse {
+    
+    var responseType: MessageResponseType = .okToExit
+    static let instance: OkToExit = OkToExit()
+    
+    private init() {}
 }

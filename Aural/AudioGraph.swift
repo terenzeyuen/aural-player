@@ -27,7 +27,7 @@ class AudioGraph: AudioGraphProtocol, PlayerGraphProtocol, RecorderGraphProtocol
     private var reverbPreset: AVAudioUnitReverbPreset
     
     // Sets up the audio engine
-    init() {
+    init(_ state: AudioGraphState) {
         
         playerNode = AVAudioPlayerNode()
         
@@ -51,14 +51,7 @@ class AudioGraph: AudioGraphProtocol, PlayerGraphProtocol, RecorderGraphProtocol
         playerVolume = AppDefaults.volume
         muted = AppDefaults.muted
         reverbPreset = AppDefaults.reverbPreset.avPreset
-        
-//        loadState(AppState.defaults.playerState)
-    }
-    
-    func loadState(_ state: PlayerState) {
-        
-        
-        
+
         // EQ
         eqNode.setBands(state.eqBands)
         eqNode.globalGain = state.eqGlobalGain
@@ -244,9 +237,9 @@ class AudioGraph: AudioGraphProtocol, PlayerGraphProtocol, RecorderGraphProtocol
         }
     }
     
-    func getState() -> PlayerState {
+    func getPersistentState() -> AudioGraphState {
         
-        let state: PlayerState = PlayerState()
+        let state: AudioGraphState = AudioGraphState()
         
         // Volume and pan (balance)
         state.volume = playerVolume

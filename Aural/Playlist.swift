@@ -67,28 +67,36 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD, PlaylistAccessor {
     func clear() {
         tracks.removeAll()
         tracksByFilename.removeAll()
-        playbackSequence.clear()
+        playbackSequence.playlistCleared()
     }
     
     
     // Shifts a single track up in the playlist order
-    func moveTrackUp(_ index: Int) {
+    func moveTrackUp(_ index: Int) -> Int {
         
         if (index > 0) {
             let upIndex = index - 1
             swapTracks(index, upIndex)
             playbackSequence.trackReordered(index, upIndex)
+            
+            return upIndex
         }
+        
+        return index
     }
     
     // Shifts a single track down in the playlist order
-    func moveTrackDown(_ index: Int) {
+    func moveTrackDown(_ index: Int) -> Int {
         
         if (index < (tracks.count - 1)) {
             let downIndex = index + 1
             swapTracks(index, downIndex)
             playbackSequence.trackReordered(index, downIndex)
+            
+            return downIndex
         }
+        
+        return index
     }
     
     // Swaps two tracks in the array of tracks
@@ -274,6 +282,19 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD, PlaylistAccessor {
         return totalDuration
     }
     
+    func getPersistentState() -> PlaylistState {
+        
+        let state = PlaylistState()
+        state.repeatMode = self.playbackSequence.repeatMode
+        state.shuffleMode = self.playbackSequence.shuffleMode
+        
+        for track in tracks {
+            state.tracks.append(track.file!.path)
+        }
+        
+        return state
+    }
+    
     // ---------------------------------- END CRUD methods ----------------------------------
     
     // ---------------------------------- BEGIN sequence accessor methods ----------------------------------
@@ -340,21 +361,7 @@ class Playlist: PlaybackSequenceAccessor, PlaylistCRUD, PlaylistAccessor {
     
     // ---------------------------------- END sequence accessor methods ----------------------------------
     
-    // TODO: Called by PlaylistIO. Put in DAO protocol ?
     func getTracks() -> [Track] {
         return tracks
-    }
-    
-    func getPersistentState() -> PlaylistState {
-        
-        let state = PlaylistState()
-        state.repeatMode = self.playbackSequence.repeatMode
-        state.shuffleMode = self.playbackSequence.shuffleMode
-        
-        for track in tracks {
-            state.tracks.append(track.file!.path)
-        }
-        
-        return state
     }
 }

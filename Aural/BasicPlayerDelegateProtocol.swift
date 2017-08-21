@@ -2,7 +2,7 @@ import Foundation
 
 protocol BasicPlayerDelegateProtocol {
     
-    func play(_ track: IndexedTrack, _ interruptPlayingTrack: Bool)
+    func play(_ trackIndex: Int, _ interruptPlayingTrack: Bool)
     
     func stop()
 }

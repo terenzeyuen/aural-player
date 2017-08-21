@@ -10,9 +10,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         
-        AppDelegate.configureLogging()
-        
-        ObjectGraph.initialize()
+//        configureLogging()
         
         // Set up key press handler
         KeyPressHandler.initialize(self)
@@ -20,10 +18,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             KeyPressHandler.handle(evt)
             return evt;
         });
+        
+        SyncMessenger.publishMessage(AppLoadedNotification.instance)
     }
     
     // Make sure all logging is done to the app's log file
-    private static func configureLogging() {
+    private func configureLogging() {
         
         let allPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = allPaths.first!
@@ -33,17 +33,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationWillTerminate(_ aNotification: Notification) {
+        SyncMessenger.publishMessage(AppExitNotification.instance)
         tearDown()
     }
     
     func tearDown() {
-        
-//        let uiState = UIState()
-//        uiState.windowLocationX = Float(window.frame.origin.x)
-//        uiState.windowLocationY = Float(window.frame.origin.y)
-        //        uiState.showPlaylist = isPlaylistShown()
-        //        uiState.showEffects = isEffectsShown()
-        
-//        player.appExiting(uiState)
+        ObjectGraph.tearDown()
     }
 }

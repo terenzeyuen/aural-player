@@ -15,15 +15,9 @@ class RecorderViewController: NSViewController {
     // Timer that periodically updates the recording duration (only when recorder is active)
     private var recorderTimer: ScheduledTaskExecutor?
     
-    private let graph: AudioGraphDelegateProtocol = ObjectGraph.getAudioGraphDelegate()
-    
     override func viewDidLoad() {
        
-        print("DON'T GIMME THAT CRAP !")
-        
-        let appState = ObjectGraph.getUIAppState()
-        
-        recorderTimer = ScheduledTaskExecutor(intervalMillis: appState.seekTimerInterval, task: {self.updateRecordingInfo()}, queue: DispatchQueue.main)
+        recorderTimer = ScheduledTaskExecutor(intervalMillis: UIConstants.recorderTimerIntervalMillis, task: {self.updateRecordingInfo()}, queue: DispatchQueue.main)
     }
     
     @IBAction func recorderAction(_ sender: Any) {

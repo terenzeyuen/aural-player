@@ -54,8 +54,6 @@ class PreferencesViewController: NSViewController {
     
     override func viewDidLoad() {
         
-        print("CUM AHN, DON'T BULLLLLLLLSHIT MEH")
-        
         prefsPanel.titlebarAppearsTransparent = true
         prefsTabViewButtons = [btnPlayerPrefs, btnPlaylistPrefs, btnViewPrefs]
         

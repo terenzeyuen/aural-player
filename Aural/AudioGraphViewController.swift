@@ -82,6 +82,10 @@ class AudioGraphViewController: NSViewController {
         
         let appState = ObjectGraph.getUIAppState()
         
+        volumeSlider.floatValue = appState.volume
+        setVolumeImage(appState.muted)
+        panSlider.floatValue = appState.balance
+        
         // Set up the filter control sliders
         
         filterBassSlider.minValue = AppConstants.bass_min

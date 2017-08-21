@@ -1,6 +1,6 @@
 import Cocoa
 
-class WindowViewController: NSViewController {
+class WindowViewController: NSViewController, MessageSubscriber {
     
     @IBOutlet weak var window: NSWindow!
     
@@ -24,11 +24,6 @@ class WindowViewController: NSViewController {
         
         let appState = ObjectGraph.getUIAppState()
         
-        // TODO: Where/when should this be done ?
-        positionWindow(appState.windowLocation)
-        window.isMovableByWindowBackground = true
-        window.makeKeyAndOrderFront(self)
-        
         playlistCollapsibleView = CollapsibleView(views: [playlistBox, playlistControlsBox])
         fxCollapsibleView = CollapsibleView(views: [fxBox])
         
@@ -39,6 +34,12 @@ class WindowViewController: NSViewController {
         if (appState.hideEffects) {
             toggleEffects(false)
         }
+        
+        positionWindow(appState.windowLocation)
+        window.isMovableByWindowBackground = true
+        window.makeKeyAndOrderFront(self)
+        
+        SyncMessenger.subscribe(.appExitNotification, subscriber: self)
     }
     
     func positionWindow(_ location: NSPoint) {
@@ -50,6 +51,8 @@ class WindowViewController: NSViewController {
     }
     
     @IBAction func closeAction(_ sender: AnyObject) {
+        
+        // TODO: Check if recording ongoing
         
         //        if let _ = player.getRecordingInfo() {
         //
@@ -165,14 +168,23 @@ class WindowViewController: NSViewController {
         return playlistCollapsibleView?.hidden == false
     }
     
-    func tearDown() {
+    func consumeMessage(_ message: Message) {
         
-        //        let uiState = UIState()
-        //        uiState.windowLocationX = Float(window.frame.origin.x)
-        //        uiState.windowLocationY = Float(window.frame.origin.y)
-        //        uiState.showPlaylist = isPlaylistShown()
-        //        uiState.showEffects = isEffectsShown()
+        if (message is AppExitNotification) {
+            saveUIState()
+        }
+    }
+    
+    func saveUIState() {
         
-        //        player.appExiting(uiState)
+        let appState = ObjectGraph.getAppState()
+        
+        let uiState = UIState()
+        uiState.windowLocationX = Float(window.frame.origin.x)
+        uiState.windowLocationY = Float(window.frame.origin.y)
+        uiState.showPlaylist = isPlaylistShown()
+        uiState.showEffects = isEffectsShown()
+        
+        appState.uiState = uiState
     }
 }

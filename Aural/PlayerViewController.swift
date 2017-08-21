@@ -14,24 +14,25 @@ class PlayerViewController: NSViewController, EventSubscriber, MessageSubscriber
     @IBOutlet weak var seekSlider: NSSlider!
     @IBOutlet weak var lblPlayingTime: NSTextField!
     
-    // Timer that periodically updates the seek slider bar and playing time
-    private var seekTimer: ScheduledTaskExecutor? = nil
-    
     @IBOutlet weak var btnMoreInfo: NSButton!
     
     private let player: PlayerDelegateProtocol = ObjectGraph.getPlayerDelegate()
     
+    // Timer that periodically updates the seek slider bar and playing time
+    private var seekTimer: ScheduledTaskExecutor? = nil
+    
     // Popover view that displays detailed track info
     private lazy var popover: NSPopover = {
+        
         let popover = NSPopover()
         popover.behavior = .semitransient
         let ctrlr = PopoverController(nibName: "PopoverController", bundle: Bundle.main)
         popover.contentViewController = ctrlr
+        
         return popover
     }()
     
     override func viewDidLoad() {
-        print("FAAK YOU, ASSHOLLLLLLLLLE")
         
         let appState = ObjectGraph.getUIAppState()
         
@@ -42,13 +43,11 @@ class PlayerViewController: NSViewController, EventSubscriber, MessageSubscriber
         EventRegistry.subscribe(.trackNotPlayed, subscriber: self, dispatchQueue: DispatchQueue.main)
         
         // Register self as a subscriber to various UI message notifications
-        UIMessenger.subscribe(.trackPlaybackRequest, subscriber: self)
-        UIMessenger.subscribe(.stopPlaybackRequest, subscriber: self)
+        SyncMessenger.subscribe(.trackPlaybackRequest, subscriber: self)
+        SyncMessenger.subscribe(.stopPlaybackRequest, subscriber: self)
     }
     
     @IBAction func playPauseAction(_ sender: Any) {
-        
-        print("Play or pause, mothafuckaaaa ?!!!!")
         
         do {
             
@@ -130,7 +129,7 @@ class PlayerViewController: NSViewController, EventSubscriber, MessageSubscriber
         resetPlayingTime()
         
         let trackChangedMessage = TrackChangedNotification(newTrack)
-        UIMessenger.publishMessage(trackChangedMessage)
+        SyncMessenger.publishMessage(trackChangedMessage)
     }
     
     func showNowPlayingInfo(_ track: Track) {

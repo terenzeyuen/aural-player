@@ -5,7 +5,7 @@ import Cocoa
  
  See AuralPlayerDelegate, AuralSoundTuningDelegate, and EventSubscriber protocols to learn more about the public functions implemented here.
  */
-class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, EventSubscriber {
+class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, PlaylistChangeListener, EventSubscriber {
     
     // The actual audio player
     private var player: PlayerProtocol
@@ -14,9 +14,6 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
     private var playlist: PlaybackSequenceAccessor
     
     private var preferences: Preferences
-    
-    // Currently playing track
-    private var playingTrack: IndexedTrack?
     
     // Serial queue for track prep tasks (to prevent concurrent prepping of the same track which could cause contention and is unnecessary to begin with)
     private var trackPrepQueue: OperationQueue
@@ -37,47 +34,9 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
         EventRegistry.subscribe(EventType.playbackCompleted, subscriber: self, dispatchQueue: DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive))
     }
     
-    func autoplay() {
-        
-        DispatchQueue.main.async {
-            
-            do {
-                
-                try self.continuePlaying()
-                
-            } catch let error as Error {
-                
-                if (error is InvalidTrackError) {
-                    EventRegistry.publishEvent(.trackNotPlayed, TrackNotPlayedEvent(error as! InvalidTrackError))
-                }
-            }
-            
-            // Notify the UI that a track has started playing
-            EventRegistry.publishEvent(.trackChanged, TrackChangedEvent(self.playingTrack))
-        }
-    }
-    
-    func autoplay(_ trackIndex: Int) {
-        
-        DispatchQueue.main.async {
-            
-            do {
-                try self.play(trackIndex)
-                
-            } catch let error as Error {
-                
-                if (error is InvalidTrackError) {
-                    EventRegistry.publishEvent(.trackNotPlayed, TrackNotPlayedEvent(error as! InvalidTrackError))
-                }
-            }
-            
-            // Notify the UI that a track has started playing
-            EventRegistry.publishEvent(.trackChanged, TrackChangedEvent(self.playingTrack))
-        }
-    }
-    
     func getMoreInfo() -> IndexedTrack? {
         
+        let playingTrack = playlist.getPlayingTrack()
         if (playingTrack == nil) {
             return nil
         }
@@ -89,11 +48,12 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
     func togglePlayPause() throws -> (playbackState: PlaybackState, playingTrack: IndexedTrack?, trackChanged: Bool) {
         
         var trackChanged = false
+        var playingTrack: IndexedTrack?
         
         // Determine current state of player, to then toggle it
         switch playbackState {
             
-        case .noTrack: try continuePlaying()
+        case .noTrack: let playingTrack = try continuePlaying()
         if (playingTrack != nil) {
             trackChanged = true
         }
@@ -113,12 +73,12 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
         let track = playlist.selectTrackAt(index)!
         try play(track)
         
-        return playingTrack!
+        return track
     }
     
     func continuePlaying() throws -> IndexedTrack? {
         try play(playlist.subsequentTrack())
-        return playingTrack
+        return playlist.getPlayingTrack()
     }
 
     func nextTrack() throws -> IndexedTrack? {
@@ -148,7 +108,6 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
             stopPlayback()
         }
         
-        playingTrack = track
         if (track != nil) {
             
             let session = PlaybackSession.start(track!)
@@ -180,6 +139,8 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
         let peekPrevious = self.playlist.peekPreviousTrack()?.track
         
         // Add each of the three tracks to the set of tracks to be prepped, as long as they're non-nil and not equal to the playing track (which has already been prepped, since it is playing)
+        let playingTrack = playlist.getPlayingTrack()
+        
         if (peekSubsequent != nil && playingTrack?.track !== peekSubsequent) {
             nextTracksSet.add(peekSubsequent!)
         }
@@ -228,7 +189,7 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
     }
     
     func getSeekPosition() -> (seconds: Double, percentage: Double) {
-        
+        let playingTrack = playlist.getPlayingTrack()
         let seconds = playingTrack != nil ? player.getSeekPosition() : 0
         let percentage = playingTrack != nil ? seconds * 100 / playingTrack!.track!.duration! : 0
         
@@ -242,6 +203,7 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
         }
         
         // Calculate the new start position
+        let playingTrack = playlist.getPlayingTrack()
         let curPosn = player.getSeekPosition()
         let trackDuration = playingTrack!.track!.duration!
         let newPosn = min(trackDuration, curPosn + Double(preferences.seekLength))
@@ -262,6 +224,7 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
         }
         
         // Calculate the new start position
+        let playingTrack = playlist.getPlayingTrack()
         let curPosn = player.getSeekPosition()
         let newPosn = max(0, curPosn - Double(preferences.seekLength))
         
@@ -276,6 +239,7 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
         }
         
         // Calculate the new start position
+        let playingTrack = playlist.getPlayingTrack()
         let newPosn = percentage * playingTrack!.track!.duration! / 100
         let trackDuration = playingTrack!.track!.duration!
         
@@ -293,6 +257,20 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
         return playlist.getPlayingTrack()
     }
     
+    func handleTrackRemovedNotification(_ message: TrackRemovedNotification) {
+        
+        let index = message.removedTrackIndex
+        let playingTrack = playlist.getPlayingTrack()
+        
+        if (playingTrack?.index == index) {
+            
+            stopPlayback()
+        
+            // Notify the UI about this track change event
+            EventRegistry.publishEvent(.trackChanged, TrackChangedEvent(nil))
+        }
+    }
+    
     // Called when playback of the current track completes
     func consumeEvent(_ event: Event) {
         
@@ -304,6 +282,13 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
         }
     }
     
+    func consumeMessage(_ message: Message) {
+        
+        if (message is TrackRemovedNotification) {
+            handleTrackRemovedNotification(message as! TrackRemovedNotification)
+        }
+    }
+    
     private func trackPlaybackCompleted() {
         
         // Stop playback of the old track
@@ -311,7 +296,7 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
         
         // Continue the playback sequence
         do {
-            try continuePlaying()
+            let playingTrack = try continuePlaying()
             
             playbackState = playingTrack != nil ? .playing : .noTrack
             
@@ -330,17 +315,19 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
         PlaybackSession.endCurrent()
         player.stop()
         playbackState = .noTrack
-        playingTrack = nil
     }
     
-    func play(_ track: IndexedTrack, _ interruptPlayingTrack: Bool) {
+    // Assume valid index
+    func play(_ trackIndex: Int, _ interruptPlayingTrack: Bool) {
         
-        let shouldPlay: Bool = interruptPlayingTrack || playingTrack == nil
+        let shouldPlay: Bool = interruptPlayingTrack || playlist.getPlayingTrack() == nil
         
         if (shouldPlay) {
             
             do {
+                let track = playlist.selectTrackAt(trackIndex)
                 try play(track)
+                EventRegistry.publishEvent(.trackChanged, TrackChangedEvent(track))
             } catch let error as Error {
                 
                 if (error is InvalidTrackError) {
@@ -351,20 +338,41 @@ class PlayerDelegate: PlayerDelegateProtocol, BasicPlayerDelegateProtocol, Event
     }
     
     func stop() {
-        stopPlayback()
+        if (playbackState != .noTrack) {
+            stopPlayback()
+        }
+    }
+    
+    func trackRemoved(_ removedTrackIndex: Int) {
+        
+        let playingTrack = playlist.getPlayingTrack()
+        if (playingTrack?.index == removedTrackIndex) {
+            // Stop playback and let the UI know
+            stopPlayback()
+            EventRegistry.publishEvent(.trackChanged, TrackChangedEvent(nil))
+        }
+    }
+    
+    // Signals a reordering of the playlist (e.g. sorting)
+    func playlistReordered(_ newTrackIndex: Int?) {
+    }
+    
+    func playlistCleared() {
+        stop()
+    }
+    
+    // A random track has been selected for playback
+    func randomTrackSelected(_ trackIndex: Int) {}
+    
+    // A single new track has been added
+    func trackAdded() {}
+    
+    // A single track has been moved, from a particular index to another
+    func trackReordered(_ oldIndex: Int, _ newIndex: Int) {
     }
     
     func appExiting(_ uiState: UIState) {
-        
 //        player.tearDown()
-//        
-//        let playerState = player.getState()
-//        
-//        let playlistState = playlist.getState()
-//        
-//        let appState = AppState(uiState, playerState, playlistState)
-//        
-//        AppStateIO.save(appState)
     }
 }
 
